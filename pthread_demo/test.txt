@@ -1,0 +1,14 @@
+总用量 12K
+drwxrwxrwx 1 junjie junjie 4.0K 5月   3 19:44 ./
+drwxrwxrwx 1 junjie junjie 4.0K 4月  30 14:12 ../
+-rwxrwxrwx 1 junjie junjie 4.8K 5月   3 15:26 main.c*
+-rwxrwxrwx 1 junjie junjie  501 4月  27 17:21 pth_barrier.c*
+-rwxrwxrwx 1 junjie junjie 1.1K 4月  27 17:21 pth_hello.c*
+-rwxrwxrwx 1 junjie junjie  599 5月   3 18:58 test.c*
+-rwxrwxrwx 1 junjie junjie    0 5月   3 19:44 test.txt*
+总用量 12K
+-rwxrwxrwx 1 junjie junjie 4.8K 5月   3 15:26 main.c
+-rwxrwxrwx 1 junjie junjie  501 4月  27 17:21 pth_barrier.c
+-rwxrwxrwx 1 junjie junjie 1.1K 4月  27 17:21 pth_hello.c
+-rwxrwxrwx 1 junjie junjie  599 5月   3 18:58 test.c
+-rwxrwxrwx 1 junjie junjie  404 5月   3 19:44 test.txt
