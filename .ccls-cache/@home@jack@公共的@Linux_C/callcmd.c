@@ -5,7 +5,7 @@
 
 >> Created Time: 2021年09月08日 星期三 23时47分05秒
 
->> 此程序的功能是：总结C程序中执行shell命令的几种方法：
+>> 此程序的功能是：总结C程序中执行shell命令的几种方法，并分别验证：
 方法1：
 
 
@@ -41,4 +41,12 @@
 #include <sys/socket.h>
 #include <time.h>
 
-int main(int argc, char *argv[]) {}
+int main(int argc, char *argv[]) {
+  int a = 0;
+  float b = 0;
+
+  while (1) {
+    printf("hello,...\n");
+  }
+  return 0;
+}
