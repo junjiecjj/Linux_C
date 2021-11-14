@@ -25,6 +25,7 @@ void *thread1(void *arg) {
     pthread_mutex_lock(&mutex);
     pthread_cond_wait(&cond, &mutex);
     printf("thread1 applied the condition\n");
+    /* sleep(4); */
     pthread_mutex_unlock(&mutex);
     sleep(4);
   }
@@ -47,7 +48,7 @@ int main() {
   pthread_cond_init(&cond, NULL);
   pthread_create(&thid1, NULL, thread1, NULL);
   pthread_create(&thid2, NULL, thread2, NULL);
-  sleep(1);
+  sleep(3);
   do {
     pthread_cond_signal(&cond);
   } while (1);
