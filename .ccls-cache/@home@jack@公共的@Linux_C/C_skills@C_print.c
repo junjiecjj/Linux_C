@@ -1,4 +1,3 @@
-
 /*************************************************************************
 >> File Name: C_print.c
 >> Author: 陈俊杰
@@ -41,7 +40,7 @@ int main(int argc, char *argv[]) {
 
   for (int i = 0; i < 10; ++i) {
     printf("这是第%d次输出---------", i);
-    for (int j = 0; j < 100000; ++j) {
+    for (int j = 0; j < 1000000; ++j) {
       //覆盖当前行的所有内容，并回到行首。如果是windows系统,\r\033[k换成\r
       printf("\r\033[k");
     }
@@ -49,7 +48,7 @@ int main(int argc, char *argv[]) {
 
   for (int i = 0; i < 10; ++i) {
     printf("这是第%d次输出---------", i);
-    for (int j = 0; j < 1000000; ++j) {
+    for (int j = 0; j < 10000000; ++j) {
       //覆盖当前行的所有内容，并回到行首。如果是windows系统,\r\033[k换成\r
       printf("\b");
     }
