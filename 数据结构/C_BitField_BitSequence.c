@@ -65,6 +65,7 @@ void AnyTobites(unsigned char *start, int len) {
 }
 
 void test1() {
+  //每个字节分别赋值
   printf("//******************test1 ***********************//\n");
   struct iphdr {
     unsigned char fin : 1;
@@ -104,6 +105,7 @@ void test1() {
 }
 
 void test2() {
+  //整个结构体一次性赋值
   printf("//******************test2 ***********************//\n");
   struct iphdr {
 
@@ -139,6 +141,7 @@ void test2() {
 }
 
 void test3() {
+  //当位域成员大小加一起不够一个整字节的时候，验证各成员在内存中的布局。
   printf("//******************test3 ***********************//\n");
   struct iphdr {
     unsigned char fin : 1;
@@ -169,6 +172,7 @@ void test3() {
 }
 
 void test4() {
+  //当位域成员大小加一起不够一个整字节的时候，验证各成员在内存中的布局。
   printf("//******************test4 ***********************//\n");
   /* struct iphdr2 t; */
   struct iphdr2 {
