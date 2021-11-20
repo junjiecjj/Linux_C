@@ -166,6 +166,11 @@ void test3() {
   printf("s[0] = %x\n", s[0]);
 
   t.fin = 1;
+  t.opcode = 0xc;
+  AnyTobites(s, sizeof(t));
+  printf("s[0] = %x\n", s[0]);
+
+  t.fin = 1;
   t.opcode = 0x0;
   AnyTobites(s, sizeof(t));
   printf("s[0]= %x\n", s[0]);
@@ -193,6 +198,16 @@ void test4() {
 
   t.fin = 0;
   t.opcode = 0xf;
+  AnyTobites(s, sizeof(t));
+  printf("s[0] = 0x%x\n", s[0]);
+
+  t.fin = 2;
+  t.opcode = 0xc;
+  AnyTobites(s, sizeof(t));
+  printf("s[0] = 0x%x\n", s[0]);
+
+  t.fin = 3;
+  t.opcode = 0xd;
   AnyTobites(s, sizeof(t));
   printf("s[0] = 0x%x\n", s[0]);
 

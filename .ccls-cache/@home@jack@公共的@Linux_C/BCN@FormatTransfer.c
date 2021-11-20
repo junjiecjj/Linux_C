@@ -2,102 +2,8 @@
 #include "FormatTransfer.h"
 #include <stdio.h>
 #include <stdlib.h>
-
-//大小端转换不分有无符号
-// short 大小端转换
-#define _swap16(x)                                                             \
-  (unsigned short)((((unsigned short)(x & 0x00ff)) << 8) |                     \
-                   (((unsigned short)(x & 0xff00)) >> 8));
-
-// int 大小端转换
-#define _swap32(x)                                                             \
-  (unsigned int)((((unsigned int)(x & 0x000000ff)) << 24) |                    \
-                 (((unsigned int)(x & 0x0000ff00)) << 8) |                     \
-                 (((unsigned int)(x & 0x00ff0000)) >> 8) |                     \
-                 (((unsigned int)(x & 0xff000000)) >> 24));
-
-// double或64位的数据类型大小端转换
-//#define		_swap64(x)   (unsigned long long)((((unsigned long
-// long)(x & 0x00000000000000FF)) << 56) | (((unsigned long long)(x &
-// 0x000000000000FF00)) << 40)	|(((unsigned long long)(x & 0x0000000000FF0000))
-//<< 24)	| (((unsigned long long)(x & 0x00000000FF000000)) << 8)	|
-//(((unsigned long long)(x & 0x000000FF00000000)) >> 8)	| (((unsigned long
-// long)(x & 0x0000FF0000000000)) >> 24)	| (((unsigned long long)(x &
-// 0x00FF000000000000)) >> 40)	| (((unsigned long long)(x &
-// 0xFF00000000000000)) >> 56))
-#define _swap64(x)                                                             \
-  (unsigned long long)((((unsigned long long)(x & 0x00000000000000FF))         \
-                        << 56) |                                               \
-                       (((unsigned long long)(x & 0x000000000000FF00))         \
-                        << 40) |                                               \
-                       (((unsigned long long)(x & 0x0000000000FF0000))         \
-                        << 24) |                                               \
-                       (((unsigned long long)(x & 0x00000000FF000000)) << 8) | \
-                       (((unsigned long long)(x & 0x000000FF00000000)) >> 8) | \
-                       (((unsigned long long)(x & 0x0000FF0000000000)) >>      \
-                        24) |                                                  \
-                       (((unsigned long long)(x & 0x00FF000000000000)) >>      \
-                        40) |                                                  \
-                       (((unsigned long long)(x & 0xFF00000000000000)) >> 56))
-
-// unsigned int 或 int 大小端转换
-unsigned int WAP_u32(unsigned int x) {
-  return (unsigned int)(((x & 0xff000000) >> 24) | ((x & 0x00ff0000) >> 8) |
-                        ((x & 0x0000ff00) << 8) | ((x & 0x000000ff) << 24));
-}
-
-// unsigned short 大小端转换
-unsigned short WAP_u16(unsigned short x) {
-  return (unsigned short)(((x & 0xff00) >> 8) | ((x & 0x00ff) << 8));
-}
-
-// DOUBLE大小端转换
-DOUBLE double_swap_64(DOUBLE pData) {
-
-  DOUBLE *pNewValue;
-  DOUBLE pData0 = 0;
-
-  UCHAR *pValue;
-  UCHAR Value[8];
-
-  pValue = (UCHAR *)&pData;
-
-  Value[0] = pValue[7];
-  Value[1] = pValue[6];
-  Value[2] = pValue[5];
-  Value[3] = pValue[4];
-  Value[4] = pValue[3];
-  Value[5] = pValue[2];
-  Value[6] = pValue[1];
-  Value[7] = pValue[0];
-
-  pNewValue = (DOUBLE *)Value;
-  pData0 = *pNewValue;
-
-  return pData0;
-}
-
-// float大小端转换
-float float_swap_32(float pData) {
-
-  float *pNewValue;
-  float pData0 = 0;
-
-  UCHAR *pValue;
-  UCHAR Value[4];
-
-  pValue = (UCHAR *)&pData;
-
-  Value[0] = pValue[3];
-  Value[1] = pValue[2];
-  Value[2] = pValue[1];
-  Value[3] = pValue[0];
-
-  pNewValue = (float *)Value;
-  pData0 = *pNewValue;
-
-  return pData0;
-}
+// 以下来自：直接用 | C语言常用转换函数实现原理
+// https://mp.weixin.qq.com/s?__biz=MzI5NzM5MjMxNw==&mid=2247500711&idx=1&sn=1330a3b15e1681e503a2b38cb3119d74&chksm=ecb74275dbc0cb63648f3da1796bc81153133a70a9eeec90e61ce5610febcd80f634a3c0f034&mpshare=1&scene=1&srcid=1028Zs1O01oeeWe23VeKFlCz&sharer_sharetime=1636096573613&sharer_shareid=0d5c82ce3c8b7c8f30cc9a686416d4a8&exportkey=AWizFlr%2B57fgwwakPDTHaM8%3D&pass_ticket=rUihZeDJ4dAXC7Ft6B4oscfz3eynzUClpSFUFnCHc6SrbH5Fr%2FJA3gemHJWeR7ww&wx_header=0#rd
 
 //字符串转十六进制,不是特别好用
 void StrToHex(char *pbDest, char *pbSrc, int nLen) {
@@ -282,6 +188,105 @@ void U32ToU8Array(uint8_t *buf, uint32_t u32Value) {
 // U8转换为U32
 void U8ArrayToU32(uint8_t *buf, uint32_t *u32Value) {
   *u32Value = (buf[0] << 24) + (buf[1] << 16) + (buf[2] << 8) + (buf[3] << 0);
+}
+
+/////////////////////////////////////////////////结束
+//////////////////////////////////////////////////////////////////////////
+
+//大小端转换不分有无符号
+// short 大小端转换
+#define _swap16(x)                                                             \
+  (unsigned short)((((unsigned short)(x & 0x00ff)) << 8) |                     \
+                   (((unsigned short)(x & 0xff00)) >> 8));
+
+// int 大小端转换
+#define _swap32(x)                                                             \
+  (unsigned int)((((unsigned int)(x & 0x000000ff)) << 24) |                    \
+                 (((unsigned int)(x & 0x0000ff00)) << 8) |                     \
+                 (((unsigned int)(x & 0x00ff0000)) >> 8) |                     \
+                 (((unsigned int)(x & 0xff000000)) >> 24));
+
+// double或64位的数据类型大小端转换
+//#define		_swap64(x)   (unsigned long long)((((unsigned long
+// long)(x & 0x00000000000000FF)) << 56) | (((unsigned long long)(x &
+// 0x000000000000FF00)) << 40)	|(((unsigned long long)(x & 0x0000000000FF0000))
+//<< 24)	| (((unsigned long long)(x & 0x00000000FF000000)) << 8)	|
+//(((unsigned long long)(x & 0x000000FF00000000)) >> 8)	| (((unsigned long
+// long)(x & 0x0000FF0000000000)) >> 24)	| (((unsigned long long)(x &
+// 0x00FF000000000000)) >> 40)	| (((unsigned long long)(x &
+// 0xFF00000000000000)) >> 56))
+#define _swap64(x)                                                             \
+  (unsigned long long)((((unsigned long long)(x & 0x00000000000000FF))         \
+                        << 56) |                                               \
+                       (((unsigned long long)(x & 0x000000000000FF00))         \
+                        << 40) |                                               \
+                       (((unsigned long long)(x & 0x0000000000FF0000))         \
+                        << 24) |                                               \
+                       (((unsigned long long)(x & 0x00000000FF000000)) << 8) | \
+                       (((unsigned long long)(x & 0x000000FF00000000)) >> 8) | \
+                       (((unsigned long long)(x & 0x0000FF0000000000)) >>      \
+                        24) |                                                  \
+                       (((unsigned long long)(x & 0x00FF000000000000)) >>      \
+                        40) |                                                  \
+                       (((unsigned long long)(x & 0xFF00000000000000)) >> 56))
+
+// unsigned int 或 int 大小端转换
+unsigned int WAP_u32(unsigned int x) {
+  return (unsigned int)(((x & 0xff000000) >> 24) | ((x & 0x00ff0000) >> 8) |
+                        ((x & 0x0000ff00) << 8) | ((x & 0x000000ff) << 24));
+}
+
+// unsigned short 大小端转换
+unsigned short WAP_u16(unsigned short x) {
+  return (unsigned short)(((x & 0xff00) >> 8) | ((x & 0x00ff) << 8));
+}
+
+// DOUBLE大小端转换
+DOUBLE double_swap_64(DOUBLE pData) {
+
+  DOUBLE *pNewValue;
+  DOUBLE pData0 = 0;
+
+  UCHAR *pValue;
+  UCHAR Value[8];
+
+  pValue = (UCHAR *)&pData;
+
+  Value[0] = pValue[7];
+  Value[1] = pValue[6];
+  Value[2] = pValue[5];
+  Value[3] = pValue[4];
+  Value[4] = pValue[3];
+  Value[5] = pValue[2];
+  Value[6] = pValue[1];
+  Value[7] = pValue[0];
+
+  pNewValue = (DOUBLE *)Value;
+  pData0 = *pNewValue;
+
+  return pData0;
+}
+
+// float大小端转换
+float float_swap_32(float pData) {
+
+  float *pNewValue;
+  float pData0 = 0;
+
+  UCHAR *pValue;
+  UCHAR Value[4];
+
+  pValue = (UCHAR *)&pData;
+
+  Value[0] = pValue[3];
+  Value[1] = pValue[2];
+  Value[2] = pValue[1];
+  Value[3] = pValue[0];
+
+  pNewValue = (float *)Value;
+  pData0 = *pNewValue;
+
+  return pData0;
 }
 
 /*

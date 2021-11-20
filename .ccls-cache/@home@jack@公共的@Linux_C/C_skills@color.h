@@ -1,7 +1,7 @@
 
 
-#ifndef _COLOR_CJJ
-#define _COLOR_CJJ
+#ifndef _COLOR_H_
+#define _COLOR_H_
 
 #define BLACK_BLACK      "\e[40;30;1m"
 #define BLACK_RED        "\e[40;31;1m"
@@ -77,7 +77,4 @@
 
 
 #define COLOR_RESET          "\e[0m"
-
-
-
-#endif // _COLOR_CJJ
+#endif
