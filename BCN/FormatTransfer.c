@@ -296,20 +296,45 @@ int等4个字节的数据类型以二进制格式输出 ，适用于小端字节
 void PrintIntBinary(int num) {
   printf("sizeof(num) = %zd\n", sizeof(num));
   printf("int %d binary is:\n", num);
-  unsigned char *p = (unsigned char *)&num + sizeof(int) -
-                     1; // p先指向num后面第三个字节的地址，即num最高位字节地址
+  // p先指向num后面第三个字节的地址，即num最高位字节地址
+  unsigned char *p = (unsigned char *)&num + sizeof(int) - 1;
   for (int i = 0; i < sizeof(int); ++i) //依次处理4个字节(32位)
   {
-    int j =
-        *(p - i); //取每个字节的首地址，从高位字节到低位字节，即p,p-1,p-2,p-3
-    for (int k = 7; k >= 0;
-         k--) //处理每个字节的8个位，注意字节内部的二进制是大端
-    {
-      if (j &
-          (1
-           << k)) // 1左移k位，当前字节的内容j进行或运算，如k=7,00000000&10000000=0
-                  // -> 该字节的最高位为0
-      {
+    //取每个字节的首地址，从高位字节到低位字节，即p,p-1,p-2,p-3
+    int j = *(p - i);
+    //处理每个字节的8个位，注意字节内部的二进制是大端
+    for (int k = 7; k >= 0; k--) {
+      // 1左移k位，当前字节的内容j进行或运算，如k=7,00000000&10000000=0 //
+      // 该字节的最高位为0
+      if (j & (1 << k)) {
+        printf("1");
+      } else {
+        printf("0");
+      }
+    }
+    printf(" ");
+  }
+  printf("\n");
+}
+
+/*
+将输入的int, float,unsigned int,long int, unsigned long
+int等4个字节的数据类型以二进制格式输出 ，先打印低地址往高地址打印数据
+*/
+void PrintIntBinary_FromLowAdressToHigh(int num) {
+  printf("sizeof(num) = %zd\n", sizeof(num));
+  printf("int %d binary is:\n", num);
+  // p先指向num后面第三个字节的地址，即num最高位字节地址
+  unsigned char *p = (unsigned char *)&num + sizeof(int) - 1;
+  for (int i = 0; i < sizeof(int); ++i) //依次处理4个字节(32位)
+  {
+    //取每个字节的首地址，从高位字节到低位字节，即p,p-1,p-2,p-3
+    int j = *(p - i);
+    //处理每个字节的8个位，注意字节内部的二进制是大端
+    for (int k = 7; k >= 0; k--) {
+      // 1左移k位，当前字节的内容j进行或运算，如k=7,00000000&10000000=0 //
+      // 该字节的最高位为0
+      if (j & (1 << k)) {
         printf("1");
       } else {
         printf("0");
@@ -340,7 +365,7 @@ void PrintUCHARBinary(unsigned char num) {
 }
 
 //可以将任何数据类型打印为二进制格式,大端小端都有用
-void AnyTobites(unsigned char *start, int len) {
+void vAnyToBites_IgnoreBigLittle_HumanRead(unsigned char *start, int len) {
   if (checkBiglittle()) //小端
   {
     // start = start + (len - 1);
@@ -387,17 +412,14 @@ void PrintFloatBinary(float num) {
   unsigned char *p = (unsigned char *)&num + sizeof(float) -
                      1; // p先指向num后面第三个字节的地址，即num最高位字节地址
   for (int i = 0; i < sizeof(float); ++i) //依次处理4个字节(32位)
-  {
-    int j =
-        *(p - i); //取每个字节的首地址，从高位字节到低位字节，即p,p-1,p-2,p-3
-    for (int k = 7; k >= 0;
-         k--) //处理每个字节的8个位，注意字节内部的二进制是大端
-    {
-      if (j &
-          (1
-           << k)) // 1左移k位，当前字节的内容j进行或运算，如k=7,00000000&10000000=0
-                  // -> 该字节的最高位为0
-      {
+  { //取每个字节的首地址，从高位字节到低位字节，即p,p-1,p-2,p-3
+    int j = *(p - i);
+
+    //处理每个字节的8个位，注意字节内部的二进制是大端
+    for (int k = 7; k >= 0; k--) {
+      // 1左移k位，当前字节的内容j进行或运算，如k=7,00000000&10000000=0 // ->
+      // 该字节的最高位为0
+      if (j & (1 << k)) {
         printf("1");
       } else {
         printf("0");
@@ -414,20 +436,17 @@ void PrintFloatBinary(float num) {
 void PrintDoubleBinary(double num) {
   printf("sizeof(num) = %zd\n", sizeof(num));
   printf("double %lf binary is:\n", num);
-  unsigned char *p = (unsigned char *)&num + sizeof(double) -
-                     1; // p先指向num后面第三个字节的地址，即num最高位字节地址
+  // p先指向num后面第三个字节的地址，即num最高位字节地址
+  unsigned char *p = (unsigned char *)&num + sizeof(double) - 1;
   for (int i = 0; i < sizeof(double); ++i) //依次处理4个字节(32位)
   {
-    int j =
-        *(p - i); //取每个字节的首地址，从高位字节到低位字节，即p,p-1,p-2,p-3
-    for (int k = 7; k >= 0;
-         k--) //处理每个字节的8个位，注意字节内部的二进制是大端
-    {
-      if (j &
-          (1
-           << k)) // 1左移k位，当前字节的内容j进行或运算，如k=7,00000000&10000000=0
-                  // -> 该字节的最高位为0
-      {
+    //取每个字节的首地址，从高位字节到低位字节，即p,p-1,p-2,p-3
+    int j = *(p - i);
+    //处理每个字节的8个位，注意字节内部的二进制是大端
+    for (int k = 7; k >= 0; k--) {
+      // 1左移k位，当前字节的内容j进行或运算，如k=7,00000000&10000000=0  // ->
+      // 该字节的最高位为0
+      if (j & (1 << k)) {
         printf("1");
       } else {
         printf("0");
@@ -592,39 +611,43 @@ void Formattransfer_test() {
   printf("*********************** int_binary **********************\n");
 
   PrintIntBinary(a1);
-  AnyTobites((unsigned char *)&a1, sizeof(int));
+  vAnyToBites_IgnoreBigLittle_HumanRead((unsigned char *)&a1, sizeof(int));
   dump(&a1, sizeof(a1));
 
   int i1 = 0x12345678;
   PrintIntBinary(i1); //将int以二进制格式打印
-  AnyTobites((unsigned char *)&i1, sizeof(int)); //将int以二进制格式打印
-  dump(&i1, sizeof(i1));                         //将int以16进制格式打印
+  vAnyToBites_IgnoreBigLittle_HumanRead((unsigned char *)&i1,
+                                        sizeof(int)); //将int以二进制格式打印
+  dump(&i1, sizeof(i1)); //将int以16进制格式打印
   printf(
       "*********************** unsigned char_binary **********************\n");
 
   unsigned char b = 12;
   PrintUCHARBinary(b); //将unsigned char以二进制格式打印
-  AnyTobites((unsigned char *)&b,
-             sizeof(unsigned char)); //将unsigned char以二进制格式打印
-  dump(&b, sizeof(b));               //将unsigned char以16进制格式打印
+  vAnyToBites_IgnoreBigLittle_HumanRead(
+      (unsigned char *)&b,
+      sizeof(unsigned char)); //将unsigned char以二进制格式打印
+  dump(&b, sizeof(b));        //将unsigned char以16进制格式打印
 
   char c = 9;
   PrintUCHARBinary(c);
-  AnyTobites((unsigned char *)&c, sizeof(char));
+  vAnyToBites_IgnoreBigLittle_HumanRead((unsigned char *)&c, sizeof(char));
   dump(&c, sizeof(c));
   printf("*********************** float_binary **********************\n");
 
   float f1 = 0.75;
   PrintFloatBinary(f1); //将float以二进制格式打印
-  AnyTobites((unsigned char *)&f1, sizeof(float)); //将float以二进制格式打印
-  dump(&f1, sizeof(f1)); //将float以16进制格式打印
+  vAnyToBites_IgnoreBigLittle_HumanRead(
+      (unsigned char *)&f1, sizeof(float)); //将float以二进制格式打印
+  dump(&f1, sizeof(f1));                    //将float以16进制格式打印
 
   printf("*********************** double_binary **********************\n");
 
   double d1 = 0.75;
   // printf("%d\n",sizeof(d1));
   PrintDoubleBinary(d1); //将double以二进制格式打印
-  AnyTobites((unsigned char *)&d1, sizeof(double)); //将double以二进制格式打印
+                         //将double以二进制格式打印
+  vAnyToBites_IgnoreBigLittle_HumanRead((unsigned char *)&d1, sizeof(double));
   dump(&d1, sizeof(d1)); //将double以16进制格式打印
 
   printf("*********************** big little judge **********************\n");
@@ -658,107 +681,111 @@ void Formattransfer_test() {
          "1 **********************\n");
   int A = 12;
   PrintIntBinary(A);
-  AnyTobites((unsigned char *)&A, sizeof(int));
+  vAnyToBites_IgnoreBigLittle_HumanRead((unsigned char *)&A, sizeof(int));
   dump(&A, sizeof(A));
 
   A = WAP_u32(A); //大小端互换
   PrintIntBinary(A);
-  AnyTobites((unsigned char *)&A, sizeof(int));
+  vAnyToBites_IgnoreBigLittle_HumanRead((unsigned char *)&A, sizeof(int));
   dump(&A, sizeof(A));
 
   printf("*********************** \"int (32bit)\"  little to big endian method "
          "2 **********************\n");
   A = 12;
   PrintIntBinary(A);
-  AnyTobites((unsigned char *)&A, sizeof(int));
+  vAnyToBites_IgnoreBigLittle_HumanRead((unsigned char *)&A, sizeof(int));
   dump(&A, sizeof(A));
 
   A = _swap32(A); //大小端互换
   PrintIntBinary(A);
-  AnyTobites((unsigned char *)&A, sizeof(int));
+  vAnyToBites_IgnoreBigLittle_HumanRead((unsigned char *)&A, sizeof(int));
   dump(&A, sizeof(A));
 
   printf("*********************** \"unsigned int (32bit)\" little to big "
          "endian method 1 **********************\n");
   unsigned int ui = 12;
   PrintIntBinary(ui);
-  AnyTobites((unsigned char *)&ui, sizeof(unsigned int));
+  vAnyToBites_IgnoreBigLittle_HumanRead((unsigned char *)&ui,
+                                        sizeof(unsigned int));
   dump(&ui, sizeof(ui));
 
   ui = WAP_u32(ui); //大小端互换
   PrintIntBinary(ui);
-  AnyTobites((unsigned char *)&ui, sizeof(unsigned int));
+  vAnyToBites_IgnoreBigLittle_HumanRead((unsigned char *)&ui,
+                                        sizeof(unsigned int));
   dump(&ui, sizeof(ui));
 
   printf("*********************** \"unsigned int  (32bit)\" little to big "
          "endian method 2 **********************\n");
   ui = 12;
   PrintIntBinary(ui);
-  AnyTobites((unsigned char *)&ui, sizeof(int));
+  vAnyToBites_IgnoreBigLittle_HumanRead((unsigned char *)&ui, sizeof(int));
   dump(&ui, sizeof(ui));
 
   ui = WAP_u32(ui); //大小端互换
   PrintIntBinary(ui);
-  AnyTobites((unsigned char *)&ui, sizeof(int));
+  vAnyToBites_IgnoreBigLittle_HumanRead((unsigned char *)&ui, sizeof(int));
   dump(&ui, sizeof(ui));
 
   printf("*********************** \"unsigned short  (16 bit)\" little to big "
          "endian  method 1 ***********\n");
   unsigned short us = 12;
 
-  AnyTobites((unsigned char *)&us, sizeof(int));
+  vAnyToBites_IgnoreBigLittle_HumanRead((unsigned char *)&us, sizeof(int));
   dump(&us, sizeof(us));
 
   us = WAP_u16(us); //大小端互换
 
-  AnyTobites((unsigned char *)&us, sizeof(int));
+  vAnyToBites_IgnoreBigLittle_HumanRead((unsigned char *)&us, sizeof(int));
   dump(&us, sizeof(us));
 
   printf("*********************** \"unsigned short  (16bit)\" little to big "
          "endian  method 2 ***********\n");
   us = 12;
 
-  AnyTobites((unsigned char *)&us, sizeof(int));
+  vAnyToBites_IgnoreBigLittle_HumanRead((unsigned char *)&us, sizeof(int));
   dump(&us, sizeof(us));
 
   us = _swap16(us); //大小端互换
 
-  AnyTobites((unsigned char *)&us, sizeof(int));
+  vAnyToBites_IgnoreBigLittle_HumanRead((unsigned char *)&us, sizeof(int));
   dump(&us, sizeof(us));
 
   printf("*********************** \"float  (32bit)\" little to big endian  "
          "method 1 ***********\n");
   float fl = 12.12;
 
-  AnyTobites((unsigned char *)&fl, sizeof(float));
+  vAnyToBites_IgnoreBigLittle_HumanRead((unsigned char *)&fl, sizeof(float));
   dump(&fl, sizeof(fl));
 
   fl = float_swap_32(fl); //大小端互换
 
-  AnyTobites((unsigned char *)&fl, sizeof(float));
+  vAnyToBites_IgnoreBigLittle_HumanRead((unsigned char *)&fl, sizeof(float));
   dump(&fl, sizeof(fl));
 
   printf("*********************** \"double  (64 bit)\" little to big endian  "
          "method 1 ***********\n");
   d1 = 12.12;
 
-  AnyTobites((unsigned char *)&d1, sizeof(double));
+  vAnyToBites_IgnoreBigLittle_HumanRead((unsigned char *)&d1, sizeof(double));
   dump(&d1, sizeof(d1));
 
   d1 = double_swap_64(d1); //大小端互换
 
-  AnyTobites((unsigned char *)&d1, sizeof(double));
+  vAnyToBites_IgnoreBigLittle_HumanRead((unsigned char *)&d1, sizeof(double));
   dump(&d1, sizeof(d1));
 
   printf("*********************** \"unsigned long long  (64bit)\" little to "
          "big endian  method 1 ***********\n");
   unsigned long long ull = 0x12345678;
 
-  AnyTobites((unsigned char *)&ull, sizeof(unsigned long long));
+  vAnyToBites_IgnoreBigLittle_HumanRead((unsigned char *)&ull,
+                                        sizeof(unsigned long long));
   dump(&ull, sizeof(unsigned long long));
 
   ull = _swap64(ull); //大小端互换
 
-  AnyTobites((unsigned char *)&ull, sizeof(unsigned long long));
+  vAnyToBites_IgnoreBigLittle_HumanRead((unsigned char *)&ull,
+                                        sizeof(unsigned long long));
   dump(&ull, sizeof(unsigned long long));
 }
