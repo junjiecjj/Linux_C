@@ -1223,6 +1223,36 @@ void vtest5() {
   dump(p, sizeof(S));
 }
 
+void vtest6() {
+  //测试一个结构体的成员在内存地址的分布
+  printf("//*************** [%s] *************************//\n", __FUNCTION__);
+  printf("测试一个结构体的成员在内存地址的分布\n");
+  struct iphdr {
+    unsigned short a;
+    unsigned short b;
+    unsigned short c;
+  } S;
+
+  S.a = 0x1200;
+  S.b = 0x1f2d;
+  S.c = 0xff4d;
+  printf("sizeof(S) = %d\n", sizeof(S));
+
+  unsigned char *p = (unsigned char *)&S;
+
+  vAnyToBites_FromLowAddrToHigh(p, sizeof(S));
+  dump(p, sizeof(S));
+}
+
+/*
+  原则一：结构体中元素是按照定义顺序一个一个放到内存中去的，但并不是紧密排列的。从结构体存储的首地址开始，每一个元素放置到内存中时，它都会认为内存是以它自己的大小来划分的，因此元素放置的位置一定会在自己宽度的整数倍上开始（以结构体变量首地址为0计算）。
+  原则二：在经过第一原则分析后，检查计算出的存储单元是否为所有元素中最宽的元素的长度的整数倍，是，则结束；若不是，则补齐为它的整数倍。
+
+从test1-6可以看出，结构体的每个成员从上往下依次是存在内存从低往高的位置存的，这与系统的大小端无关，
+但是每个成员在相应的内存里存储方式是一字节为单位，且与系统的大小端有关的，
+
+*/
+
 void hex() {
   printf("//******************* hex ********************//\n");
   unsigned char a = 14;
@@ -1242,6 +1272,7 @@ int main(int argc, char *argv[]) {
   test3_r1();
   test4();
   vtest5();
+  vtest6();
 
   hex();
   checkBiglittle();
