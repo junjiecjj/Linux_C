@@ -1037,11 +1037,62 @@ void test3() {
 
 void test3_r() {
   //当位域成员大小加一起不够一个整字节的时候，验证各成员在内存中的布局。
-  printf("//******************test3_r ***********************//\n");
+  printf("//****************** [%s] ***********************//\n", __FUNCTION__);
   struct iphdr {
     unsigned char fin : 1;
-    unsigned char : 3; //该3位不能使用,与unsigned char :0截然不同
-    // unsigned char :0
+    unsigned char : 3; //该3位不能使用,与unsigned char
+                       //:0截然不同,无名位域的宽度为3bit
+    // unsigned char :0; //空域，宽度为8bit
+    unsigned char opcode : 4;
+    /* unsigned char a; */
+    /* unsigned char b; */
+  } t;
+  unsigned char *s;
+
+  memset(&t, 0, 1);
+
+  s = (unsigned short *)&t;
+
+  t.fin = 1;
+  t.opcode = 0xf;
+  printf("当位域成员大小加一起不够一个整字节的时候，验证各成员在内存中的布局\ns"
+         "izeof(iphdr) = %d\n\n\n",
+         sizeof(struct iphdr));
+  vAnyToBites_IgnoreBigLittle_HumanRead(s, sizeof(t));
+  vAnyToBites_FromLowAddrToHigh(s, sizeof(t));
+  dump(s, sizeof(t));
+  printf("s[0] = %x\n\n", s[0]);
+
+  t.fin = 0;
+  t.opcode = 0xf;
+  vAnyToBites_IgnoreBigLittle_HumanRead(s, sizeof(t));
+  vAnyToBites_FromLowAddrToHigh(s, sizeof(t));
+  dump(s, sizeof(t));
+  printf("s[0] = %x\n\n", s[0]);
+
+  t.fin = 1;
+  t.opcode = 0xc;
+  vAnyToBites_IgnoreBigLittle_HumanRead(s, sizeof(t));
+  vAnyToBites_FromLowAddrToHigh(s, sizeof(t));
+  dump(s, sizeof(t));
+  printf("s[0] = %x\n\n", s[0]);
+
+  t.fin = 1;
+  t.opcode = 0x0;
+  vAnyToBites_IgnoreBigLittle_HumanRead(s, sizeof(t));
+  vAnyToBites_FromLowAddrToHigh(s, sizeof(t));
+  dump(s, sizeof(t));
+  printf("s[0]= %x\n\n", s[0]);
+}
+
+void test3_r1() {
+  //当位域成员大小加一起不够一个整字节的时候，验证各成员在内存中的布局。
+  printf("//****************** %s ***********************//\n", __FUNCTION__);
+  struct iphdr {
+    unsigned char fin : 1;
+    // unsigned char : 3; //该3位不能使用,与unsigned char
+    //:0截然不同,无名位域的宽度为3bit
+    unsigned char : 0; //空域，宽度为8bit
     unsigned char opcode : 4;
     /* unsigned char a; */
     /* unsigned char b; */
@@ -1188,6 +1239,7 @@ int main(int argc, char *argv[]) {
   test2();
   test3();
   test3_r();
+  test3_r1();
   test4();
   vtest5();
 
