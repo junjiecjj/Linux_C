@@ -9,6 +9,7 @@
 https://mp.weixin.qq.com/s?__biz=MzUxMjEyNDgyNw==&mid=2247493481&idx=1&sn=fc7af21e8047fd76e0e23809ea12da0b&chksm=f96b959dce1c1c8bc704fc673ec78c7d33f00fd06f53539860e8f3e28197e153aeafc597d30b&mpshare=1&scene=24&srcid=1120cHL13QwAU0HmFl26eLTX&sharer_sharetime=1637384247264&sharer_shareid=0d5c82ce3c8b7c8f30cc9a686416d4a8#rd
 ************************************************************************/
 
+#include <asm/byteorder.h>
 #include <complex.h>
 #include <float.h>
 #include <limits.h>
@@ -21,7 +22,6 @@ https://mp.weixin.qq.com/s?__biz=MzUxMjEyNDgyNw==&mid=2247493481&idx=1&sn=fc7af2
 #include <string.h>
 #include <sys/socket.h>
 #include <time.h>
-
 /*==========================基本类型定义==========================*/
 typedef char s8;
 typedef short s16;
@@ -96,6 +96,14 @@ typedef double DOUBLE;
 #ifndef BOOL_TYPEDEFINE
 #define BOOL_TYPEDEFINE
 typedef enum { FALSE = 0, TRUE = 1 } BOOL;
+#endif
+
+#ifndef BIG_ENDIAN
+printf(
+    "BIG.................................................................\n");
+#else
+printf("LITTLE................................................................."
+       "\n");
 #endif
 
 //大小端转换不分有无符号
@@ -368,7 +376,7 @@ void PrintIntBinary_FromLowAdressToHigh(int num) {
 }
 
 /*
-将输入的float等4个字节的数据类型以二进制格式输出,从低内存地址到高内存地址，不区分大小端
+将输入的float数据类型以二进制格式输出,以小数位、指数位分开,从低内存地址到高内存地址，不区分大小端
 */
 void PrintFloatBinary1(float num) {
   int L = sizeof(num) * 8;
@@ -1244,12 +1252,87 @@ void vtest6() {
   dump(p, sizeof(S));
 }
 
+void vtest7() {
+  //测试一个结构体的成员在内存地址的分布
+  printf("//*************** [%s] *************************//\n", __FUNCTION__);
+  printf("测试一个结构体的成员在内存地址的分布\n");
+  struct iphdr {
+    unsigned short a : 3;
+    unsigned short b : 4;
+    unsigned short : 5;
+    unsigned short c : 3;
+    unsigned short d : 5;
+  } S;
+
+  S.a = 1; // 1
+  S.b = 3; // 11
+  S.c = 4; // 101
+  S.d = 7; // 111
+  printf("sizeof(S) = %d\n", sizeof(S));
+
+  unsigned char *p = (unsigned char *)&S;
+
+  vAnyToBites_FromLowAddrToHigh(p, sizeof(S));
+  dump(p, sizeof(S));
+}
+
+void vtest8() {
+  //测试一个结构体的成员在内存地址的分布
+  printf("//*************** [%s] *************************//\n", __FUNCTION__);
+  printf("测试一个结构体的成员在内存地址的分布\n");
+  struct Foo2 {
+    unsigned short a : 1;
+    unsigned short b : 3;
+    unsigned short c : 4;
+    unsigned short d : 4;
+    unsigned short e : 4;
+  };
+  union {
+    struct Foo2 s;
+    unsigned short s_data;
+  } S;
+
+  S.s.a = 1; // 100
+  S.s.b = 3; // 111
+  S.s.c = 5; // 101
+  S.s.d = 7; // 1000
+  S.s.e = 15;
+  printf("sizeof(S) = %d\n", sizeof(S));
+
+  unsigned char *p = (unsigned char *)&(S.s);
+  printf("val is 0x%x.\n", S.s_data);
+  vAnyToBites_FromLowAddrToHigh(p, sizeof(S.s));
+  dump(p, sizeof(S.s));
+}
+
+void vbit_order() {
+  printf("//*************** [%s] *************************//\n", __FUNCTION__);
+  struct bit_order {
+    unsigned char a : 2, b : 3, c : 3;
+  };
+
+  unsigned char ch = 0x79;
+  struct bit_order *ptr = (struct bit_order *)&ch;
+
+  printf("bit_order->a : %u\n", ptr->a);
+  printf("bit_order->b : %u\n", ptr->b);
+  printf("bit_order->c : %u\n", ptr->c);
+
+  unsigned char *p = (unsigned char *)ptr;
+  vAnyToBites_FromLowAddrToHigh(p, sizeof(struct bit_order));
+  dump(p, sizeof(struct bit_order));
+}
+
 /*
   原则一：结构体中元素是按照定义顺序一个一个放到内存中去的，但并不是紧密排列的。从结构体存储的首地址开始，每一个元素放置到内存中时，它都会认为内存是以它自己的大小来划分的，因此元素放置的位置一定会在自己宽度的整数倍上开始（以结构体变量首地址为0计算）。
   原则二：在经过第一原则分析后，检查计算出的存储单元是否为所有元素中最宽的元素的长度的整数倍，是，则结束；若不是，则补齐为它的整数倍。
+  原则三：由于位域本质上是一种特殊的结构体成员，因此一般结构体成员的引用方法同样适用于位域成员。不过，需要特别注意的是，位域成员存储是以二进制位作为单位的，而内存的最小寻址单元是字节，所以不能直接引用位域成员的地址。
 
-从test1-6可以看出，结构体的每个成员从上往下依次是存在内存从低往高的位置存的，这与系统的大小端无关，
-但是每个成员在相应的内存里存储方式是一字节为单位，且与系统的大小端有关的，
+无论是大端或小端模式，位域的存储都是由内存低地址向高地址分配，即从低地址字节的低位bit开始向高地址字节的高位bit分配空间；
+位域成员在已分配的内存区域内，按照机器定义的比特序对数据的各个bit位进行排列。即在小端模式中，位域成员的最低有效位存放在内存低bit位，最高有效位存放在内存高bit位；大端模式则相反。
+
+从test1-6可以看出，当结构体的成员的字节数sizeof()值都>=1时，结构体的每个成员从上往下在内存中依次从低地址往高地址的位置存的，这与系统的大小端无关，
+但是每个成员在相应的字段里存储方式是以字节为单位，且与系统的大小端有关的，
 
 */
 
@@ -1273,6 +1356,9 @@ int main(int argc, char *argv[]) {
   test4();
   vtest5();
   vtest6();
+  vtest7();
+  vtest8();
+  vbit_order();
 
   hex();
   checkBiglittle();
