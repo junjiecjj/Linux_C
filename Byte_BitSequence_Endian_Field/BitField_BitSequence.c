@@ -98,13 +98,6 @@ typedef double DOUBLE;
 typedef enum { FALSE = 0, TRUE = 1 } BOOL;
 #endif
 
-#ifndef BIG_ENDIAN
-printf(
-    "BIG.................................................................\n");
-#else
-printf("LITTLE................................................................."
-       "\n");
-#endif
 
 //大小端转换不分有无符号
 // short 大小端转换
@@ -932,8 +925,49 @@ void test1() {
   //通过数组访问的方式修改内存的值，因为hexdump解析的值是0x81 83,
   //所以0x81必为最低字节的内存的数据
   //这里是对每个内存地址赋值，而数组的内存地址一定是从低到高
-  s[0] = 0x81;
-  s[1] = 0x83;
+  s[0] = 0xc6;
+  s[1] = 0xd3;
+
+/*
+针对s[0],为s[0]赋值映射到位域是如下过程:
+
+十六进制值:            0xc6
+值二进制:             1100  0110
+比特序大小端转换:     0110  0011
+分别赋值给位域:       1:0  3:110  4:0011
+位域内大小端转换:     1:0  3:011  4:1100
+位域对应的10进制值:   0    3      12
+
+反过来：为位域分别赋值映射到s[0]是如下过程:
+位域的值:                   1:0   3:3     4:12
+位域值对应的二进制：        1:0   3:011   4:1100
+位域大小端转换:             1:0   3:110   4:0011
+合起来:                       0110 0011
+字节内大小端转换:             1100 0110
+存在内存上的二进制值          1100 0110
+十六进制:                      0xc6
+
+从这里可以看出来，字节内的大小端涉及到值高低位和内存高低位存储时的大小端转换
+和位域内的大小端转换两个层级的转换，非常绕.
+这里请注意：
+(一)对于不用位域的情况,比如:
+struct Ex1
+{
+     int a;
+     float b;
+     double c;
+}A
+(1):在本地写代码时，一旦定义了A，则系统从低到高分配4+4+8=16Byte内存. 低位[0->11]高位
+具体分配如下:a:[0,3]共4Byte,b[4,7]共4Byte,c[8-15]共8Byte,这是与任何大小端无关的,大小端只是某个数据类型内定义的,比如int/float/double,
+比如:a有四个字节，a[0]是第一个数值上的字节也是值的最高位,a[1]为值第二个字节,a[2],a[3]以此类推
+对于大端:按照从左往右地址递增，分别存储a[0] a[1] a[2] a[3].
+对于小端:按照从左往右地址递增，分别存储a[3] a[2] a[1] a[0].
+
+(2)在网络传输时,如果传输结构体A,把A打包发出去后,则对方收到A后a,b,c之间的顺序不会乱，这是与大小端无关的
+
+*/
+
+
   printf("sizeof(strct iphdr) = %d\n", sizeof(t));
   vAnyToBites_IgnoreBigLittle_HumanRead(s, sizeof(t));
   vAnyToBites_FromLowAddrToHigh(s, sizeof(t));
@@ -942,11 +976,11 @@ void test1() {
   printf("fin:%d rsv：%d opcode：%d mask：%d paylod：%d \n\n", t.fin, t.rsv,
          t.opcode, t.mask, t.payload);
 
-  t.fin = 1;
-  t.rsv = 0;
-  t.opcode = 8;
+  t.fin = 0;
+  t.rsv = 3;
+  t.opcode = 12;
   t.mask = 1;
-  t.payload = 65;
+  t.payload = 105;
   vAnyToBites_IgnoreBigLittle_HumanRead(s, sizeof(t));
   vAnyToBites_FromLowAddrToHigh(s, sizeof(t));
   dump(s, sizeof(t));
@@ -1029,7 +1063,7 @@ void test3() {
   printf("s[0] = %x\n\n", s[0]);
 
   t.fin = 1;
-  t.opcode = 0xc;
+  t.opcode = 0xa;
   vAnyToBites_IgnoreBigLittle_HumanRead(s, sizeof(t));
   vAnyToBites_FromLowAddrToHigh(s, sizeof(t));
   dump(s, sizeof(t));
@@ -1042,6 +1076,8 @@ void test3() {
   dump(s, sizeof(t));
   printf("s[0]= %x\n\n", s[0]);
 }
+
+
 
 void test3_r() {
   //当位域成员大小加一起不够一个整字节的时候，验证各成员在内存中的布局。
@@ -1100,7 +1136,7 @@ void test3_r1() {
     unsigned char fin : 1;
     // unsigned char : 3; //该3位不能使用,与unsigned char
     //:0截然不同,无名位域的宽度为3bit
-    unsigned char : 0; //空域，宽度为8bit
+    unsigned char : 0; //空域，宽度为8bit,把最后的字节填满
     unsigned char opcode : 4;
     /* unsigned char a; */
     /* unsigned char b; */
@@ -1311,6 +1347,17 @@ void vbit_order() {
     unsigned char a : 2, b : 3, c : 3;
   };
 
+
+/*
+位宽:              2     3     3
+值(hex):           1     6     3
+大端二进制表示：   01   110    011
+位域内大小端转换:  10   011    110
+合起来:            1001 1110
+大小端:            0111 1001
+十六进制值：0x79
+*/
+
   unsigned char ch = 0x79;
   struct bit_order *ptr = (struct bit_order *)&ch;
 
@@ -1322,6 +1369,34 @@ void vbit_order() {
   vAnyToBites_FromLowAddrToHigh(p, sizeof(struct bit_order));
   dump(p, sizeof(struct bit_order));
 }
+
+void vbit_order1() {
+  printf("//*************** [%s] *************************//\n", __FUNCTION__);
+  struct bit_order {
+    unsigned char a : 2, b : 3, c : 3;
+  };
+
+/*
+位宽:              2     3     3
+值(hex):           1     6     2
+大端二进制表示：   01   110    010
+位域内大小端转换:  10   011    010
+合起来:            1001 1010
+大小端:            0101 1001
+十六进制值：0x59
+*/
+  unsigned char ch = 0x59;
+  struct bit_order *ptr = (struct bit_order *)&ch;
+
+  printf("bit_order->a : %u\n", ptr->a);
+  printf("bit_order->b : %u\n", ptr->b);
+  printf("bit_order->c : %u\n", ptr->c);
+
+  unsigned char *p = (unsigned char *)ptr;
+  vAnyToBites_FromLowAddrToHigh(p, sizeof(struct bit_order));
+  dump(p, sizeof(struct bit_order));
+}
+
 
 /*
   原则一：结构体中元素是按照定义顺序一个一个放到内存中去的，但并不是紧密排列的。从结构体存储的首地址开始，每一个元素放置到内存中时，它都会认为内存是以它自己的大小来划分的，因此元素放置的位置一定会在自己宽度的整数倍上开始（以结构体变量首地址为0计算）。
@@ -1359,14 +1434,15 @@ int main(int argc, char *argv[]) {
   vtest7();
   vtest8();
   vbit_order();
+  vbit_order1();
 
-  hex();
-  checkBiglittle();
-  checkBiglittle1();
-  checkBiglittle2();
-  checkBiglittle3();
-  checkBiglittle4();
-  Formattransfer_test();
+  /* hex(); */
+  /* checkBiglittle(); */
+  /* checkBiglittle1(); */
+  /* checkBiglittle2(); */
+  /* checkBiglittle3(); */
+  /* checkBiglittle4(); */
+  /* Formattransfer_test(); */
 
   return 0;
 }
