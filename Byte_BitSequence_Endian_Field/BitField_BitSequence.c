@@ -850,8 +850,8 @@ void Formattransfer_test() {
 
   dump(&fl, sizeof(fl));
 
-  printf("*********************** \"double  (64 bit)\" little to big endian  "
-         "method 1 ***********\n");
+  printf(
+      "*********************** \"double  (64 bit)\" 大小端互换 ***********\n");
   d1 = 12.12;
   //二进制打印，人类习惯
   PrintDoubleBinary_HumanRead(d1);
@@ -877,8 +877,8 @@ void Formattransfer_test() {
 
   dump(&d1, sizeof(d1));
 
-  printf("*********************** \"unsigned long long  (64bit)\" little to "
-         "big endian  method 1 ***********\n");
+  printf("*********************** \"unsigned long long  (64bit)\" 大小端互换 "
+         "***********\n");
   unsigned long long ull = 0x12345678;
 
   vAnyToBites_IgnoreBigLittle_HumanRead((unsigned char *)&ull,
@@ -964,7 +964,9 @@ void test1() {
   对于大端:按照从左往右地址递增，分别存储a[0] a[1] a[2] a[3].
   对于小端:按照从左往右地址递增，分别存储a[3] a[2] a[1] a[0].
 
-  (2)在网络传输时,如果传输结构体A,把A打包发出去后,则对方收到A后a,b,c之间的顺序不会乱，这是与大小端无关的
+  (2)在网络传输时,如果传输结构体A,把A打包发出去后,则对方收到A后a,b,c之间的顺序不会乱，这是与大小端无关的,
+  只要发送方是以a,b,c的顺序发送，对方接受的顺序也是a,b,c,这个顺序是不会变的，与大小端无关，
+  但是int a变量四个字节的顺序是与大小端有是与大小端有关的.
 
   */
 
@@ -1008,18 +1010,18 @@ void test2() {
   //注意，直接赋值0x8183，因为该常量必然和主机字节序一致，
   //小端：83给低字节，
   //大端：81给低字节
-  *s = 0x8183;
+  *s = 0xd3c6;
 
   vAnyToBites_IgnoreBigLittle_HumanRead(s, sizeof(t));
   vAnyToBites_FromLowAddrToHigh(s, sizeof(t));
   dump(s, sizeof(t));
   printf("fin:%d rsv：%d opcode：%d mask：%d paylod：%d \n", t.fin, t.rsv,
          t.opcode, t.mask, t.payload);
-  t.fin = 1;
-  t.rsv = 1;
-  t.opcode = 8;
+  t.fin = 0;
+  t.rsv = 3;
+  t.opcode = 12;
   t.mask = 1;
-  t.payload = 64;
+  t.payload = 105;
   vAnyToBites_IgnoreBigLittle_HumanRead(s, sizeof(t));
   vAnyToBites_FromLowAddrToHigh(s, sizeof(t));
   dump(s, sizeof(t));
@@ -1029,6 +1031,12 @@ void test2() {
   printf("s[0] = 0x%x\n", s1[0]);
   printf("s[1] = 0x%x\n", s1[1]);
 }
+
+/*
+ * 从以上两个例子可以看出，当结构体内成员有位域时，结构体也是按字节先后存入内存地址的，
+ * 结构体的第一个字节的所有位域存在最低内存地址，结构体最后的字节存入最高地址，存入地址是以字节为单位的.
+ * 然后字节内的位域成员也是前面的在低地址后面的在高字节地址
+ * */
 
 void test3() {
   //当位域成员大小加一起不够一个整字节的时候，验证各成员在内存中的布局。
@@ -1194,9 +1202,9 @@ void test4() {
   t.fin = 1;
   t.opcode = 0xf;
 
-  printf("当位域成员大小加一起不够一个整字节的时候，验证各成员在内存中的布局\ns"
-         "izeof(iphdr2) = %d\n\n\n",
-         sizeof(struct iphdr2));
+  printf(
+      "当位域成员大小加一起不够一个整字节的时候，验证各成员在内存中的布局\n");
+  printf("sizeof(iphdr2) = %d\n\n\n", sizeof(struct iphdr2));
   vAnyToBites_IgnoreBigLittle_HumanRead(s, sizeof(t));
   vAnyToBites_FromLowAddrToHigh(s, sizeof(t));
   dump(s, sizeof(t));
@@ -1421,26 +1429,39 @@ void hex() {
 int main(int argc, char *argv[]) {
   printf("您是想进行:(1)大小端转换测试还是(2)位域、字节序、比特序测试??"
          "\n请输入括号内相应的数字.\n");
-  test1();
-  test2();
-  test3();
-  test3_r();
-  test3_r1();
-  test4();
-  vtest5();
-  vtest6();
-  vtest7();
-  vtest8();
-  vbit_order();
-  vbit_order1();
-
-  /* hex(); */
-  /* checkBiglittle(); */
-  /* checkBiglittle1(); */
-  /* checkBiglittle2(); */
-  /* checkBiglittle3(); */
-  /* checkBiglittle4(); */
-  /* Formattransfer_test(); */
+  int choice = 0;
+  scanf("%d", &choice);
+  switch (choice) {
+  case 1: {
+    test1();
+    test2();
+    test3();
+    test3_r();
+    test3_r1();
+    test4();
+    vtest5();
+    vtest6();
+    vtest7();
+    vtest8();
+    vbit_order();
+    vbit_order1();
+    break;
+  }
+  case 2: {
+    hex();
+    checkBiglittle();
+    checkBiglittle1();
+    checkBiglittle2();
+    checkBiglittle3();
+    checkBiglittle4();
+    Formattransfer_test();
+    break;
+  }
+  default: {
+    printf("您的选择有误\n");
+    break;
+  }
+  }
 
   return 0;
 }
