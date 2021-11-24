@@ -668,6 +668,195 @@ void vByte_order() {
   printf("a: %u, b: %u, c: %u\n", p->a, p->b, p->c);
 }
 
+void vByte_order1() {
+  struct foo {
+#ifndef BIG_ENDIAN
+    unsigned short a : 3;
+    unsigned short b : 7;
+    unsigned short c : 5;
+#else
+    unsigned short c : 5;
+    unsigned short b : 7;
+    unsigned short a : 3;
+#endif
+  };
+
+  unsigned short n = 0x1234;
+  struct foo *p = (struct foo *)&n;
+
+  printf("sizeof(struct foo): %zu\n", sizeof(struct foo));
+  printf("a: 0x%x, b: 0x%x, c: 0x%x\n", p->a, p->b, p->c);
+}
+
+/*
+ *然而, 此代码是有问题的. 在x86小端机器上运行结果如下:
+
+sizeof(struct foo): 2
+a: 0x4, b: 0x46, c: 0x4
+在MIPS大端机器上运行结果如下:
+
+sizeof(struct foo): 2
+a: 0x2, b: 0x23, c: 0x2
+造成此问题的原因是因为忽视了数据填充(padding). foo结构体默认占用2字节,
+位域一共15bit, 还有1bit的填充. x86小端机器上字节/比特对照情况如下:
+
+       34                12
+0 0 1 0 1 1 0 0    0 1 0 0 1 0 0 0
+----- ---------------- ---------
+  a          b             c
+a=100B=4H, b=1000110B=46H, c=100B=4H
+
+MIPS大端机器上字节/比特对照情况如下:
+
+       12                 34
+0 0 0 1 0 0 1 0    0 0 1 1 0 1 0 0
+--------- ---------------- -----
+     c           b           a
+a=10B=2H, b=100011B=23H, a=10B=2H
+
+请注意, 两种情况下, 填充数据都位于最后一个bit, 导致条件编译功亏一篑.
+可以修改一下代码, 显示指明填充数据:
+  */
+
+void vByte_order2() {
+  struct foo {
+#ifndef BIG_ENDIAN
+    unsigned short a : 3;
+    unsigned short b : 7;
+    unsigned short c : 5;
+    unsigned short pad : 1;
+#else
+    unsigned short pad : 1;
+    unsigned short c : 5;
+    unsigned short b : 7;
+    unsigned short a : 3;
+#endif
+  };
+  unsigned short n = 0x1234;
+  struct foo *p = (struct foo *)&n;
+
+  printf("sizeof(struct foo): %zu\n", sizeof(struct foo));
+  printf("a: 0x%x, b: 0x%x, c: 0x%x\n", p->a, p->b, p->c);
+}
+
+/*
+ 读者可以画出此时的字节/比特与位域的对比图, 这里省略了.
+
+那么接下来的问题是, 和字节对齐还有关系吗? 以下两段代码,
+从输出可知默认对齐于2个字节边界, 如果强制以4字节对齐, 会怎么样呢?
+把代码改为test3c.c:
+ */
+void vByte_order3() {
+  struct foo {
+#ifndef BIG_ENDIAN
+    unsigned short a : 3;
+    unsigned short b : 7;
+    unsigned short c : 5;
+    unsigned short pad : 1;
+#else
+    unsigned short pad : 1;
+    unsigned short c : 5;
+    unsigned short b : 7;
+    unsigned short a : 3;
+#endif
+  } __attribute__((aligned(4)));
+
+  unsigned short n = 0x1234;
+  struct foo *p = (struct foo *)&n;
+
+  printf("sizeof(struct foo): %zu\n", sizeof(struct foo));
+  printf("a: 0x%x, b: 0x%x, c: 0x%x\n", p->a, p->b, p->c);
+}
+/**
+
+在两个平台上编译运行, 执行结果是相同的:
+
+sizeof(struct foo): 4
+a: 0x4, b: 0x46, c: 0x4
+所以此时只是在后面2个字节填充了数据, 不影响有效数据.
+
+然而事情往往是复杂的, 比如以下这个代码test4.c, 它虽然没有使用位域, 但也存在问题,
+尽管现在是没问题的:
+
+ */
+void vByte_order4() {
+  struct foo {
+#ifndef BIG_ENDIAN
+    unsigned char a;
+    unsigned short b;
+    unsigned char pad;
+#else
+    unsigned char pad;
+    unsigned short b;
+    unsigned char a;
+#endif
+  } __attribute__((packed));
+
+  unsigned int n = 0x12345678;
+  struct foo *p = (struct foo *)&n;
+
+  printf("sizeof(struct foo): %zu\n", sizeof(struct foo));
+  printf("a: 0x%x, b: 0x%x\n", p->a, p->b);
+
+  return 0;
+}
+/*
+ 它使用__attribbute__ ((packed))来使foo结构体使用最小对齐,
+此时这个代码在大端小端机器上运行结果都是一样的:
+
+sizeof(struct foo): 4
+a: 0x78, b: 0x3456
+因为除了我们显式填充的数据pad, 编译器没有填充在数据成员之间填充任何东西. 然而,
+如果把代码改成以下这样, 就出错了(或者使用默认对齐):
+ */
+
+void vByte_order5() {
+  struct foo {
+#ifndef BIG_ENDIAN
+    unsigned char a;
+    unsigned short b;
+    unsigned char pad;
+#else
+    unsigned char pad;
+    unsigned short b;
+    unsigned char a;
+#endif
+  } __attribute__((aligned(4)));
+  unsigned int n = 0x12345678;
+  struct foo *p = (struct foo *)&n;
+
+  printf("sizeof(struct foo): %zu\n", sizeof(struct foo));
+  printf("a: 0x%x, b: 0x%x\n", p->a, p->b);
+
+  return 0;
+}
+/*
+ 此时x86小端机器执行结果为:
+
+sizeof(struct foo): 8
+a: 0x78, b: 0x1234
+MIPS大端机器执行结果为:
+
+sizeof(struct foo): 8
+a: 0x0, b: 0x5678
+原因在于, 编译器以4字节对齐方式填充了额外的字节, 在x86小端机器上结构体被填充为:
+
++----+----+-------+----+----------+
+| 78 | 56 | 34 12 | ?? | ** ** ** |
++----+----+-------+----+----------+
+  a           b    pad
+在MIPS大端机器结构体被填充为:
+
++----+----+-------+----+----------+
+| 12 | 34 | 56 78 | ?? | ** ** ** |
++----+----+-------+----+----------+
+  pad         b     a
+读者可分析默认情况下的对齐情况和执行结果.
+
+综上所述, 要编写完美兼容不同字节序/比特序的C代码, 还是需要非常仔细的,
+必须综合考虑多种情况的影响.
+ */
+
 /*
   原则一：结构体中元素是按照定义顺序一个一个放到内存中去的，但并不是紧密排列的。从结构体存储的首地址开始，每一个元素放置到内存中时，它都会认为内存是以它自己的大小来划分的，因此元素放置的位置一定会在自己宽度的整数倍上开始（以结构体变量首地址为0计算）。
   原则二：在经过第一原则分析后，检查计算出的存储单元是否为所有元素中最宽的元素的长度的整数倍，是，则结束；若不是，则补齐为它的整数倍。
