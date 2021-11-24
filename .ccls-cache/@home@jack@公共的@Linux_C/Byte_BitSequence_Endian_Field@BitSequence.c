@@ -21,6 +21,11 @@
 #include <sys/socket.h>
 #include <time.h>
 
+#ifndef BOOL_TYPEDEFINE
+#define BOOL_TYPEDEFINE
+typedef enum { FALSE = 0, TRUE = 1 } BOOL;
+#endif
+
 //判断系统大小端,使用联合体判断
 BOOL checkBiglittle();
 
@@ -221,8 +226,51 @@ void test1() {
   //通过数组访问的方式修改内存的值，因为hexdump解析的值是0x81 83,
   //所以0x81必为最低字节的内存的数据
   //这里是对每个内存地址赋值，而数组的内存地址一定是从低到高
-  s[0] = 0x81;
-  s[1] = 0x83;
+  s[0] = 0xc6;
+  s[1] = 0xd3;
+
+  /*
+  针对s[0],为s[0]赋值映射到位域是如下过程:
+
+  十六进制值:            0xc6
+  值二进制:             1100  0110
+  比特序大小端转换:     0110  0011
+  分别赋值给位域:       1:0  3:110  4:0011
+  位域内大小端转换:     1:0  3:011  4:1100
+  位域对应的10进制值:   0    3      12
+
+  反过来：为位域分别赋值映射到s[0]是如下过程:
+  位域的值:                   1:0   3:3     4:12
+  位域值对应的二进制：        1:0   3:011   4:1100
+  位域大小端转换:             1:0   3:110   4:0011
+  合起来:                       0110 0011
+  字节内大小端转换:             1100 0110
+  存在内存上的二进制值          1100 0110
+  十六进制:                      0xc6
+
+  从这里可以看出来，字节内的大小端涉及到值高低位和内存高低位存储时的大小端转换
+  和位域内的大小端转换两个层级的转换，非常绕.
+  这里请注意：
+  (一)对于不用位域的情况,比如:
+  struct Ex1
+  {
+       int a;
+       float b;
+       double c;
+  }A
+  (1):在本地写代码时，一旦定义了A，则系统从低到高分配4+4+8=16Byte内存.
+  低位[0->11]高位
+  具体分配如下:a:[0,3]共4Byte,b[4,7]共4Byte,c[8-15]共8Byte,这是与任何大小端无关的,大小端只是某个数据类型内定义的,比如int/float/double,
+  比如:a有四个字节，a[0]是第一个数值上的字节也是值的最高位,a[1]为值第二个字节,a[2],a[3]以此类推
+  对于大端:按照从左往右地址递增，分别存储a[0] a[1] a[2] a[3].
+  对于小端:按照从左往右地址递增，分别存储a[3] a[2] a[1] a[0].
+
+  (2)在网络传输时,如果传输结构体A,把A打包发出去后,则对方收到A后a,b,c之间的顺序不会乱，这是与大小端无关的,
+  只要发送方是以a,b,c的顺序发送，对方接受的顺序也是a,b,c,这个顺序是不会变的，与大小端无关，
+  但是int a变量四个字节的顺序是与大小端有是与大小端有关的.
+
+  */
+
   printf("sizeof(strct iphdr) = %d\n", sizeof(t));
   vAnyToBites_IgnoreBigLittle_HumanRead(s, sizeof(t));
   vAnyToBites_FromLowAddrToHigh(s, sizeof(t));
@@ -231,11 +279,11 @@ void test1() {
   printf("fin:%d rsv：%d opcode：%d mask：%d paylod：%d \n\n", t.fin, t.rsv,
          t.opcode, t.mask, t.payload);
 
-  t.fin = 1;
-  t.rsv = 0;
-  t.opcode = 8;
+  t.fin = 0;
+  t.rsv = 3;
+  t.opcode = 12;
   t.mask = 1;
-  t.payload = 65;
+  t.payload = 105;
   vAnyToBites_IgnoreBigLittle_HumanRead(s, sizeof(t));
   vAnyToBites_FromLowAddrToHigh(s, sizeof(t));
   dump(s, sizeof(t));
@@ -263,18 +311,18 @@ void test2() {
   //注意，直接赋值0x8183，因为该常量必然和主机字节序一致，
   //小端：83给低字节，
   //大端：81给低字节
-  *s = 0x8183;
+  *s = 0xd3c6;
 
   vAnyToBites_IgnoreBigLittle_HumanRead(s, sizeof(t));
   vAnyToBites_FromLowAddrToHigh(s, sizeof(t));
   dump(s, sizeof(t));
   printf("fin:%d rsv：%d opcode：%d mask：%d paylod：%d \n", t.fin, t.rsv,
          t.opcode, t.mask, t.payload);
-  t.fin = 1;
-  t.rsv = 1;
-  t.opcode = 8;
+  t.fin = 0;
+  t.rsv = 3;
+  t.opcode = 12;
   t.mask = 1;
-  t.payload = 64;
+  t.payload = 105;
   vAnyToBites_IgnoreBigLittle_HumanRead(s, sizeof(t));
   vAnyToBites_FromLowAddrToHigh(s, sizeof(t));
   dump(s, sizeof(t));
@@ -284,6 +332,12 @@ void test2() {
   printf("s[0] = 0x%x\n", s1[0]);
   printf("s[1] = 0x%x\n", s1[1]);
 }
+
+/*
+ * 从以上两个例子可以看出，当结构体内成员有位域时，结构体也是按字节先后存入内存地址的，
+ * 结构体的第一个字节的所有位域存在最低内存地址，结构体最后的字节存入最高地址，存入地址是以字节为单位的.
+ * 然后字节内的位域成员也是前面的在低地址后面的在高字节地址
+ * */
 
 void test3() {
   //当位域成员大小加一起不够一个整字节的时候，验证各成员在内存中的布局。
@@ -301,7 +355,7 @@ void test3() {
   s = (unsigned short *)&t;
 
   t.fin = 1;
-  t.opcode = 0xf;
+  t.opcode = 0x5;
   printf("当位域成员大小加一起不够一个整字节的时候，验证各成员在内存中的布局\ns"
          "izeof(iphdr) = %d\n\n\n",
          sizeof(struct iphdr));
@@ -310,26 +364,13 @@ void test3() {
   dump(s, sizeof(t));
   printf("s[0] = %x\n\n", s[0]);
 
-  t.fin = 0;
-  t.opcode = 0xf;
+  t.fin = 1;
+  t.opcode = 0x3;
   vAnyToBites_IgnoreBigLittle_HumanRead(s, sizeof(t));
   vAnyToBites_FromLowAddrToHigh(s, sizeof(t));
   dump(s, sizeof(t));
   printf("s[0] = %x\n\n", s[0]);
-
-  t.fin = 1;
-  t.opcode = 0xc;
-  vAnyToBites_IgnoreBigLittle_HumanRead(s, sizeof(t));
-  vAnyToBites_FromLowAddrToHigh(s, sizeof(t));
-  dump(s, sizeof(t));
-  printf("s[0] = %x\n\n", s[0]);
-
-  t.fin = 1;
-  t.opcode = 0x0;
-  vAnyToBites_IgnoreBigLittle_HumanRead(s, sizeof(t));
-  vAnyToBites_FromLowAddrToHigh(s, sizeof(t));
-  dump(s, sizeof(t));
-  printf("s[0]= %x\n\n", s[0]);
+  //验证了上述1和2的说法
 }
 
 void test3_r() {
@@ -351,7 +392,7 @@ void test3_r() {
   s = (unsigned short *)&t;
 
   t.fin = 1;
-  t.opcode = 0xf;
+  t.opcode = 0x5;
   printf("当位域成员大小加一起不够一个整字节的时候，验证各成员在内存中的布局\ns"
          "izeof(iphdr) = %d\n\n\n",
          sizeof(struct iphdr));
@@ -360,26 +401,12 @@ void test3_r() {
   dump(s, sizeof(t));
   printf("s[0] = %x\n\n", s[0]);
 
-  t.fin = 0;
-  t.opcode = 0xf;
+  t.fin = 1;
+  t.opcode = 0x3;
   vAnyToBites_IgnoreBigLittle_HumanRead(s, sizeof(t));
   vAnyToBites_FromLowAddrToHigh(s, sizeof(t));
   dump(s, sizeof(t));
   printf("s[0] = %x\n\n", s[0]);
-
-  t.fin = 1;
-  t.opcode = 0xc;
-  vAnyToBites_IgnoreBigLittle_HumanRead(s, sizeof(t));
-  vAnyToBites_FromLowAddrToHigh(s, sizeof(t));
-  dump(s, sizeof(t));
-  printf("s[0] = %x\n\n", s[0]);
-
-  t.fin = 1;
-  t.opcode = 0x0;
-  vAnyToBites_IgnoreBigLittle_HumanRead(s, sizeof(t));
-  vAnyToBites_FromLowAddrToHigh(s, sizeof(t));
-  dump(s, sizeof(t));
-  printf("s[0]= %x\n\n", s[0]);
 }
 
 void test3_r1() {
@@ -389,7 +416,7 @@ void test3_r1() {
     unsigned char fin : 1;
     // unsigned char : 3; //该3位不能使用,与unsigned char
     //:0截然不同,无名位域的宽度为3bit
-    unsigned char : 0; //空域，宽度为8bit
+    unsigned char : 0; //空域，宽度为8bit,把最后的字节填满
     unsigned char opcode : 4;
     /* unsigned char a; */
     /* unsigned char b; */
@@ -447,53 +474,11 @@ void test4() {
   s = (unsigned char *)&t;
 
   t.fin = 1;
-  t.opcode = 0xf;
+  t.opcode = 0x13;
 
-  printf("当位域成员大小加一起不够一个整字节的时候，验证各成员在内存中的布局\ns"
-         "izeof(iphdr2) = %d\n\n\n",
-         sizeof(struct iphdr2));
-  vAnyToBites_IgnoreBigLittle_HumanRead(s, sizeof(t));
-  vAnyToBites_FromLowAddrToHigh(s, sizeof(t));
-  dump(s, sizeof(t));
-  printf("s[0] = 0x%x\n\n", s[0]);
-
-  t.fin = 0;
-  t.opcode = 0xf;
-  vAnyToBites_IgnoreBigLittle_HumanRead(s, sizeof(t));
-  vAnyToBites_FromLowAddrToHigh(s, sizeof(t));
-  dump(s, sizeof(t));
-  printf("s[0] = 0x%x\n\n", s[0]);
-
-  t.fin = 2;
-  t.opcode = 0xc;
-  vAnyToBites_IgnoreBigLittle_HumanRead(s, sizeof(t));
-  vAnyToBites_FromLowAddrToHigh(s, sizeof(t));
-  dump(s, sizeof(t));
-  printf("s[0] = 0x%x\n\n", s[0]);
-
-  t.fin = 3;
-  t.opcode = 0xd;
-  vAnyToBites_IgnoreBigLittle_HumanRead(s, sizeof(t));
-  vAnyToBites_FromLowAddrToHigh(s, sizeof(t));
-  dump(s, sizeof(t));
-  printf("s[0] = 0x%x\n\n", s[0]);
-
-  t.fin = 1;
-  t.opcode = 0x0;
-  vAnyToBites_IgnoreBigLittle_HumanRead(s, sizeof(t));
-  vAnyToBites_FromLowAddrToHigh(s, sizeof(t));
-  dump(s, sizeof(t));
-  printf("s[0] = 0x%x\n\n", s[0]);
-
-  t.fin = 1;
-  t.opcode = 0x7f;
-  vAnyToBites_IgnoreBigLittle_HumanRead(s, sizeof(t));
-  vAnyToBites_FromLowAddrToHigh(s, sizeof(t));
-  dump(s, sizeof(t));
-  printf("s[0] = 0x%x\n\n", s[0]);
-
-  t.fin = 1;
-  t.opcode = 0x20;
+  printf(
+      "当位域成员大小加一起不够一个整字节的时候，验证各成员在内存中的布局\n");
+  printf("sizeof(iphdr2) = %d\n\n\n", sizeof(struct iphdr2));
   vAnyToBites_IgnoreBigLittle_HumanRead(s, sizeof(t));
   vAnyToBites_FromLowAddrToHigh(s, sizeof(t));
   dump(s, sizeof(t));
@@ -539,12 +524,31 @@ void vtest6() {
 
   vAnyToBites_FromLowAddrToHigh(p, sizeof(S));
   dump(p, sizeof(S));
+  /*
+   * 输出:
+   * 测试一个结构体的成员在内存地址的分布
+   * sizeof(S) = 6
+   * 按照地从低地址到高地址的二进制打印:
+   * 00000000 00010010 00101101 00011111 01001101 11111111
+   * 十六进制打印
+   * 地址0x7ffd78f7076a:0x0
+   * 地址0x7ffd78f7076b:0x12
+   * 地址0x7ffd78f7076c:0x2d
+   * 地址0x7ffd78f7076d:0x1f
+   * 地址0x7ffd78f7076e:0x4d
+   * 地址0x7ffd78f7076f:0xff
+   * 以实际表示的数的字节序列的十六进制打印:
+   * 0x: ff 4d 1f 2d 12 0
+   * 按照内存地址从低到高的字节序列十六进制打印:
+   * 0x: 0 12 2d 1f 4d ff
+   * 从这个例子可以看出:大小端是针对数据类型内部的，整个结构体的顺序不变，即a还是最低地址，b中间，c最高地址；
+   * 只是a,b,c内部乱了
+   */
 }
 
 void vtest7() {
   //测试一个结构体的成员在内存地址的分布
   printf("//*************** [%s] *************************//\n", __FUNCTION__);
-  printf("测试一个结构体的成员在内存地址的分布\n");
   struct iphdr {
     unsigned short a : 3;
     unsigned short b : 4;
@@ -600,6 +604,16 @@ void vbit_order() {
     unsigned char a : 2, b : 3, c : 3;
   };
 
+  /*
+  位宽:              2     3     3
+  值(hex):           1     6     3
+  大端二进制表示：   01   110    011
+  位域内大小端转换:  10   011    110
+  合起来:            1001 1110
+  大小端:            0111 1001
+  十六进制值：0x79
+  */
+
   unsigned char ch = 0x79;
   struct bit_order *ptr = (struct bit_order *)&ch;
 
@@ -610,6 +624,48 @@ void vbit_order() {
   unsigned char *p = (unsigned char *)ptr;
   vAnyToBites_FromLowAddrToHigh(p, sizeof(struct bit_order));
   dump(p, sizeof(struct bit_order));
+}
+
+void vbit_order1() {
+  printf("//*************** [%s] *************************//\n", __FUNCTION__);
+  struct bit_order {
+    unsigned char a : 2, b : 3, c : 3;
+  };
+
+  /*
+  位宽:              2     3     3
+  值(hex):           1     6     2
+  大端二进制表示：   01   110    010
+  位域内大小端转换:  10   011    010
+  合起来:            1001 1010
+  大小端:            0101 1001
+  十六进制值：0x59
+  */
+  unsigned char ch = 0x59;
+  struct bit_order *ptr = (struct bit_order *)&ch;
+
+  printf("bit_order->a : %u\n", ptr->a);
+  printf("bit_order->b : %u\n", ptr->b);
+  printf("bit_order->c : %u\n", ptr->c);
+
+  unsigned char *p = (unsigned char *)ptr;
+  vAnyToBites_FromLowAddrToHigh(p, sizeof(struct bit_order));
+  dump(p, sizeof(struct bit_order));
+}
+
+void vByte_order() {
+  printf("//*************** [%s] *************************//\n", __FUNCTION__);
+  struct foo {
+    unsigned char a : 2;
+    unsigned char b : 3;
+    unsigned char c : 1;
+  };
+
+  unsigned char ch = 0x2d;
+  struct foo *p = (struct foo *)&ch;
+
+  printf("sizeof(struct foo): %zu\n", sizeof(struct foo));
+  printf("a: %u, b: %u, c: %u\n", p->a, p->b, p->c);
 }
 
 /*
@@ -649,11 +705,7 @@ int main(int argc, char *argv[]) {
   vtest7();
   vtest8();
   vbit_order();
-
-  hex();
-  checkBiglittle();
-  checkBiglittle1();
-  checkBiglittle2();
-  checkBiglittle3();
-  checkBiglittle4();
+  vbit_order1();
+  vByte_order();
+  return 0;
 }
