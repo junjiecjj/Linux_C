@@ -1,22 +1,22 @@
-/*************************************************************************
->> File Name: keygen.c
->> Author: 陈俊杰
->> Mail: 2716705056qq.com
-
->> Created Time: 2021年11月27日 星期六 23时56分29秒
-
->> 此程序的功能是：
-************************************************************************/
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdlib.h>
+#include "key.h"
 
 static int keygen = 0;
 static int offset = 0;
+
 static int default_keygen = 0x9527;
 
 /*
- 功能：
+功能：
  重置keygen，会影响生成的随机数序列
- */
-void reset_keygen() { set_keygen(default_keygen); }
+*/
+void reset_keygen()
+{
+	set_keygen(default_keygen);
+}
 
 /*
 功能：
@@ -26,21 +26,25 @@ void reset_keygen() { set_keygen(default_keygen); }
 返回值:
  无
 */
-void set_keygen(int key) {
-  keygen = key;
-  offset = 0;
+void set_keygen(int key)
+{
+	keygen = key;
+	offset = 0;
 }
 
 /*
 功能：
  根据同步码和keygen生成随机密钥种子
 参数：
-    sync：同步码
+    sync：同步码 
  key：密钥
 返回值:
  种子
 */
-int born_seed(int sync, int key) { return (sync ^ key); }
+int born_seed(int sync,int key)
+{
+	return (sync^key);
+}
 
 /*
 功能：
@@ -51,26 +55,29 @@ int born_seed(int sync, int key) { return (sync ^ key); }
  key：申请的密钥存储的缓存
 返回值:
  实际返回密钥个数
- */
-int request_key(int sync, int key_num, char key[]) {
-  int i, j, r;
-  int seed;
-  seed = born_seed(sync, keyen);
+*/
+int request_key(int sync,int key_num,char key[])
+{
+	int i,j, r;
+	int seed;
 
-  srand(seed);
-  if (keynum > MAX_KEY_REQUEST) {
-    key_num = MAX_KEY_REQUEST;
-  }
+	seed = born_seed(sync,keygen);
+	
+	srand(seed);
+	if(key_num > MAX_KEY_REQUEST)
+	{
+		key_num = MAX_KEY_REQUEST;
+	}	
 
-  for (int i = 0; i < offset; ++i) {
-    rand();
-  }
-
-  for (j = 0; j < key_num; j++) {
-    r = rand() & 0xff;
-    key[j] = r;
-  }
-
-  offset += key_num;
-  return key_num;
+	for(i=0;i<offset;i++)
+	{
+		rand();
+	}
+	
+	for (j = 0; j < key_num; j++) {
+		r =  rand()&0xff;
+		key[j] = r;
+	}
+	offset += key_num;
+	return key_num;
 }
