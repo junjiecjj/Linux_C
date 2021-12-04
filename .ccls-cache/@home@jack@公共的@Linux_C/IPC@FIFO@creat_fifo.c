@@ -31,3 +31,20 @@ int main(int argc, char *argv[]) {
 
   return 0;
 }
+
+/*
+
+# root @ arch in ~/work on git:master x [17:17:33]
+$ gcc a.c
+
+# root @ arch in ~/work on git:master x [17:17:34]
+$ ./a.out fifo
+create file "fifo" success!
+
+# root @ arch in ~/work on git:master x [17:17:38]
+$ ll
+total 16K
+-rw-r--r-- 1 root root  461 Aug 13 17:15 a.c
+-rwxr-xr-x 1 root root 8.5K Aug 13 17:17 a.out
+prw-r--r-- 1 root root    0 Aug 13 17:17 fifo
+*/

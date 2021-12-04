@@ -45,3 +45,28 @@ int main(int argc, char *argv[]) {
   close(fifo);
   return 0;
 }
+
+/*
+
+# root @ arch in ~/work on git:master x [18:36:19]
+$ gcc -o send send.c
+
+# root @ arch in ~/work on git:master x [18:36:22]
+$ gcc -o recv recv.c
+
+# root @ arch in ~/work on git:master x [18:36:26]
+$ ll
+total 32K
+pr--r--r-- 1 root root    0 Aug 13 18:34 fifo
+-rwxr-xr-x 1 root root 8.8K Aug 13 18:36 recv
+-rw-r--r-- 1 root root  727 Aug 13 18:34 recv.c
+-rwxr-xr-x 1 root root 8.8K Aug 13 18:36 send
+-rw-r--r-- 1 root root  727 Aug 13 18:32 send.c
+
+# root @ arch in ~/work on git:master x [18:36:30]
+$ ./send fifo /etc/sysctl.conf
+
+# root @ arch in ~/work on git:master x [18:35:08]
+$ ./recv fifo sysctl.conf
+
+*/

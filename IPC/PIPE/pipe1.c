@@ -59,3 +59,15 @@ int main(int argc, char *argv[]) {
 
   return 0;
 }
+
+/*
+
+# root @ arch in ~/work on git:master x [14:44:49]
+$ gcc a.c
+
+# root @ arch in ~/work on git:master x [14:44:52]
+$ ./a.out from_parent from_child
+child_proc(4335) recv_from_parent: from_parent
+parent_proc(4334) recv_from_child: from_child
+
+*/
