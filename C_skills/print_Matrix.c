@@ -21,7 +21,7 @@
 #include<complex.h>
 #include<stdbool.h>
 
-//申明
+//适用于A[m][n]形式申明的二维数组
 void showInt2DArray(int m, int n, int (*A)[n]) {
   for (int i = 0; i < m; i++) {
     for (int j = 0; j < n; j++) {
@@ -31,6 +31,7 @@ void showInt2DArray(int m, int n, int (*A)[n]) {
   }
 }
 
+//适用于int **A形式申明的二维数组,内存连续或者不连续都行
 void showInt2DArray_point(int m, int n, int **A) {
   for (int i = 0; i < m; i++) {
     for (int j = 0; j < n; j++) {
@@ -42,6 +43,7 @@ void showInt2DArray_point(int m, int n, int **A) {
 
 
 
+//适用于A[m][n]形式申明的二维数组
 void Print2DMatrix(int rows, int cols, int ar[rows][cols])
 {
     for(int i=0; i< rows;++i)
@@ -55,6 +57,8 @@ void Print2DMatrix(int rows, int cols, int ar[rows][cols])
     printf("\n");
 }
 
+
+//适用于int **A形式申明的二维数组,内存连续,不连续时编译不会出错但是不对
 void Print2DMatrix_1D(int rows, int cols, int *ar)
 {
     for(int i=0; i< rows*cols;++i)
@@ -111,13 +115,16 @@ int main(int argc, char *argv[])
 
 
     printf("打印数组A第一次......\n");
-    showInt2DArray(m, n, D); //这样不会出错，但是结果不对
+    showInt2DArray(m, n, D); //这样编译不会出错，但是结果不对
 
     printf("打印数组A第二次......\n");
-    Print2DMatrix(m, n, D); //这样不会出错，但是结果不对
-
+    Print2DMatrix(m, n, D); //这样编译不会出错，但是结果不对
 
     printf("打印数组A第三次......\n");
+    Print2DMatrix_1D(m, n, &D[0][0]); //这样编译不会出错，但是结果不对
+
+
+    printf("打印数组A第四次......\n");
     showInt2DArray_point(m, n, D); //正确的方式
 
 
@@ -151,13 +158,15 @@ int main(int argc, char *argv[])
 
 
     printf("打印数组A第一次......\n");
-    showInt2DArray(m, n, E); //这样不会出错，但是结果不对
+    showInt2DArray(m, n, E); //这样编译不会出错，但是结果不对
 
     printf("打印数组A第二次......\n");
-    Print2DMatrix(m, n, E); //这样不会出错，但是结果不对
-
+    Print2DMatrix(m, n, E); //这样编译不会出错，但是结果不对
 
     printf("打印数组A第三次......\n");
+    Print2DMatrix_1D(m, n, E[0]); //这样可以，把内存连续分配的二维数组当做一维打印
+
+    printf("打印数组A第四次......\n");
     showInt2DArray_point(m, n, E); //正确的方式
 
 
