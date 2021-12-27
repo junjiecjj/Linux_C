@@ -263,6 +263,7 @@ name或sizeof 6.28。尽管如此，还是建议所有情况下都使用圆括�
 size_t writeNum = 0;
 size_t readNum = 0;
 
+//申明
 void showInt2DArray(int m, int n, int (*A)[n]) {
   for (int i = 0; i < m; i++) {
     for (int j = 0; j < n; j++) {
