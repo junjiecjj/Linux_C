@@ -2,7 +2,7 @@
 >> File Name: FFT.c
 >> Author: 陈俊杰
 >> Mail: 2716705056qq.com
- 
+
 >> Created Time: 2021年02月05日 星期五 18时09分22秒
 >> Last Modified : 2021年02月05日 星期五 18时09分40秒
 >> 此程序的功能是：快速傅里叶变换
@@ -29,7 +29,7 @@ typedef struct{       //定义一个结构体表示复数的类型
 
 Complex x[N], *W;   //定义输入序列和旋转因子
 int size=0;   //定义数据长度
-double PI = 3.1416926; 
+double PI = 3.1416926;
 void output()
 {
 	int i;
@@ -121,11 +121,13 @@ void fft()
 		}
 	}
 }
+
+
 int main(int argc, char *argv[])
 {
 	int i;
 	printf("输入数据个数\n");
-	scanf("%d",&size);//输入数据的长度（2的整数次幂）
+	scanf("%d",&size);       //输入数据的长度（2的整数次幂）
 	printf("输入数据的实部、虚部\n");
 	for(i=0;i<size;i++)
 	{
