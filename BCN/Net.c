@@ -21,8 +21,7 @@ void hello(void) {
   A += 100;
   int b = 1011;
 
-  printf("function: [%s], File Path: [%s], Line: [%d], Time: [%s] \n", __func__,
-         __FILE__, __LINE__, GetTimeOfNow());
+  printf("function: [%s], File Path: [%s], Line: [%d], Time: [%s] \n", __func__, __FILE__, __LINE__, GetTimeOfNow());
   printf("A = %d, b = %d\n", A, b);
 }
 

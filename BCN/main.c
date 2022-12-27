@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include "DOA.h"
 #include "Net.h"
-#include "Globle.h"
+#include "Global.h"
 #include "Define.h"
 #include "Struct.h"
 #include "FormatTransfer.h"
@@ -18,7 +18,8 @@ int main(int argc, char *argv[])
 	BCN.d = 19;
 	showstr(&BCN);
 
-	byby();
+	timeExamp();
+	timeTest();
 
 	printf("***************** sizeof() ******************************\n");
 	double A[4] = {12.12, 13.13, 14.14, 15.15};
@@ -128,11 +129,7 @@ int main(int argc, char *argv[])
 
     printf("***************** FormatTransfer.h  ****************************\n");
 
-    Formattransfer_test();
-
-
-
-
+    // Formattransfer_test();
 
 
 

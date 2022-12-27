@@ -1,10 +1,9 @@
 #ifndef _COORDINATE_CJJ
 #define _COORDINATE_CJJ
 
-/*-°üº¬Í·ÎÄ¼þ------------------------------------------------------------------------------------*/
+/*-ï¿½ï¿½ï¿½ï¿½Í·ï¿½Ä¼ï¿½------------------------------------------------------------------------------------*/
 #include "coordinate.h"
-#include "Public.h"
-#include "RamRefLib.h"
+
 
 
 /************************************************************************
@@ -35,8 +34,8 @@ hypot_3(
  *  Function Name:	dMyRand
  *
  *  Description:
- *					Ëæ»úÊý·¢ÉúÆ÷--²úÉú0ºÍ1Ö®¼äµÄËæ»úÊý(32bit)
- *					64bit ÐèÐÞ¸Ä×î´óÕûÊýÖµ
+ *					ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½--ï¿½ï¿½ï¿½ï¿½0ï¿½ï¿½1Ö®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(32bit)
+ *					64bit ï¿½ï¿½ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
  *
  *
  *  Return Value:	None.
@@ -45,10 +44,10 @@ DOUBLE dRand()
 {
 	DOUBLE Temp = 0;
 
-	/*³õÊ¼»¯*/
+	/*ï¿½ï¿½Ê¼ï¿½ï¿½*/
 	/*	srand( (unsigned)time( NULL ) );*/
 
-	/*Ëæ»úÊý*/
+	/*ï¿½ï¿½ï¿½ï¿½ï¿½*/
 	Temp = (DOUBLE)rand() / RAND_MAX;
 
 	return Temp ;
@@ -57,21 +56,21 @@ DOUBLE dRand()
 
 /*****************************************************************************
 
-º¯ÊýÃû£º	atan2XY
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½	atan2XY
 
-ÃèÊö:		¸ù¾Ý(x,y)¼ÆËã½Ç¶È
+ï¿½ï¿½ï¿½ï¿½:		ï¿½ï¿½ï¿½ï¿½(x,y)ï¿½ï¿½ï¿½ï¿½Ç¶ï¿½
 
-ÏêÏ¸ÃèÊö£º
-            ¸ù¾Ý(x,y)¼ÆËã½Ç¶È£¬µ¥Î»Îª»¡¶È
+ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            ï¿½ï¿½ï¿½ï¿½(x,y)ï¿½ï¿½ï¿½ï¿½Ç¶È£ï¿½ï¿½ï¿½Î»Îªï¿½ï¿½ï¿½ï¿½
 
 
-²ÎÊý:		Î»ÖÃx,y
+ï¿½ï¿½ï¿½ï¿½:		Î»ï¿½ï¿½x,y
 
-·µ»ØÖµ£º	½Ç¶È0 -- 2¦Ð
+ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½	ï¿½Ç¶ï¿½0 -- 2ï¿½ï¿½
 
-×¢ÒâÊÂÏî:	ÎÞ
+×¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:	ï¿½ï¿½
 
-º¯Êý¶¨Òå:
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:
  ******************************************************************************/
 DOUBLE atan2XY(DOUBLE x, DOUBLE y)
 {
@@ -99,7 +98,7 @@ void Coordinate_GetInitationParas(double *a, double *b, double *f, double *e2, d
 }
 
 
-/*¾­Î³¸ß  --> µØÐÄÏµx,y,z*/
+/*ï¿½ï¿½Î³ï¿½ï¿½  --> ï¿½ï¿½ï¿½ï¿½Ïµx,y,z*/
 void Coordinate_WGS84ToECEF(double Lon, double Lat, double Height, double *X, double *Y, double *Z);
 
 
@@ -120,10 +119,10 @@ void Coordinate_PolarHToPolar(double Range, double Azimuth, double Height, doubl
 
 void Coordinate_PolarToWGS84(double Range, double Azimuth, double Height, double Plat, double Plon, double Pht, double *Tlat, double *Tlon, double *Th);
 
-// µØÐÄÏµ(µØÐÄµØ¹ÌÏµ)µ½´óµØÏµ(¶«±±Ìì¡¢Õ¾ÐÄÏµ)
+// ï¿½ï¿½ï¿½ï¿½Ïµ(ï¿½ï¿½ï¿½ÄµØ¹ï¿½Ïµ)ï¿½ï¿½ï¿½ï¿½ï¿½Ïµ(ï¿½ï¿½ï¿½ï¿½ï¿½ì¡¢Õ¾ï¿½ï¿½Ïµ)
 void Coordinate_ECEFToENU(double Xr, double Yr, double Zr, double X, double Y, double Z, double refLon, double refLat, double *e, double *n, double *u);
 
-//´óµØÏµ(¶«±±Ìì¡¢Õ¾ÐÄÏµ) x,y,z -->  ·½Î»¸©Ñö
+//ï¿½ï¿½ï¿½Ïµ(ï¿½ï¿½ï¿½ï¿½ï¿½ì¡¢Õ¾ï¿½ï¿½Ïµ) x,y,z -->  ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½
 void Coordinate_RightAngleToPolar(double X, double Y, double Z, double *Range, double *Azimuth, double *Elevation);
 
 void Coordinate_RightAngleToPolar_XX(double X, double Y, double Z, double *Range, double *Azimuth, double *Elevation);
@@ -143,7 +142,7 @@ void Coordinate_ACUaerToxyz_HJ_Pro(double Range, double Azimuth, double Elevatio
 // hj eplane xyz to aer
 void Coordinate_eplaneaerToxyz_HJ_Pro(double Range, double Azimuth, double Elevation, double *X, double *Y, double *Z);
 
-// hj ÕóÃæ AER ---xyz
+// hj ï¿½ï¿½ï¿½ï¿½ AER ---xyz
 void Coordinate_eplaneAerToXyz_HJ(double Range, double Azimuth, double Elevation, double *X, double *Y, double *Z);
 
 
@@ -152,12 +151,12 @@ void Coordinate_WGS84ToPolarE(double Lon, double Lat, double Height, double Plat
 
 void Coordinate_WGS84ToPolarPro(int mode,int i,double yaw,double X, double Y, double Z, double Plat, double Plon, double Pht, double *Range, double *Azimuth, double *Elevation);
 
-// ÊýÒý£¬³ÌÒý¡¢Í¬Õ¾Êý¾Ý´¦Àí
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¬Õ¾ï¿½ï¿½ï¿½Ý´ï¿½ï¿½ï¿½
 void Coordinate_HJWGS84ToPolarPro(int mode,int i,double yaw,double X, double Y, double Z, double Plat, double Plon, double Pht, double *Range, double *Azimuth, double *Elevation);
 
 
 
-// ÊýÒý£¬³ÌÒý¡¢Í¬Õ¾Êý¾Ý´¦Àí
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¬Õ¾ï¿½ï¿½ï¿½Ý´ï¿½ï¿½ï¿½
 void Coordinate_HJWGS84ToPolarPro2(int mode,int i,double yaw,double X, double Y, double Z, double Plat, double Plon, double Pht, double *Range1, double *Azimuth1, double *Elevation1);
 
 void Coordinate_CarAERToENUAER_XX(int i,double yaw,double Range, double Azimuth, double Elevation, double *R, double *Az, double *Ele);
@@ -169,8 +168,8 @@ void Coordinate_ENUToWGS84(double e, double n, double u, double StaLong, double 
 void Coordinate_WGS84ToPolarSTK(double Ranged, double Azimuthd, double Elevationd, double Plat, double Plon, double Pht, double *Range, double *Azimuth, double *Elevation);
 
 /*
-	double yaw Ö¸±±Îó²î
-	¸ù¾Ý³µÍ·µÄÖ¸±±Îó²î, ½«ENU×ø±êÏµ×ªµ½³µµÄ×ø±êÏµÏÂ
+	double yaw Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½ï¿½ï¿½Ý³ï¿½Í·ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ENUï¿½ï¿½ï¿½ï¿½Ïµ×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½
  */
 void Coordinate_ENUToCarPosition(double yaw1, double e, double n, double u, double *x, double *y, double *z);
 
@@ -179,28 +178,28 @@ void Coordinate_PolarToRightAngle_XX(double Range, double Azimuth, double Elevat
 
 void Coordinate_PolarToRightAngle_HJ(double Range, double Azimuth, double Elevation, double *X, double *Y, double *Z);
 
-unsigned int beam_plane_calc(int mode,float x, float y);// x ·½Î», y ¸©Ñö
+unsigned int beam_plane_calc(int mode,float x, float y);// x ï¿½ï¿½Î», y ï¿½ï¿½ï¿½ï¿½
 
-// ÈÆYÖáÄæÊ±ÕëÐý×ªµÄ¾ØÕó
+// ï¿½ï¿½Yï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½×ªï¿½Ä¾ï¿½ï¿½ï¿½
 RMATRIX rotat_y_axis_matrix(double az);
 
-// rot RMATRIX  ÈÆZÖáÄæÊ±ÕëÐý×ªµÄ¾ØÕó
+// rot RMATRIX  ï¿½ï¿½Zï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½×ªï¿½Ä¾ï¿½ï¿½ï¿½
 RMATRIX rotat_z_axis_matrix(double ele);
 
-// rot RMATRIX  ÈÆ ºáÒ¡ Ðý×ªµÄ¾ØÕó
+// rot RMATRIX  ï¿½ï¿½ ï¿½ï¿½Ò¡ ï¿½ï¿½×ªï¿½Ä¾ï¿½ï¿½ï¿½
 RMATRIX rotat_R_axis_matrix(double aR);
 
-// rot RMATRIX  ÈÆ ×ÝÒ¡ Ðý×ªµÄ¾ØÕó
+// rot RMATRIX  ï¿½ï¿½ ï¿½ï¿½Ò¡ ï¿½ï¿½×ªï¿½Ä¾ï¿½ï¿½ï¿½
 RMATRIX rotat_P_axis_matrix(double aP);
 
-// rot RMATRIX  ÈÆ º½Ïò Ðý×ªµÄ¾ØÕó
+// rot RMATRIX  ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½×ªï¿½Ä¾ï¿½ï¿½ï¿½
 RMATRIX rotat_H_axis_matrix(double aH)
 {
 	RMATRIX			zdata;
 	double RAzi = 0;
 	RAzi = (aH * 1.0) / 180.0*ONEPI;
 
-	//´æ´¢¾ØÕóµÄÐÐºÅºÍÁÐºÅ
+	//ï¿½æ´¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÐºÅºï¿½ï¿½Ðºï¿½
 	zdata.MatrixCol = 3;
 	zdata.MatrixRow = 3;
 
@@ -228,7 +227,7 @@ void Coordinate_ServoToCarPosition( double e, double n, double u, double *x, dou
 // XX
 void Coordinate_XX_enuToCarPosition(double e, double n, double u, double *x, double *y, double *z) //sifu-->zhenmian
 {
-	// ¹ßµ¼Èý½Ç¶È ×¢Òâ»»Ëã³É»¡¶ÈAAA
+	// ï¿½ßµï¿½ï¿½ï¿½ï¿½Ç¶ï¿½ ×¢ï¿½â»»ï¿½ï¿½É»ï¿½ï¿½ï¿½AAA
 	double dRollAngle_rad = 0;
 	double dPitchAngle_rad = 0;
 	double dYawAngle_rad = 0;
@@ -243,7 +242,7 @@ void Coordinate_XX_enuToCarPosition(double e, double n, double u, double *x, dou
 	memset(fX_c,0,3*sizeof(double));
 	memset(fX_c2,0,3*sizeof(double));
 	memset(fX,0,3*sizeof(double));
-	// ÊäÈë×ø±ê---Èç¹ûenu-xyz(ËÅ·þÕóÃæ£©
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½---ï¿½ï¿½ï¿½enu-xyz(ï¿½Å·ï¿½ï¿½ï¿½ï¿½æ£©
 	fX[0] = e;
 	fX[1] = n;
 	fX[2] = u;
@@ -257,21 +256,21 @@ void Coordinate_XX_enuToCarPosition(double e, double n, double u, double *x, dou
 	fMatrix[2][0] = -cos(dYawAngle_rad)*sin(dPitchAngle_rad)*cos(dRollAngle_rad) + sin(dYawAngle_rad)*sin(dRollAngle_rad);
 	fMatrix[2][1] = sin(dYawAngle_rad)*sin(dPitchAngle_rad)*cos(dRollAngle_rad)+ cos(dYawAngle_rad)*sin(dRollAngle_rad);
 	fMatrix[2][2] = cos(dPitchAngle_rad)*cos(dRollAngle_rad);
-	//×ø±ê±ä»»
+	//ï¿½ï¿½ï¿½ï¿½ä»»
 	for (i = 0;i<3;i++)
 	{
 		for (j = 0;j<3;j++)
 		{
-			// fX_c[i] += fMatrix[j][i]*fX[j];//³Ë¾ØÕóµÄ×ªÖÃfMatrix[i][j]
-			fX_c[i] += fMatrix[i][j]*fX[j];//³Ë¾ØÕóµÄ×ªÖÃfMatrix[i][j]
+			// fX_c[i] += fMatrix[j][i]*fX[j];//ï¿½Ë¾ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½fMatrix[i][j]
+			fX_c[i] += fMatrix[i][j]*fX[j];//ï¿½Ë¾ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½fMatrix[i][j]
 		}
 	}
 	*x = fX_c[0];
 	*y = fX_c[1];
 	*z = fX_c[2];
 }
-//RollAngleºáÒ¡½Ç,PitchAngle ×ÝÒ¡½Ç, YawAngleÆ«º½½Ç
-/*! ´ÓÆ½Ì¨×ø±ê×ª»»ÎªÕ¾ÐÄÏµRAE*/
+//RollAngleï¿½ï¿½Ò¡ï¿½ï¿½,PitchAngle ï¿½ï¿½Ò¡ï¿½ï¿½, YawAngleÆ«ï¿½ï¿½ï¿½ï¿½
+/*! ï¿½ï¿½Æ½Ì¨ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ÎªÕ¾ï¿½ï¿½ÏµRAE*/
 void HJACUAERToENU(double range, double azi_rad,double ele_rad,
 		double dRollAngle_rad,double dPitchAngle_rad,double dYawAngle_rad,
 		double* e, double* n,double* u)
@@ -306,14 +305,14 @@ void HJACUAERToENU(double range, double azi_rad,double ele_rad,
 	fMatrix[2][1] = sin(dYawAngle_rad)*sin(dPitchAngle_rad)*cos(dRollAngle_rad) - cos(dYawAngle_rad)*sin(dRollAngle_rad);
 	fMatrix[2][2] = cos(dPitchAngle_rad)*cos(dRollAngle_rad);
 
-	/*²»¿¼ÂÇÆ½Ì¨°²×°Îó²î*/
+	/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ½Ì¨ï¿½ï¿½×°ï¿½ï¿½ï¿½*/
 #if 1
-	//×ø±ê±ä»»
+	//ï¿½ï¿½ï¿½ï¿½ä»»
 	for (i = 0;i<3;i++)
 	{
 		for (j = 0;j<3;j++)
 		{
-			fX_c[i] += fMatrix[j][i]*fX[j];//³Ë¾ØÕóµÄ×ªÖÃfMatrix[i][j]
+			fX_c[i] += fMatrix[j][i]*fX[j];//ï¿½Ë¾ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½fMatrix[i][j]
 		}
 	}
 #endif
@@ -322,7 +321,7 @@ void HJACUAERToENU(double range, double azi_rad,double ele_rad,
 	*n = fX_c[0];
 	*u = fX_c[2];
 
-	//·½Î»Ñö½Ç¼ÆËã
+	//ï¿½ï¿½Î»ï¿½ï¿½ï¿½Ç¼ï¿½ï¿½ï¿½
 	// XYZToRAE_rad(fX_c[1],fX_c[0],fX_c[2],rtemp,azitemp,elvtemp); //fX_c[0],fX_c[1],fX_c[2],range0,azi0_rad,ele0_rad 20190702
 
 }
@@ -363,15 +362,15 @@ void Coordinate_ACUxyzToePlanexyz_HJ(double x, double y, double z,  double Azimu
 	fMatrix[2][1] = 0;
 	fMatrix[2][2] = cos(RAzi);
 
-	/*²»¿¼ÂÇÆ½Ì¨°²×°Îó²î*/
+	/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ½Ì¨ï¿½ï¿½×°ï¿½ï¿½ï¿½*/
 
-	//×ø±ê±ä»»
+	//ï¿½ï¿½ï¿½ï¿½ä»»
 	for (i = 0;i<3;i++)
 	{
 		for (j = 0;j<3;j++)
 		{
 			//printf("[ACU - eplant :]--i= %d,j= %d,ez = %f\n",i,j,fMatrix[i][j]);
-			fX_c[i] += fMatrix[i][j]*fX[j];//³Ë¾ØÕóµÄ×ªÖÃfMatrix[i][j]
+			fX_c[i] += fMatrix[i][j]*fX[j];//ï¿½Ë¾ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½fMatrix[i][j]
 		}
 	}
 
@@ -422,13 +421,13 @@ void Coordinate_ePlanexyzToACUxyz_HJ(double ex, double ey, double ez,  double Az
 	fMatrix[2][2] = cos(RAzi);
 
 
-	//×ø±ê±ä»»
+	//ï¿½ï¿½ï¿½ï¿½ä»»
 	for (i = 0;i<3;i++)
 	{
 		for (j = 0;j<3;j++)
 		{
 			//printf("[ACU - eplant :]--i= %d,j= %d,ez = %f\n",i,j,fMatrix[i][j]);
-			fX_c[i] += fMatrix[i][j]*fX[j];//³Ë¾ØÕóµÄ×ªÖÃfMatrix[i][j]
+			fX_c[i] += fMatrix[i][j]*fX[j];//ï¿½Ë¾ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½fMatrix[i][j]
 		}
 	}
 
@@ -463,10 +462,10 @@ void Coordinate_ACUxyzToePlanexyz_HJPro(double x, double y, double z,  double Az
 	int i;
 	int j;
 
-	// rot RMATRIX  ÈÆZÖáÄæÊ±ÕëÐý×ªµÄ¾ØÕó
+	// rot RMATRIX  ï¿½ï¿½Zï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½×ªï¿½Ä¾ï¿½ï¿½ï¿½
 	TZ =  rotat_z_axis_matrix(REle);
 
-	// rot RMATRIX  ÈÆYÖáÄæÊ±ÕëÐý×ªµÄ¾ØÕó
+	// rot RMATRIX  ï¿½ï¿½Yï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½×ªï¿½Ä¾ï¿½ï¿½ï¿½
 	TY =  rotat_y_axis_matrix(RAzi);
 
 	T1 = real_matrix_multiper(TZ,TY);
@@ -481,7 +480,7 @@ void Coordinate_ACUxyzToePlanexyz_HJPro(double x, double y, double z,  double Az
 		for (j = 0;j<3;j++)
 		{
 			//printf("[ACU - eplant :]--i= %d,j= %d,ez = %f\n",i,j,fMatrix[i][j]);
-			fX_c[i] += T1.ArrayMatrix[i][j]*fX[j];//³Ë¾ØÕóµÄ×ªÖÃfMatrix[i][j]
+			fX_c[i] += T1.ArrayMatrix[i][j]*fX[j];//ï¿½Ë¾ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½fMatrix[i][j]
 		}
 	}
 
@@ -516,10 +515,10 @@ void Coordinate_ePlanexyzToACUxyz_HJPro(double ex, double ey, double ez,  double
 	int i;
 	int j;
 
-	// rot RMATRIX  ÈÆZÖáÄæÊ±ÕëÐý×ªµÄ¾ØÕó
+	// rot RMATRIX  ï¿½ï¿½Zï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½×ªï¿½Ä¾ï¿½ï¿½ï¿½
 	TZ =  rotat_z_axis_matrix(REle);
 
-	// rot RMATRIX  ÈÆYÖáÄæÊ±ÕëÐý×ªµÄ¾ØÕó
+	// rot RMATRIX  ï¿½ï¿½Yï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½×ªï¿½Ä¾ï¿½ï¿½ï¿½
 	TY =  rotat_y_axis_matrix(RAzi);
 
 	T1 = real_matrix_multiper(TY,TZ);
@@ -534,7 +533,7 @@ void Coordinate_ePlanexyzToACUxyz_HJPro(double ex, double ey, double ez,  double
 		for (j = 0;j<3;j++)
 		{
 			//printf("[ACU - eplant :]--i= %d,j= %d,ez = %f\n",i,j,fMatrix[i][j]);
-			fX_c[i] += T1.ArrayMatrix[i][j]*fX[j];//³Ë¾ØÕóµÄ×ªÖÃfMatrix[i][j]
+			fX_c[i] += T1.ArrayMatrix[i][j]*fX[j];//ï¿½Ë¾ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½fMatrix[i][j]
 		}
 	}
 
@@ -571,16 +570,16 @@ void Coordinate_ENUxyzToACUxyz_HJ(double x, double y, double z, double *ax, doub
 	RMATRIX			T2;
 	RMATRIX			T3;
 
-	// rot RMATRIX  ÈÆ ºáÒ¡ Ðý×ªµÄ¾ØÕó
+	// rot RMATRIX  ï¿½ï¿½ ï¿½ï¿½Ò¡ ï¿½ï¿½×ªï¿½Ä¾ï¿½ï¿½ï¿½
 	TR =  rotat_R_axis_matrix(dRoll);
 
-	// rot RMATRIX  ÈÆ ×ÝÒ¡ Ðý×ªµÄ¾ØÕó
+	// rot RMATRIX  ï¿½ï¿½ ï¿½ï¿½Ò¡ ï¿½ï¿½×ªï¿½Ä¾ï¿½ï¿½ï¿½
 	TP = rotat_P_axis_matrix(dPitch);
 
-	// rot RMATRIX  ÈÆ º½Ïò Ðý×ªµÄ¾ØÕó
+	// rot RMATRIX  ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½×ªï¿½Ä¾ï¿½ï¿½ï¿½
 	TH =  rotat_H_axis_matrix(dYaw);
 
-	// rot RMATRIX  ÈÆYÖáÄæÊ±ÕëÐý×ªµÄ¾ØÕó
+	// rot RMATRIX  ï¿½ï¿½Yï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½×ªï¿½Ä¾ï¿½ï¿½ï¿½
 	TY =  rotat_y_axis_matrix(90);
 
 	T1 = real_matrix_multiper(TY,TR);
@@ -595,13 +594,13 @@ void Coordinate_ENUxyzToACUxyz_HJ(double x, double y, double z, double *ax, doub
 	fX[2] = z;
 
 
-	//×ø±ê±ä»»
+	//ï¿½ï¿½ï¿½ï¿½ä»»
 	for (i = 0;i<3;i++)
 	{
 		for (j = 0;j<3;j++)
 		{
 			//printf("[ACU - eplant :]--i= %d,j= %d,ez = %f\n",i,j,fMatrix[i][j]);
-			fX_c[i] += T3.ArrayMatrix[i][j]*fX[j];//³Ë¾ØÕóµÄ×ªÖÃfMatrix[i][j]
+			fX_c[i] += T3.ArrayMatrix[i][j]*fX[j];//ï¿½Ë¾ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½fMatrix[i][j]
 		}
 	}
 
@@ -641,16 +640,16 @@ void Coordinate_ACUxyzToENUxyz_HJ(double ax, double ay, double az, double *x, do
 	RMATRIX			T2;
 	RMATRIX			T3;
 
-	// rot RMATRIX  ÈÆ ºáÒ¡ Ðý×ªµÄ¾ØÕó
+	// rot RMATRIX  ï¿½ï¿½ ï¿½ï¿½Ò¡ ï¿½ï¿½×ªï¿½Ä¾ï¿½ï¿½ï¿½
 	TR =  rotat_R_axis_matrix(-dRoll);
 
-	// rot RMATRIX  ÈÆ ×ÝÒ¡ Ðý×ªµÄ¾ØÕó
+	// rot RMATRIX  ï¿½ï¿½ ï¿½ï¿½Ò¡ ï¿½ï¿½×ªï¿½Ä¾ï¿½ï¿½ï¿½
 	TP = rotat_P_axis_matrix(-dPitch);
 
-	// rot RMATRIX  ÈÆ º½Ïò Ðý×ªµÄ¾ØÕó
+	// rot RMATRIX  ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½×ªï¿½Ä¾ï¿½ï¿½ï¿½
 	TH =  rotat_H_axis_matrix(-dYaw);
 
-	// rot RMATRIX  ÈÆYÖáÄæÊ±ÕëÐý×ªµÄ¾ØÕó
+	// rot RMATRIX  ï¿½ï¿½Yï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½×ªï¿½Ä¾ï¿½ï¿½ï¿½
 	TY =  rotat_y_axis_matrix(-90);
 
 	T1 = real_matrix_multiper(TH,TP);
@@ -665,13 +664,13 @@ void Coordinate_ACUxyzToENUxyz_HJ(double ax, double ay, double az, double *x, do
 	fX[2] = az;
 
 
-	//×ø±ê±ä»»
+	//ï¿½ï¿½ï¿½ï¿½ä»»
 	for (i = 0;i<3;i++)
 	{
 		for (j = 0;j<3;j++)
 		{
 			//printf("[ACU - eplant :]--i= %d,j= %d,ez = %f\n",i,j,fMatrix[i][j]);
-			fX_c[i] += T3.ArrayMatrix[i][j]*fX[j];//³Ë¾ØÕóµÄ×ªÖÃfMatrix[i][j]
+			fX_c[i] += T3.ArrayMatrix[i][j]*fX[j];//ï¿½Ë¾ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½fMatrix[i][j]
 		}
 	}
 
@@ -709,7 +708,7 @@ void Coordinate_ENUxyzToaer_HJ(double X, double Y, double Z, double *Range, doub
 	{
 		dAzimuth = dAzimuth + 360;
 	}
-	dElevation = dElevation + 0.083; //ÐÞÕý
+	dElevation = dElevation + 0.083; //ï¿½ï¿½ï¿½ï¿½
 	if(dElevation > 270)
 	{
 		dElevation = dElevation - 90;
@@ -775,9 +774,9 @@ void testCoordinate_change()
 	// Yp = 4711684.322;
 	// Zp = 4078819.724;
 
-	// ÌìÏß×ª´óµØ
+	// ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½
 	Coordinate_HJAnneToStation(1.933,17.0987, &Azimuth,&Elevation);
-	// ´óµØ×ªÕóÃæ
+	// ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½
 	HJ_ENUToACUGroundToMeasure(Azimuth,Elevation,&sAzimuth,&sElevation);
 	printf("[ENU AE to eplant]Az= %f,ele = %f\n",sAzimuth,sElevation);
 
@@ -788,7 +787,7 @@ void testCoordinate_change()
 	Zp = -2018484;
 
 	Coordinate_WGS84ToECEF(121.266,38.803,17.28, &Xr, &Yr, &Zr);//pingtai Plon, Plat, Pht,
-	Coordinate_ECEFToENU(Xr, Yr, Zr, Xp, Yp, Zp, 121.266,38.803, &e, &n, &u); // Æ½Ì¨,ÎÀÐÇ,Æ½Ì¨ ,enu  Plon, Plat,
+	Coordinate_ECEFToENU(Xr, Yr, Zr, Xp, Yp, Zp, 121.266,38.803, &e, &n, &u); // Æ½Ì¨,ï¿½ï¿½ï¿½ï¿½,Æ½Ì¨ ,enu  Plon, Plat,
 	//Coordinate_ENUxyzToaer_HJ(e, n, u, &Range, &Azimuth,&Elevation);
 	Coordinate_ENUxyzToaer_HJ(n, u, e, &Range, &Azimuth,&Elevation);
 	printf("[enu - AER :]--Range= %f,Az= %f,ele = %f\n",Range, Azimuth,Elevation);
@@ -883,22 +882,22 @@ void testCoordinate_change()
 	//printf("[AER  - enu:]--e= %f,n= %f,u = %f\n",x, y,z);
 
 	printf("cal scan mode pro [start]---------- time(ms) = %ld clock(us) = %ld\n",g_Time,m_BaseUTCClock_uSecond);
-	// ¶«±±Ìì ENU --AER send to ACU
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ENU --AER send to ACU
 	Xp = 7298653.338792;
 	Yp = 41474405.488343;
 	Zp = -2018484.959142;
 	Coordinate_WGS84ToECEF(g_HJSysParm.longitude,g_HJSysParm.lat,g_HJSysParm.high, &Xr, &Yr, &Zr);//pingtai Plon, Plat, Pht,
-	Coordinate_ECEFToENU(Xr, Yr, Zr, Xp, Yp, Zp, g_HJSysParm.longitude,g_HJSysParm.lat, &e, &n, &u); // Æ½Ì¨,ÎÀÐÇ,Æ½Ì¨ ,enu  Plon, Plat,
+	Coordinate_ECEFToENU(Xr, Yr, Zr, Xp, Yp, Zp, g_HJSysParm.longitude,g_HJSysParm.lat, &e, &n, &u); // Æ½Ì¨,ï¿½ï¿½ï¿½ï¿½,Æ½Ì¨ ,enu  Plon, Plat,
 	Coordinate_ENUxyzToaer_HJ(e, n, u, &Range, &Azimuth,&Elevation);
 	//printf("[enu - AER :]--Range= %f,Az= %f,ele = %f\n",Range, Azimuth,Elevation);
 	printf("[enu:]--e= %f,n= %f,u = %f\n",e,n,u);
 	for(j = 0; j < 65; j++)
 	{
-		// µþ¼Ó µç²¨ÊøµÄÆ«ÒÆ½Ç¶È
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½ç²¨ï¿½ï¿½ï¿½ï¿½Æ«ï¿½Æ½Ç¶ï¿½
 		Xp = Xp + eXp;
 		Yp = Yp + eYp;
 		Zp = Zp + eZp;
-		Coordinate_ECEFToENU(Xr, Yr, Zr, Xp, Yp, Zp, g_HJSysParm.longitude,g_HJSysParm.lat, &e, &n, &u); // Æ½Ì¨,ÎÀÐÇ,Æ½Ì¨ ,enu  Plon, Plat,
+		Coordinate_ECEFToENU(Xr, Yr, Zr, Xp, Yp, Zp, g_HJSysParm.longitude,g_HJSysParm.lat, &e, &n, &u); // Æ½Ì¨,ï¿½ï¿½ï¿½ï¿½,Æ½Ì¨ ,enu  Plon, Plat,
 		Coordinate_ENUxyzToACUxyz_HJ(e, n, u, &ax, &ay, &az);
 		Coordinate_ACUxyzToePlanexyz_HJ(ax,ay,az, g_HJSysParm.ACU_Azloc,g_HJSysParm.ACU_Eleloc,&ex, &ey, &ez); // double Azimuth, double Elevation
 		Coordinate_eplanexyzToaer_HJ(ex, ey, ez,&Range, &Azimuth,&Elevation);
@@ -916,12 +915,12 @@ void testCoordinate_change()
 #endif
 }
 
-//´¬Õ¾²âÁ¿Ïµ£­´óµØÏµ×ª»»£¨Í¬ÑùÊÊÓÃ³µÔØ¡¢»úÔØ£©
-//Head:º½Ïò½Ç
-//Roll£ººáÒ¡½Ç
-//Pitch£º×ÝÒ¡½Ç
-//AZM,ELM:·½Î»¡¢¸©Ñö½Ç(º¯Êýµ÷ÓÃÊ±Îª²âÁ¿Ïµ£¬Í¬±äÁ¿·µ»ØÊ±Îª´óµØÏµ×ª»»½á¹û)
-//ËùÓÐµ¥Î»Îª¶È
+//ï¿½ï¿½Õ¾ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ï¿½ï¿½Ïµ×ªï¿½ï¿½ï¿½ï¿½Í¬ï¿½ï¿½ï¿½ï¿½ï¿½Ã³ï¿½ï¿½Ø¡ï¿½ï¿½ï¿½ï¿½Ø£ï¿½
+//Head:ï¿½ï¿½ï¿½ï¿½ï¿½
+//Rollï¿½ï¿½ï¿½ï¿½Ò¡ï¿½ï¿½
+//Pitchï¿½ï¿½ï¿½ï¿½Ò¡ï¿½ï¿½
+//AZM,ELM:ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±Îªï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±Îªï¿½ï¿½ï¿½Ïµ×ªï¿½ï¿½ï¿½ï¿½ï¿½)
+//ï¿½ï¿½ï¿½Ðµï¿½Î»Îªï¿½ï¿½
 void MeasureToGround(double AZM1,double ELM1,double Head,double Roll,double Pitch,double *AZM2,double *ELM2)
 {
 	double aSin, aCos;
@@ -932,7 +931,7 @@ void MeasureToGround(double AZM1,double ELM1,double Head,double Roll,double Pitc
 	AzTemp = AZM1*M_PI/180.0;
 	ElTemp = ELM1*M_PI/180.0;
 
-	if (ELM1 > 89.99999) //µÈÓÚ90¶È
+	if (ELM1 > 89.99999) //ï¿½ï¿½ï¿½ï¿½90ï¿½ï¿½
 	{
 		ElTemp = 89.9999*M_PI/180.0; //89.9996*M_PI/180.0;
 	}
@@ -949,7 +948,7 @@ void MeasureToGround(double AZM1,double ELM1,double Head,double Roll,double Pitc
 			(cos(Head)*sin(Pitch)*cos(Roll) + sin(Head)*sin(Roll))*sin(ElTemp) +
 			(cos(Head)*sin(Pitch)*sin(Roll) - sin(Head)*cos(Roll))*cos(ElTemp)*sin(AzTemp);
 
-	if(fabs(aCos) < 0.0000001)    //Èç¹û·ÖÄ¸½üËÆÎª0 Ôò·½Î»½á¹ûÎª90»ò270¶È
+	if(fabs(aCos) < 0.0000001)    //ï¿½ï¿½ï¿½ï¿½ï¿½Ä¸ï¿½ï¿½ï¿½ï¿½Îª0 ï¿½ï¿½Î»ï¿½ï¿½ï¿½Îª90ï¿½ï¿½270ï¿½ï¿½
 	{
 		if(aSin >= 0.0)
 		{
@@ -1042,13 +1041,13 @@ void Coordinate_XYZToENUAER_ACU(double Xgp, double Ygp, double Zgp, double Xg, d
 	Ygmp=0.0;
 	Zgmp=0.0;
 
-	SinLongitude = sin(Lon*PI/180.0);     //¾­¶È
-	SinLatitude = sin(Lat*PI/180.0);       //Î³¶È
-	CosLongitude = cos(Lon*PI/180.0);     //¾­¶È
-	CosLatitude = cos(Lat*PI/180.0);       //Î³¶È
+	SinLongitude = sin(Lon*PI/180.0);     //ï¿½ï¿½ï¿½ï¿½
+	SinLatitude = sin(Lat*PI/180.0);       //Î³ï¿½ï¿½
+	CosLongitude = cos(Lon*PI/180.0);     //ï¿½ï¿½ï¿½ï¿½
+	CosLatitude = cos(Lat*PI/180.0);       //Î³ï¿½ï¿½
 
 	f0=sqrt(1-Eg2*pow(SinLatitude,2.0));
-	if(f0 < 0.000000000000001)       //·ÀÖ¹³ýÁã´íÎó
+	if(f0 < 0.000000000000001)       //ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		f0=0.000000000000001;
 	Np = Re/f0;
 
@@ -1067,14 +1066,14 @@ void Coordinate_XYZToENUAER_ACU(double Xgp, double Ygp, double Zgp, double Xg, d
 	R = sqrt( pow(Xr,2.0) + pow(Yr,2.0) + pow(Zr,2.0) );
 
 	f0=sqrt( pow(Xr,2.0) + pow(Zr,2.0) );
-	if(f0 < 0.000000000000001)       //·ÀÖ¹³ýÁã´íÎó
+	if(f0 < 0.000000000000001)       //ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	{
 		f0=0.000000000000001;
 	}
 
 	A0 = asin( Zr/f0 );
 
-	if(R < 0.000000000000001)  //·ÀÖ¹³ýÁã´íÎó
+	if(R < 0.000000000000001)  //ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	{
 		R=0.000000000000001;
 	}
@@ -1122,7 +1121,7 @@ void Coordinate_XYZToENUAER_ACU(double Xgp, double Ygp, double Zgp, double Xg, d
 	*Elevation = El;
 }
 
-// hj ËÅ·þµ±Ç°½Ç¶ÈÐÅÏ¢
+// hj ï¿½Å·ï¿½ï¿½ï¿½Ç°ï¿½Ç¶ï¿½ï¿½ï¿½Ï¢
 void Coordinate_ACUCURRENTToStation(double sAzimuth, double sElevation,  double *mAzimuth, double *mElevation)
 {
 	double dRoll = 0;
@@ -1147,7 +1146,7 @@ void Coordinate_ACUCURRENTToStation(double sAzimuth, double sElevation,  double 
 	{
 		sAzimuth = sAzimuth + 360;
 	}
-	sElevation = sElevation + _ACU_ANGLE_ADD_ERROR; //0.083; //ÐÞÕý
+	sElevation = sElevation + _ACU_ANGLE_ADD_ERROR; //0.083; //ï¿½ï¿½ï¿½ï¿½
 	if(sElevation >= 360)
 	{
 		sElevation = sElevation -360;
@@ -1168,7 +1167,7 @@ void Coordinate_ACUCURRENTToStation(double sAzimuth, double sElevation,  double 
 }
 
 
-// hj ÕóÃæ×ªÕ¾ÐÄ,Ò²¾ÍÊÇÕóÃæ×ª´óµØÏµ£¬Õ¾ÐÄÏµ=´óµØÏµ
+// hj ï¿½ï¿½ï¿½ï¿½×ªÕ¾ï¿½ï¿½,Ò²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½Ïµï¿½ï¿½Õ¾ï¿½ï¿½Ïµ=ï¿½ï¿½ï¿½Ïµ
 void Coordinate_HJAnneToStation(double Azimuth, double Elevation,  double *mAzimuth, double *mElevation)
 {
 	double dRoll = 0;
@@ -1203,8 +1202,8 @@ void Coordinate_HJAnneToStation(double Azimuth, double Elevation,  double *mAzim
 	dPitch =  1.0  * g_HJSysParm.pitch;
 	Coordinate_eplaneAerToXyz_HJ(1,Azimuth,Elevation, &ex, &ey, &ez); //zhenm
 	// hj ePlane to ACU
-	Coordinate_ePlanexyzToACUxyz_HJPro(ex, ey,ez,ACU_Azloc,ACU_Eleloc,&sx, &sy, &sz); // ËÅ·þ½Ç
-	Coordinate_ACUxyzToaer_HJ_Pro(sx, sy, sz, &sRange, &sAzimuth,&sElevation);  // 20210415 ÐÞ¸Ä
+	Coordinate_ePlanexyzToACUxyz_HJPro(ex, ey,ez,ACU_Azloc,ACU_Eleloc,&sx, &sy, &sz); // ï¿½Å·ï¿½ï¿½ï¿½
+	Coordinate_ACUxyzToaer_HJ_Pro(sx, sy, sz, &sRange, &sAzimuth,&sElevation);  // 20210415 ï¿½Þ¸ï¿½
 
 	sAzimuth = sAzimuth - 90;
 	if(sAzimuth >=360.0)
@@ -1215,7 +1214,7 @@ void Coordinate_HJAnneToStation(double Azimuth, double Elevation,  double *mAzim
 	{
 		sAzimuth = sAzimuth + 360;
 	}
-	// sElevation = sElevation + 0.083; //ÐÞÕý
+	// sElevation = sElevation + 0.083; //ï¿½ï¿½ï¿½ï¿½
 	if(sElevation >= 360)
 	{
 		sElevation = sElevation -360;
@@ -1229,7 +1228,7 @@ void Coordinate_HJAnneToStation(double Azimuth, double Elevation,  double *mAzim
 		sElevation = sElevation - 360;
 	}
 
-	// hj ACU AE To MEA _AE  ËÅ·þ×ª´óµØ
+	// hj ACU AE To MEA _AE  ï¿½Å·ï¿½×ªï¿½ï¿½ï¿½
 	// 	HJ_ACUToMeasure_AE(sAzimuth,sElevation,&sAzimuth1,&sElevation1);
 
 	// printf("[ACU AE ]Az= %f,ele = %f\n",sAzimuth,sElevation);
@@ -1239,7 +1238,7 @@ void Coordinate_HJAnneToStation(double Azimuth, double Elevation,  double *mAzim
 }
 
 
-// hj »ù´øÕóÃæ×ªÕ¾ÐÄ
+// hj ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªÕ¾ï¿½ï¿½
 void Coordinate_HJAnneToStation_band(double Azimuth, double Elevation, double dYaw,double dRoll,double dPitch ,double ACU_Eleloc,double ACU_Azloc,double *mAzimuth, double *mElevation)
 {
 
@@ -1264,8 +1263,8 @@ void Coordinate_HJAnneToStation_band(double Azimuth, double Elevation, double dY
 
 	Coordinate_eplaneAerToXyz_HJ(1,Azimuth,Elevation, &ex, &ey, &ez); //zhenm
 	// hj ePlane to ACU
-	Coordinate_ePlanexyzToACUxyz_HJPro(ex, ey,ez,ACU_Azloc,ACU_Eleloc,&sx, &sy, &sz); // ËÅ·þ½Ç
-	Coordinate_ACUxyzToaer_HJ_Pro(sx, sy, sz, &sRange, &sAzimuth,&sElevation);  // 20210415 ÐÞ¸Ä
+	Coordinate_ePlanexyzToACUxyz_HJPro(ex, ey,ez,ACU_Azloc,ACU_Eleloc,&sx, &sy, &sz); // ï¿½Å·ï¿½ï¿½ï¿½
+	Coordinate_ACUxyzToaer_HJ_Pro(sx, sy, sz, &sRange, &sAzimuth,&sElevation);  // 20210415 ï¿½Þ¸ï¿½
 
 	sAzimuth = sAzimuth - 90;
 	if(sAzimuth >=360.0)
@@ -1276,7 +1275,7 @@ void Coordinate_HJAnneToStation_band(double Azimuth, double Elevation, double dY
 	{
 		sAzimuth = sAzimuth + 360;
 	}
-	// sElevation = sElevation + 0.083; //ÐÞÕý
+	// sElevation = sElevation + 0.083; //ï¿½ï¿½ï¿½ï¿½
 	if(sElevation >= 360)
 	{
 		sElevation = sElevation -360;
@@ -1290,7 +1289,7 @@ void Coordinate_HJAnneToStation_band(double Azimuth, double Elevation, double dY
 		sElevation = sElevation - 360;
 	}
 
-	// hj ACU AE To MEA _AE  ËÅ·þ×ª´óµØ
+	// hj ACU AE To MEA _AE  ï¿½Å·ï¿½×ªï¿½ï¿½ï¿½
 	// 	HJ_ACUToMeasure_AE(sAzimuth,sElevation,&sAzimuth1,&sElevation1);
 
 	// printf("[ACU AE ]Az= %f,ele = %f\n",sAzimuth,sElevation);
@@ -1299,7 +1298,7 @@ void Coordinate_HJAnneToStation_band(double Azimuth, double Elevation, double dY
 	*mElevation = dElevation;
 }
 
-// hj »ù´øÕóÃæ×ªÕ¾ÐÄ
+// hj ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªÕ¾ï¿½ï¿½
 void Coordinate_HJAnneToStation_band_1(double Azimuth, double Elevation,double *mAzimuth, double *mElevation)
 {
 	double dRoll = 0;
@@ -1326,7 +1325,7 @@ void Coordinate_HJAnneToStation_band_1(double Azimuth, double Elevation,double *
 	double ACU_Azloc = 0;
 	double ACU_Eleloc = 0;
 
-	// ÖÍºóÒ»¼¶Êý¾ÝÊ¹ÓÃ
+	// ï¿½Íºï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½
 	dYaw = g_ArrayAngleOut[0].yaw;
 	dRoll = g_ArrayAngleOut[0].roll;
 	dPitch =  g_ArrayAngleOut[0].pitch;
@@ -1335,8 +1334,8 @@ void Coordinate_HJAnneToStation_band_1(double Azimuth, double Elevation,double *
 
 	Coordinate_eplaneAerToXyz_HJ(1,Azimuth,Elevation, &ex, &ey, &ez); //zhenm
 	// hj ePlane to ACU
-	Coordinate_ePlanexyzToACUxyz_HJPro(ex, ey,ez,ACU_Azloc,ACU_Eleloc,&sx, &sy, &sz); // ËÅ·þ½Ç
-	Coordinate_ACUxyzToaer_HJ_Pro(sx, sy, sz, &sRange, &sAzimuth,&sElevation);  // 20210415 ÐÞ¸Ä
+	Coordinate_ePlanexyzToACUxyz_HJPro(ex, ey,ez,ACU_Azloc,ACU_Eleloc,&sx, &sy, &sz); // ï¿½Å·ï¿½ï¿½ï¿½
+	Coordinate_ACUxyzToaer_HJ_Pro(sx, sy, sz, &sRange, &sAzimuth,&sElevation);  // 20210415 ï¿½Þ¸ï¿½
 
 	sAzimuth = sAzimuth - 90;
 	if(sAzimuth >=360.0)
@@ -1347,7 +1346,7 @@ void Coordinate_HJAnneToStation_band_1(double Azimuth, double Elevation,double *
 	{
 		sAzimuth = sAzimuth + 360;
 	}
-	// sElevation = sElevation + 0.083; //ÐÞÕý
+	// sElevation = sElevation + 0.083; //ï¿½ï¿½ï¿½ï¿½
 	if(sElevation >= 360)
 	{
 		sElevation = sElevation -360;
@@ -1361,7 +1360,7 @@ void Coordinate_HJAnneToStation_band_1(double Azimuth, double Elevation,double *
 		sElevation = sElevation - 360;
 	}
 
-	// hj ACU AE To MEA _AE  ËÅ·þ×ª´óµØ
+	// hj ACU AE To MEA _AE  ï¿½Å·ï¿½×ªï¿½ï¿½ï¿½
 	// 	HJ_ACUToMeasure_AE(sAzimuth,sElevation,&sAzimuth1,&sElevation1);
 
 	// printf("[ACU AE ]Az= %f,ele = %f\n",sAzimuth,sElevation);
@@ -1371,7 +1370,7 @@ void Coordinate_HJAnneToStation_band_1(double Azimuth, double Elevation,double *
 
 }
 
-// hj ÕóÃæ×ªÕ¾ÐÄ
+// hj ï¿½ï¿½ï¿½ï¿½×ªÕ¾ï¿½ï¿½
 void Coordinate_HJAnneToStation_IMU(IMU_MES imu_mes,double Azimuth, double Elevation,double *mAzimuth, double *mElevation)
 {
 	double dRoll = 0;
@@ -1398,7 +1397,7 @@ void Coordinate_HJAnneToStation_IMU(IMU_MES imu_mes,double Azimuth, double Eleva
 	double ACU_Azloc = 0;
 	double ACU_Eleloc = 0;
 
-	// ÖÍºóÒ»¼¶Êý¾ÝÊ¹ÓÃ
+	// ï¿½Íºï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½
 	dYaw = imu_mes.yaw;
 	dRoll = -1.0  * imu_mes.roll;
 	dPitch =  -1.0  * imu_mes.pitch;
@@ -1407,8 +1406,8 @@ void Coordinate_HJAnneToStation_IMU(IMU_MES imu_mes,double Azimuth, double Eleva
 
 	Coordinate_eplaneAerToXyz_HJ(1,Azimuth,Elevation, &ex, &ey, &ez); //zhenm
 	// hj ePlane to ACU
-	Coordinate_ePlanexyzToACUxyz_HJPro(ex, ey,ez,ACU_Azloc,ACU_Eleloc,&sx, &sy, &sz); // ËÅ·þ½Ç
-	Coordinate_ACUxyzToaer_HJ_Pro(sx, sy, sz, &sRange, &sAzimuth,&sElevation);  // 20210415 ÐÞ¸Ä
+	Coordinate_ePlanexyzToACUxyz_HJPro(ex, ey,ez,ACU_Azloc,ACU_Eleloc,&sx, &sy, &sz); // ï¿½Å·ï¿½ï¿½ï¿½
+	Coordinate_ACUxyzToaer_HJ_Pro(sx, sy, sz, &sRange, &sAzimuth,&sElevation);  // 20210415 ï¿½Þ¸ï¿½
 
 	sAzimuth = sAzimuth - 90;
 	if(sAzimuth >=360.0)
@@ -1419,7 +1418,7 @@ void Coordinate_HJAnneToStation_IMU(IMU_MES imu_mes,double Azimuth, double Eleva
 	{
 		sAzimuth = sAzimuth + 360;
 	}
-	// sElevation = sElevation + 0.083; //ÐÞÕý
+	// sElevation = sElevation + 0.083; //ï¿½ï¿½ï¿½ï¿½
 	if(sElevation >= 360)
 	{
 		sElevation = sElevation -360;
@@ -1433,7 +1432,7 @@ void Coordinate_HJAnneToStation_IMU(IMU_MES imu_mes,double Azimuth, double Eleva
 		sElevation = sElevation - 360;
 	}
 
-	// hj ACU AE To MEA _AE  ËÅ·þ×ª´óµØ
+	// hj ACU AE To MEA _AE  ï¿½Å·ï¿½×ªï¿½ï¿½ï¿½
 	// 	HJ_ACUToMeasure_AE(sAzimuth,sElevation,&sAzimuth1,&sElevation1);
 
 	// printf("[ACU AE ]Az= %f,ele = %f\n",sAzimuth,sElevation);
@@ -1443,7 +1442,7 @@ void Coordinate_HJAnneToStation_IMU(IMU_MES imu_mes,double Azimuth, double Eleva
 
 }
 
-// hj Õ¾ÐÄ×ªÕóÃæ
+// hj Õ¾ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½
 void HJ_ENUToACUGroundToMeasure(double AZM1,double ELM1,double *AZM2,double *ELM2)
 {
 	double dRoll = 0;
@@ -1485,10 +1484,10 @@ void HJ_ENUToACUGroundToMeasure(double AZM1,double ELM1,double *AZM2,double *ELM
 	ACU_Azloc = g_HJSysParm.ACU_Azloc;
 	ACU_Eleloc = 90 - g_HJSysParm.ACU_Eleloc - 0.083;
 
-	// hj Õ¾ÐÄ×ªÕóÃæ
+	// hj Õ¾ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½
 	GroundToMeasure(AZM1,ELM1,dYaw,dRoll,dPitch,&sAzimuth,&sElevation);
 
-	// hj ACU AE To MEA _AE  ËÅ·þ×ª´óµØ
+	// hj ACU AE To MEA _AE  ï¿½Å·ï¿½×ªï¿½ï¿½ï¿½
 	sAzimuth = sAzimuth + 90;
 	if(sAzimuth >=360.0)
 	{
@@ -1498,7 +1497,7 @@ void HJ_ENUToACUGroundToMeasure(double AZM1,double ELM1,double *AZM2,double *ELM
 	{
 		sAzimuth = sAzimuth + 360;
 	}
-	// 	sElevation = sElevation - 0.083; //ÐÞÕý
+	// 	sElevation = sElevation - 0.083; //ï¿½ï¿½ï¿½ï¿½
 	if(sElevation >= 360)
 	{
 		sElevation = sElevation -360;
@@ -1514,7 +1513,7 @@ void HJ_ENUToACUGroundToMeasure(double AZM1,double ELM1,double *AZM2,double *ELM
 
 	// printf("[re ENU AE]Az= %f,ele = %f\n",sAzimuth,sElevation);
 
-	// ËÅ·þ½Ç¶È
+	// ï¿½Å·ï¿½ï¿½Ç¶ï¿½
 	Coordinate_ACUaerToxyz_HJ_Pro(1,sAzimuth,sElevation,&ax,&ay,&az);
 	Coordinate_ACUxyzToePlanexyz_HJPro(ax,ay,az, ACU_Azloc,ACU_Eleloc,&ex, &ey, &ez);
 	Coordinate_eplanexyzToaer_HJ(ex, ey, ez,&Range0, &Azimuth0,&Elevation0);
@@ -1523,7 +1522,7 @@ void HJ_ENUToACUGroundToMeasure(double AZM1,double ELM1,double *AZM2,double *ELM
 	*ELM2 = Elevation0;
 }
 
-// hj Õ¾ÐÄ×ªÕóÃæ
+// hj Õ¾ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½
 void HJ_ENUToACUGroundToMeasure_IMU(IMU_MES imu_mes,double AZM1,double ELM1,double *AZM2,double *ELM2)
 {
 	double dRoll = 0;
@@ -1564,10 +1563,10 @@ void HJ_ENUToACUGroundToMeasure_IMU(IMU_MES imu_mes,double AZM1,double ELM1,doub
 	ACU_Azloc = imu_mes.ACU_Azloc;
 	ACU_Eleloc = 90 - imu_mes.ACU_Eleloc - 0.083;
 
-	// hj Õ¾ÐÄ×ªÕóÃæ
+	// hj Õ¾ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½
 	GroundToMeasure(AZM1,ELM1,dYaw,dRoll,dPitch,&sAzimuth,&sElevation);
 
-	// hj ACU AE To MEA _AE  ËÅ·þ×ª´óµØ
+	// hj ACU AE To MEA _AE  ï¿½Å·ï¿½×ªï¿½ï¿½ï¿½
 	sAzimuth = sAzimuth + 90;
 	if(sAzimuth >=360.0)
 	{
@@ -1577,7 +1576,7 @@ void HJ_ENUToACUGroundToMeasure_IMU(IMU_MES imu_mes,double AZM1,double ELM1,doub
 	{
 		sAzimuth = sAzimuth + 360;
 	}
-	// 	sElevation = sElevation - 0.083; //ÐÞÕý
+	// 	sElevation = sElevation - 0.083; //ï¿½ï¿½ï¿½ï¿½
 	if(sElevation >= 360)
 	{
 		sElevation = sElevation -360;
@@ -1593,7 +1592,7 @@ void HJ_ENUToACUGroundToMeasure_IMU(IMU_MES imu_mes,double AZM1,double ELM1,doub
 
 	// printf("[re ENU AE]Az= %f,ele = %f\n",sAzimuth,sElevation);
 
-	// ËÅ·þ½Ç¶È
+	// ï¿½Å·ï¿½ï¿½Ç¶ï¿½
 	Coordinate_ACUaerToxyz_HJ_Pro(1,sAzimuth,sElevation,&ax,&ay,&az);
 	Coordinate_ACUxyzToePlanexyz_HJPro(ax,ay,az, ACU_Azloc,ACU_Eleloc,&ex, &ey, &ez);
 	Coordinate_eplanexyzToaer_HJ(ex, ey, ez,&Range0, &Azimuth0,&Elevation0);
@@ -1602,7 +1601,7 @@ void HJ_ENUToACUGroundToMeasure_IMU(IMU_MES imu_mes,double AZM1,double ELM1,doub
 	*ELM2 = Elevation0;
 }
 
-// hj »ù´øÕ¾ÐÄ×ªÕóÃæ
+// hj ï¿½ï¿½ï¿½ï¿½Õ¾ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½
 void HJ_ENUToACUGroundToMeasure_band(double AZM1,double ELM1,double *AZM2,double *ELM2)
 {
 	double dRoll = 0;
@@ -1642,10 +1641,10 @@ void HJ_ENUToACUGroundToMeasure_band(double AZM1,double ELM1,double *AZM2,double
 	ACU_Azloc = g_ArrayAngleOut[0].ACUaz;
 	ACU_Eleloc = 90 - g_ArrayAngleOut[0].ACUele - 0.083;
 
-	// hj Õ¾ÐÄ×ªÕóÃæ
+	// hj Õ¾ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½
 	GroundToMeasure(AZM1,ELM1,dYaw,dRoll,dPitch,&sAzimuth,&sElevation);
 
-	// hj ACU AE To MEA _AE  ËÅ·þ×ª´óµØ
+	// hj ACU AE To MEA _AE  ï¿½Å·ï¿½×ªï¿½ï¿½ï¿½
 	sAzimuth = sAzimuth + 90;
 	if(sAzimuth >=360.0)
 	{
@@ -1655,7 +1654,7 @@ void HJ_ENUToACUGroundToMeasure_band(double AZM1,double ELM1,double *AZM2,double
 	{
 		sAzimuth = sAzimuth + 360;
 	}
-	// 	sElevation = sElevation - 0.083; //ÐÞÕý
+	// 	sElevation = sElevation - 0.083; //ï¿½ï¿½ï¿½ï¿½
 	if(sElevation >= 360)
 	{
 		sElevation = sElevation -360;
@@ -1671,7 +1670,7 @@ void HJ_ENUToACUGroundToMeasure_band(double AZM1,double ELM1,double *AZM2,double
 
 	// printf("[re ENU AE]Az= %f,ele = %f\n",sAzimuth,sElevation);
 
-	// ËÅ·þ½Ç¶È
+	// ï¿½Å·ï¿½ï¿½Ç¶ï¿½
 	Coordinate_ACUaerToxyz_HJ_Pro(1,sAzimuth,sElevation,&ax,&ay,&az);
 	Coordinate_ACUxyzToePlanexyz_HJPro(ax,ay,az, ACU_Azloc,ACU_Eleloc,&ex, &ey, &ez);
 	Coordinate_eplanexyzToaer_HJ(ex, ey, ez,&Range0, &Azimuth0,&Elevation0);
@@ -1679,7 +1678,7 @@ void HJ_ENUToACUGroundToMeasure_band(double AZM1,double ELM1,double *AZM2,double
 	*AZM2 = Azimuth0;
 	*ELM2 = Elevation0;
 }
-// hj ACU AE To MEA _AE  ËÅ·þ×ª´óµØ
+// hj ACU AE To MEA _AE  ï¿½Å·ï¿½×ªï¿½ï¿½ï¿½
 void HJ_ACUToMeasure_AE(double AZM1,double ELM1,double *AZM2,double *ELM2)
 {
 	double  AzTemp = AZM1*M_PI/180.0;
@@ -1702,7 +1701,7 @@ void HJ_ACUToMeasure_AE(double AZM1,double ELM1,double *AZM2,double *ELM2)
 
 
 
-// hj ACU AE To MEA _AE ´óµØ×ªËÅ·þ
+// hj ACU AE To MEA _AE ï¿½ï¿½ï¿½×ªï¿½Å·ï¿½
 void HJ_ACU_Measure_RETURE_AE(double AZM1,double ELM1,double *AZM2,double *ELM2)
 {
 	double  AzTemp = AZM1*M_PI/180.0;
@@ -1733,7 +1732,7 @@ void GroundToMeasure(double AZ,double EL,double Head,double Roll,double Pitch,do
 	AzTemp = AZ*M_PI/180.0;
 	ElTemp = EL*M_PI/180.0;
 
-	if (EL > 89.99999) //´óÓÚ90¶È
+	if (EL > 89.99999) //ï¿½ï¿½ï¿½ï¿½90ï¿½ï¿½
 		ElTemp = 89.9996*M_PI/180.0;
 
 	Head = Head*M_PI/180.0;
@@ -1747,7 +1746,7 @@ void GroundToMeasure(double AZ,double EL,double Head,double Roll,double Pitch,do
 
 	aCos = cos(Pitch)*cos(ElTemp)*cos(AzTemp-Head) + sin(Pitch)*sin(ElTemp);
 
-	if(fabs(aCos) < 0.0000001)    //Èç¹û·ÖÄ¸½üËÆÎª0 Ôò·½Î»½á¹ûÎª90»ò270¶È
+	if(fabs(aCos) < 0.0000001)    //ï¿½ï¿½ï¿½ï¿½ï¿½Ä¸ï¿½ï¿½ï¿½ï¿½Îª0 ï¿½ï¿½Î»ï¿½ï¿½ï¿½Îª90ï¿½ï¿½270ï¿½ï¿½
 	{
 		if(aSin >= 0.0)
 		{

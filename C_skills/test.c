@@ -15,20 +15,16 @@
 #include <string.h>
 #include <time.h>
 
-void thread(void *var) {
-  int *p = (int *)var;
-  printf("In child, a1 = %d\n", *p);
-  *p = 2;
-  printf("In child, a2 = %d\n", *p);
-}
+int x = 10;      //   没问题，10是常量
+int y = 3+20 ;   //   没问题，用于初始化的是常量表达式
 
-int main() {
-  int a = 1;
-  printf("a = %d\n", a);
-  pthread_t tid;
+int x2 = 2*x; //不行，x是变量
 
-  pthread_create(&tid, NULL, thread, (void *)&a);
-  printf("now a = %d\n", a);
-  pthread_join(tid, NULL);
+
+int main(int argc, char *argv[]){
+
+  printf("x2  = %d\n",x2);
+
+
   return 0;
 }

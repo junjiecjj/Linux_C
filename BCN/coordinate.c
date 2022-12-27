@@ -1,7 +1,5 @@
 /*-包含头文件------------------------------------------------------------------------------------*/
 #include "coordinate.h"
-#include "Public.h"
-#include "RamRefLib.h"
 
 
 /************************************************************************
@@ -306,7 +304,7 @@ void Coordinate_RightAngleToPolar_XX(double X, double Y, double Z, double *Range
 {
 	double azi = 0;
 	*Range = sqrt(X*X + Y*Y +Z*Z);
-	azi = atan2(X,Z)*180.0/ONEPI; // 
+	azi = atan2(X,Z)*180.0/ONEPI; //
 	*Elevation = asin(Y/(*Range))*180.0/ONEPI;
 	if(azi < -90)
 	{
@@ -328,7 +326,7 @@ void Coordinate_eplanexyzToaer_HJ(double X, double Y, double Z, double *Range, d
 {
 	double azi = 0;
 	*Range = sqrt(X*X + Y*Y +Z*Z);
-	azi = atan2(X,Y)*180.0/ONEPI; // 
+	azi = atan2(X,Y)*180.0/ONEPI; //
 	*Elevation = asin(Z/(*Range))*180.0/ONEPI;
 	if(azi < -90)
 	{
@@ -350,7 +348,7 @@ void Coordinate_ACUxyzToaer_HJ(double X, double Y, double Z, double *Range, doub
 	double azi = 0;
 	double ele = 0;
 	*Range = sqrt(X*X + Y*Y +Z*Z);
-	azi = atan2(Z,X)*180.0/ONEPI; // 
+	azi = atan2(Z,X)*180.0/ONEPI; //
 	ele = acos(Y/(*Range))*180.0/ONEPI;
 	if(azi < 0)
 	{
@@ -376,7 +374,7 @@ void Coordinate_ACUxyzToaer_HJ_Pro(double X, double Y, double Z, double *Range, 
 	double azi = 0;
 	double ele = 0;
 	*Range = sqrt(X*X + Y*Y +Z*Z);
-	azi = atan2(Z,X)*180.0/ONEPI; // 
+	azi = atan2(Z,X)*180.0/ONEPI; //
 	ele = asin(Y/(*Range))*180.0/ONEPI;
 	if(azi < 0)
 	{
@@ -387,7 +385,7 @@ void Coordinate_ACUxyzToaer_HJ_Pro(double X, double Y, double Z, double *Range, 
 		*Azimuth  = azi;
 	}
 
-	*Elevation  = ele;  
+	*Elevation  = ele;
 }
 
 // hj ACU AER to xyz
@@ -637,13 +635,13 @@ void Coordinate_HJWGS84ToPolarPro(int mode,int i,double yaw,double X, double Y, 
 			dPitch = g_HJSysParm.pitch;
 			dYaw = g_HJSysParm.yaw;
 
-			Coordinate_eplaneAerToXyz_HJ(1,Azimuth1,Elevation1, &ex, &ey, &ez); //zhenm 
+			Coordinate_eplaneAerToXyz_HJ(1,Azimuth1,Elevation1, &ex, &ey, &ez); //zhenm
 			//Coordinate_ePlanexyzToACUxyz_HJ(ex, ey,ez, g_HJSysParm.ACU_Azloc,g_HJSysParm.ACU_Eleloc,&sx, &sy, &sz);
 			// hj ePlane to ACU
 			Coordinate_ePlanexyzToACUxyz_HJPro(ex, ey,ez,g_HJSysParm.ACU_Azloc,90-g_HJSysParm.ACU_Eleloc,&sx, &sy, &sz); // 伺服角
-			Coordinate_ACUxyzToaer_HJ_Pro(sx, sy, sz, &sRange, &sAzimuth,&sElevation);  // ACU 
+			Coordinate_ACUxyzToaer_HJ_Pro(sx, sy, sz, &sRange, &sAzimuth,&sElevation);  // ACU
 
-#if 0 
+#if 0
 			MeasureToGround(sAzimuth,sElevation,dYaw,dRoll,dPitch,&dAzimuth,&dElevation); // dadi
 			dAzimuth = dAzimuth - 90;
 			if(dAzimuth >=360.0)
@@ -731,12 +729,12 @@ void Coordinate_HJWGS84ToPolarPro(int mode,int i,double yaw,double X, double Y, 
 			dPitch = g_HJSysParm.pitch;
 			dYaw = g_HJSysParm.yaw;
 
-			Coordinate_eplaneAerToXyz_HJ(1,Azimuth1,Elevation1, &ex, &ey, &ez); //zhenm 
+			Coordinate_eplaneAerToXyz_HJ(1,Azimuth1,Elevation1, &ex, &ey, &ez); //zhenm
 			//Coordinate_ePlanexyzToACUxyz_HJ(ex, ey,ez, g_HJSysParm.ACU_Azloc,g_HJSysParm.ACU_Eleloc,&sx, &sy, &sz);
 			// hj ePlane to ACU
 			Coordinate_ePlanexyzToACUxyz_HJPro(ex, ey,ez,g_HJSysParm.ACU_Azloc,90-g_HJSysParm.ACU_Eleloc,&sx, &sy, &sz); // 伺服角
-			Coordinate_ACUxyzToaer_HJ_Pro(sx, sy, sz, &sRange, &sAzimuth,&sElevation);  // ACU 
-#if 0 
+			Coordinate_ACUxyzToaer_HJ_Pro(sx, sy, sz, &sRange, &sAzimuth,&sElevation);  // ACU
+#if 0
 			MeasureToGround(sAzimuth,sElevation,dYaw,dRoll,dPitch,&dAzimuth,&dElevation); // dadi
 			dAzimuth = dAzimuth - 90;
 			if(dAzimuth >=360.0)
@@ -907,7 +905,7 @@ void Coordinate_HJWGS84ToPolarPro2(int mode,int i,double yaw,double X, double Y,
 			//printf("Saz = %f,  Sele = %f Maz = %f,  Mele = %f\n",sAzimuth,sElevation,dAzimuth,dElevation);
 
 		}
-	
+
 		g_HJSysParm.CR = sqrt(e*e + n*n + u*u);
 		g_HJSysParm.CRTime = g_Time;  	// 程引R的时间
 		g_HJSysParm.CRFlag = true; 	// 程引R有效标识
@@ -938,7 +936,7 @@ void Coordinate_CarAERToENUAER_XX(int i,double yaw,double Range, double Azimuth,
 	double z=0;
 
 	Coordinate_PolarToRightAngle_XX(Range,Azimuth,Elevation, &x, &y, &z);
-	Coordinate_ENUToCarPosition(yaw, x,y,z, &e,&n,&u);   //test  xiangdui 
+	Coordinate_ENUToCarPosition(yaw, x,y,z, &e,&n,&u);   //test  xiangdui
 	Coordinate_RightAngleToPolar(e, n, u, &Range0, &Azimuth0, &Elevation0);
 
 	g_SysParm[i].CurAzi = (int)(Azimuth0 *1000.0);
@@ -1121,7 +1119,7 @@ RMATRIX rotat_y_axis_matrix(double az)
 	zdata.ArrayMatrix[2][2] = cos(RAzi);
 
 
-	return zdata;	
+	return zdata;
 }
 
 // rot RMATRIX  绕Z轴逆时针旋转的矩阵
@@ -1148,7 +1146,7 @@ RMATRIX rotat_z_axis_matrix(double ele)
 	zdata.ArrayMatrix[2][2] = 1;
 
 
-	return zdata;	
+	return zdata;
 }
 
 // rot RMATRIX  绕 横摇 旋转的矩阵
@@ -1175,7 +1173,7 @@ RMATRIX rotat_R_axis_matrix(double aR)
 	zdata.ArrayMatrix[2][2] = cos(RAzi);
 
 
-	return zdata;	
+	return zdata;
 }
 
 // rot RMATRIX  绕 纵摇 旋转的矩阵
@@ -1201,7 +1199,7 @@ RMATRIX rotat_P_axis_matrix(double aP)
 	zdata.ArrayMatrix[2][1] = 0;
 	zdata.ArrayMatrix[2][2] = 1;
 
-	return zdata;	
+	return zdata;
 }
 
 // rot RMATRIX  绕 航向 旋转的矩阵
@@ -1273,8 +1271,8 @@ void Coordinate_XX_enuToCarPosition(double e, double n, double u, double *x, dou
 	{
 		for (j = 0;j<3;j++)
 		{
-			// fX_c[i] += fMatrix[j][i]*fX[j];//乘矩阵的转置fMatrix[i][j] 
-			fX_c[i] += fMatrix[i][j]*fX[j];//乘矩阵的转置fMatrix[i][j] 
+			// fX_c[i] += fMatrix[j][i]*fX[j];//乘矩阵的转置fMatrix[i][j]
+			fX_c[i] += fMatrix[i][j]*fX[j];//乘矩阵的转置fMatrix[i][j]
 		}
 	}
 	*x = fX_c[0];
@@ -1302,7 +1300,7 @@ void HJACUAERToENU(double range, double azi_rad,double ele_rad,
 
 	// double Range, double Azimuth, double Elevation, double *X, double *Y, double *Z
 	Coordinate_PolarToRightAngle_HJ(range,azi_rad,ele_rad,&fX[1],&fX[0],&fX[2]);
-	// RAE_radToXYZ(range,azi_rad,ele_rad,fX[1],fX[0],fX[2]);//range,azi_rad,ele_rad,fX[0],fX[1],fX[2]  
+	// RAE_radToXYZ(range,azi_rad,ele_rad,fX[1],fX[0],fX[2]);//range,azi_rad,ele_rad,fX[0],fX[1],fX[2]
 
 	memset(fMatrix,0,9*sizeof(double));
 	fMatrix[0][0] = cos(dYawAngle_rad)*cos(dPitchAngle_rad);
@@ -1324,7 +1322,7 @@ void HJACUAERToENU(double range, double azi_rad,double ele_rad,
 	{
 		for (j = 0;j<3;j++)
 		{
-			fX_c[i] += fMatrix[j][i]*fX[j];//乘矩阵的转置fMatrix[i][j] 
+			fX_c[i] += fMatrix[j][i]*fX[j];//乘矩阵的转置fMatrix[i][j]
 		}
 	}
 #endif
@@ -1382,7 +1380,7 @@ void Coordinate_ACUxyzToePlanexyz_HJ(double x, double y, double z,  double Azimu
 		for (j = 0;j<3;j++)
 		{
 			//printf("[ACU - eplant :]--i= %d,j= %d,ez = %f\n",i,j,fMatrix[i][j]);
-			fX_c[i] += fMatrix[i][j]*fX[j];//乘矩阵的转置fMatrix[i][j] 
+			fX_c[i] += fMatrix[i][j]*fX[j];//乘矩阵的转置fMatrix[i][j]
 		}
 	}
 
@@ -1439,7 +1437,7 @@ void Coordinate_ePlanexyzToACUxyz_HJ(double ex, double ey, double ez,  double Az
 		for (j = 0;j<3;j++)
 		{
 			//printf("[ACU - eplant :]--i= %d,j= %d,ez = %f\n",i,j,fMatrix[i][j]);
-			fX_c[i] += fMatrix[i][j]*fX[j];//乘矩阵的转置fMatrix[i][j] 
+			fX_c[i] += fMatrix[i][j]*fX[j];//乘矩阵的转置fMatrix[i][j]
 		}
 	}
 
@@ -1492,7 +1490,7 @@ void Coordinate_ACUxyzToePlanexyz_HJPro(double x, double y, double z,  double Az
 		for (j = 0;j<3;j++)
 		{
 			//printf("[ACU - eplant :]--i= %d,j= %d,ez = %f\n",i,j,fMatrix[i][j]);
-			fX_c[i] += T1.ArrayMatrix[i][j]*fX[j];//乘矩阵的转置fMatrix[i][j] 
+			fX_c[i] += T1.ArrayMatrix[i][j]*fX[j];//乘矩阵的转置fMatrix[i][j]
 		}
 	}
 
@@ -1545,7 +1543,7 @@ void Coordinate_ePlanexyzToACUxyz_HJPro(double ex, double ey, double ez,  double
 		for (j = 0;j<3;j++)
 		{
 			//printf("[ACU - eplant :]--i= %d,j= %d,ez = %f\n",i,j,fMatrix[i][j]);
-			fX_c[i] += T1.ArrayMatrix[i][j]*fX[j];//乘矩阵的转置fMatrix[i][j] 
+			fX_c[i] += T1.ArrayMatrix[i][j]*fX[j];//乘矩阵的转置fMatrix[i][j]
 		}
 	}
 
@@ -1612,7 +1610,7 @@ void Coordinate_ENUxyzToACUxyz_HJ(double x, double y, double z, double *ax, doub
 		for (j = 0;j<3;j++)
 		{
 			//printf("[ACU - eplant :]--i= %d,j= %d,ez = %f\n",i,j,fMatrix[i][j]);
-			fX_c[i] += T3.ArrayMatrix[i][j]*fX[j];//乘矩阵的转置fMatrix[i][j] 
+			fX_c[i] += T3.ArrayMatrix[i][j]*fX[j];//乘矩阵的转置fMatrix[i][j]
 		}
 	}
 
@@ -1682,7 +1680,7 @@ void Coordinate_ACUxyzToENUxyz_HJ(double ax, double ay, double az, double *x, do
 		for (j = 0;j<3;j++)
 		{
 			//printf("[ACU - eplant :]--i= %d,j= %d,ez = %f\n",i,j,fMatrix[i][j]);
-			fX_c[i] += T3.ArrayMatrix[i][j]*fX[j];//乘矩阵的转置fMatrix[i][j] 
+			fX_c[i] += T3.ArrayMatrix[i][j]*fX[j];//乘矩阵的转置fMatrix[i][j]
 		}
 	}
 
@@ -1698,14 +1696,14 @@ void Coordinate_ENUxyzToaer_HJ(double X, double Y, double Z, double *Range, doub
 {
 	*Range = sqrt(X*X + Y*Y +Z*Z);
 	*Azimuth = atan2XY(Z,X)*180.0/ONEPI;
-	*Elevation = asin(Y/(*Range))*180.0/ONEPI;  
-#if 0     
+	*Elevation = asin(Y/(*Range))*180.0/ONEPI;
+#if 0
 	double dRange = 0.0;
 	double dAzimuth = 0.0;
 	double dElevation = 0.0;
 	dRange = sqrt(X*X + Y*Y +Z*Z);
 	dAzimuth= atan2XY(Z,X)*180.0/ONEPI;
-	dElevation = asin(Y/(dRange))*180.0/ONEPI;  
+	dElevation = asin(Y/(dRange))*180.0/ONEPI;
 
 	if(dAzimuth >= 359.999)
 	{
@@ -1792,7 +1790,7 @@ void testCoordinate_change()
 	HJ_ENUToACUGroundToMeasure(Azimuth,Elevation,&sAzimuth,&sElevation);
 	printf("[ENU AE to eplant]Az= %f,ele = %f\n",sAzimuth,sElevation);
 
-#if 0 	
+#if 0
 
 	Xp = 7298653;
 	Yp = 41474405;
@@ -1843,12 +1841,12 @@ void testCoordinate_change()
 
 
 	Coordinate_ENUAerToXyz_HJ(sRange,sAzimuth,sElevation,&e, &n, &u);
-	// add enu to aer 
+	// add enu to aer
 	// Coordinate_ENUxyzToaer_HJ(e, n, u, &Range, &Azimuth,&Elevation);
 	Coordinate_ENUxyzToACUxyz_HJ(e, n, u, &ax, &ay, &az);
 	//Coordinate_ACUxyzToePlanexyz_HJ(ax,ay,az, g_HJSysParm.ACU_Azloc,g_HJSysParm.ACU_Eleloc,&ex, &ey, &ez); // double Azimuth, double Elevation
 	Coordinate_ACUxyzToePlanexyz_HJPro(ax,ay,az, g_HJSysParm.ACU_Azloc,g_HJSysParm.ACU_Eleloc,&ex, &ey, &ez);
-	Coordinate_eplanexyzToaer_HJ(ex, ey, ez,&Range0, &Azimuth0,&Elevation0);	
+	Coordinate_eplanexyzToaer_HJ(ex, ey, ez,&Range0, &Azimuth0,&Elevation0);
 
 	printf("[int mode of auto:]Range = %f,  Azi = %f ,Ele = %f \n ",sRange,sAzimuth,sElevation);
 	//printf("[int mode of auto:]Xr = %f, Yr = %f ,Zr = %f\n ",Xr,Yr,Zr);
@@ -1877,7 +1875,7 @@ void testCoordinate_change()
 	Coordinate_eplanexyzToaer_HJ(ex, ey, ez,&Range, &Azimuth,&Elevation);
 	//printf("[eplane - AER :]--Range= %f,Az= %f,ele = %f\n",Range, Azimuth,Elevation);
 	Coordinate_eplaneAerToXyz_HJ(Range, Azimuth,Elevation, &ex, &ey, &ez);
-	//printf("[AER  - eplane:]--ex= %f,ey= %f,ez = %f\n",ex, ey,ez);			
+	//printf("[AER  - eplane:]--ex= %f,ey= %f,ez = %f\n",ex, ey,ez);
 	Coordinate_ePlanexyzToACUxyz_HJ(ex, ey,ez, 40,20,&x, &y, &z);
 
 	x = 0.747260947684137;
@@ -1891,10 +1889,10 @@ void testCoordinate_change()
 	//printf("[enu - AER :]--Range= %f,Az= %f,ele = %f\n",Range, Azimuth,Elevation);
 	// hj ENU AER ---xyz
 	Coordinate_ENUAerToXyz_HJ(Range, Azimuth,Elevation, &x, &y, &z);
-	//printf("[AER  - enu:]--e= %f,n= %f,u = %f\n",x, y,z);	
+	//printf("[AER  - enu:]--e= %f,n= %f,u = %f\n",x, y,z);
 
 	printf("cal scan mode pro [start]---------- time(ms) = %ld clock(us) = %ld\n",g_Time,m_BaseUTCClock_uSecond);
-	// 东北天 ENU --AER send to ACU 
+	// 东北天 ENU --AER send to ACU
 	Xp = 7298653.338792;
 	Yp = 41474405.488343;
 	Zp = -2018484.959142;
@@ -2277,7 +2275,7 @@ void Coordinate_HJAnneToStation_band(double Azimuth, double Elevation, double dY
 	double dElevation = 0.0;
 
 
-	Coordinate_eplaneAerToXyz_HJ(1,Azimuth,Elevation, &ex, &ey, &ez); //zhenm 
+	Coordinate_eplaneAerToXyz_HJ(1,Azimuth,Elevation, &ex, &ey, &ez); //zhenm
 	// hj ePlane to ACU
 	Coordinate_ePlanexyzToACUxyz_HJPro(ex, ey,ez,ACU_Azloc,ACU_Eleloc,&sx, &sy, &sz); // 伺服角
 	Coordinate_ACUxyzToaer_HJ_Pro(sx, sy, sz, &sRange, &sAzimuth,&sElevation);  // 20210415 修改
@@ -2340,15 +2338,15 @@ void Coordinate_HJAnneToStation_band_1(double Azimuth, double Elevation,double *
 
 	double ACU_Azloc = 0;
 	double ACU_Eleloc = 0;
-	
+
 	// 滞后一级数据使用
 	dYaw = g_ArrayAngleOut[0].yaw;
 	dRoll = g_ArrayAngleOut[0].roll;
 	dPitch =  g_ArrayAngleOut[0].pitch;
 	ACU_Azloc = g_ArrayAngleOut[0].ACUaz;
 	ACU_Eleloc = 90 - g_ArrayAngleOut[0].ACUele - g_HJParmContrl.ACUModifyParm;
-	
-	Coordinate_eplaneAerToXyz_HJ(1,Azimuth,Elevation, &ex, &ey, &ez); //zhenm 
+
+	Coordinate_eplaneAerToXyz_HJ(1,Azimuth,Elevation, &ex, &ey, &ez); //zhenm
 	// hj ePlane to ACU
 	Coordinate_ePlanexyzToACUxyz_HJPro(ex, ey,ez,ACU_Azloc,ACU_Eleloc,&sx, &sy, &sz); // 伺服角
 	Coordinate_ACUxyzToaer_HJ_Pro(sx, sy, sz, &sRange, &sAzimuth,&sElevation);  // 20210415 修改
@@ -2383,7 +2381,7 @@ void Coordinate_HJAnneToStation_band_1(double Azimuth, double Elevation,double *
 	MeasureToGround(sAzimuth,sElevation,dYaw,dRoll,dPitch,&dAzimuth,&dElevation); // dadi
 	*mAzimuth = dAzimuth;
 	*mElevation = dElevation;
-	
+
 }
 
 // hj 阵面转站心
@@ -2412,15 +2410,15 @@ void Coordinate_HJAnneToStation_IMU(IMU_MES imu_mes,double Azimuth, double Eleva
 
 	double ACU_Azloc = 0;
 	double ACU_Eleloc = 0;
-	
+
 	// 滞后一级数据使用
 	dYaw = imu_mes.yaw;
 	dRoll = -1.0  * imu_mes.roll;
 	dPitch =  -1.0  * imu_mes.pitch;
 	ACU_Azloc = imu_mes.ACU_Azloc;
 	ACU_Eleloc = 90 - imu_mes.ACU_Eleloc - g_HJParmContrl.ACUModifyParm;
-	
-	Coordinate_eplaneAerToXyz_HJ(1,Azimuth,Elevation, &ex, &ey, &ez); //zhenm 
+
+	Coordinate_eplaneAerToXyz_HJ(1,Azimuth,Elevation, &ex, &ey, &ez); //zhenm
 	// hj ePlane to ACU
 	Coordinate_ePlanexyzToACUxyz_HJPro(ex, ey,ez,ACU_Azloc,ACU_Eleloc,&sx, &sy, &sz); // 伺服角
 	Coordinate_ACUxyzToaer_HJ_Pro(sx, sy, sz, &sRange, &sAzimuth,&sElevation);  // 20210415 修改
@@ -2455,7 +2453,7 @@ void Coordinate_HJAnneToStation_IMU(IMU_MES imu_mes,double Azimuth, double Eleva
 	MeasureToGround(sAzimuth,sElevation,dYaw,dRoll,dPitch,&dAzimuth,&dElevation); // dadi
 	*mAzimuth = dAzimuth;
 	*mElevation = dElevation;
-	
+
 }
 
 // hj 站心转阵面
@@ -2496,7 +2494,7 @@ void HJ_ENUToACUGroundToMeasure(double AZM1,double ELM1,double *AZM2,double *ELM
 	//dPitch =  -1.0  * g_HJSysParm.pitch;
 	dRoll = 1.0  * g_HJSysParm.roll;
 	dPitch =  1.0  * g_HJSysParm.pitch;
-	
+
 	ACU_Azloc = g_HJSysParm.ACU_Azloc;
 	ACU_Eleloc = 90 - g_HJSysParm.ACU_Eleloc - g_HJParmContrl.ACUModifyParm;
 
@@ -2532,7 +2530,7 @@ void HJ_ENUToACUGroundToMeasure(double AZM1,double ELM1,double *AZM2,double *ELM
 	// 伺服角度
 	Coordinate_ACUaerToxyz_HJ_Pro(1,sAzimuth,sElevation,&ax,&ay,&az);
 	Coordinate_ACUxyzToePlanexyz_HJPro(ax,ay,az, ACU_Azloc,ACU_Eleloc,&ex, &ey, &ez);
-	Coordinate_eplanexyzToaer_HJ(ex, ey, ez,&Range0, &Azimuth0,&Elevation0);	
+	Coordinate_eplanexyzToaer_HJ(ex, ey, ez,&Range0, &Azimuth0,&Elevation0);
 
 	*AZM2 = Azimuth0;
 	*ELM2 = Elevation0;
@@ -2572,7 +2570,7 @@ void HJ_ENUToACUGroundToMeasure_IMU(IMU_MES imu_mes,double AZM1,double ELM1,doub
 	double ACU_Eleloc = 0;
 
 
-    
+
 	dYaw = imu_mes.yaw;
 	dRoll = -1.0  * imu_mes.roll;
 	dPitch =  -1.0  * imu_mes.pitch;
@@ -2611,7 +2609,7 @@ void HJ_ENUToACUGroundToMeasure_IMU(IMU_MES imu_mes,double AZM1,double ELM1,doub
 	// 伺服角度
 	Coordinate_ACUaerToxyz_HJ_Pro(1,sAzimuth,sElevation,&ax,&ay,&az);
 	Coordinate_ACUxyzToePlanexyz_HJPro(ax,ay,az, ACU_Azloc,ACU_Eleloc,&ex, &ey, &ez);
-	Coordinate_eplanexyzToaer_HJ(ex, ey, ez,&Range0, &Azimuth0,&Elevation0);	
+	Coordinate_eplanexyzToaer_HJ(ex, ey, ez,&Range0, &Azimuth0,&Elevation0);
 
 	*AZM2 = Azimuth0;
 	*ELM2 = Elevation0;
@@ -2689,7 +2687,7 @@ void HJ_ENUToACUGroundToMeasure_band(double AZM1,double ELM1,double *AZM2,double
 	// 伺服角度
 	Coordinate_ACUaerToxyz_HJ_Pro(1,sAzimuth,sElevation,&ax,&ay,&az);
 	Coordinate_ACUxyzToePlanexyz_HJPro(ax,ay,az, ACU_Azloc,ACU_Eleloc,&ex, &ey, &ez);
-	Coordinate_eplanexyzToaer_HJ(ex, ey, ez,&Range0, &Azimuth0,&Elevation0);	
+	Coordinate_eplanexyzToaer_HJ(ex, ey, ez,&Range0, &Azimuth0,&Elevation0);
 
 	*AZM2 = Azimuth0;
 	*ELM2 = Elevation0;
@@ -2712,7 +2710,7 @@ void HJ_ACUToMeasure_AE(double AZM1,double ELM1,double *AZM2,double *ELM2)
 
 	Range = sqrt(X*X + Y*Y +Z*Z);
 	*AZM2 = atan2XY(X,Y)*180.0/ONEPI;
-	*ELM2 = asin(Z/(Range))*180.0/ONEPI;  
+	*ELM2 = asin(Z/(Range))*180.0/ONEPI;
 }
 
 
@@ -2735,7 +2733,7 @@ void HJ_ACU_Measure_RETURE_AE(double AZM1,double ELM1,double *AZM2,double *ELM2)
 
 	Range = sqrt(X*X + Y*Y +Z*Z);
 	*AZM2 = atan2XY(Z,X)*180.0/ONEPI;
-	*ELM2 = asin(Y/(Range))*180.0/ONEPI;  
+	*ELM2 = asin(Y/(Range))*180.0/ONEPI;
 }
 
 
@@ -2852,7 +2850,7 @@ void HJ_GroundToMeasure(double AZM1,double ELM1,double *AZM2,double *ELM2)
 	dYaw = g_HJSysParm.yaw;
 	dRoll = 1.0  * g_HJSysParm.roll;
 	dPitch =  1.0  * g_HJSysParm.pitch;
-	
+
 	ACU_Azloc = g_HJSysParm.ACU_Azloc;
 	ACU_Eleloc = 90 - g_HJSysParm.ACU_Eleloc - g_HJParmContrl.ACUModifyParm;
 
@@ -2896,7 +2894,7 @@ void ENUToECEF_V(double Lon, double Lat, double vx_enu, double vy_enu, double vz
     double m_cosLatOfRadar;                               // 雷达站址，纬度cos值
     double m_sinLongOfRadar;                              // 雷达站址，经度sin值
     double m_cosLongOfRadar;                              // 雷达站址，经度cos值
-    
+
     latitude_rad = Lat * CVTA_DegreeRadian; //converting to radians
     longtitude_rad = Lon * CVTA_DegreeRadian; //converting to radians
 
