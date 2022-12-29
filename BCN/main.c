@@ -8,7 +8,11 @@
 #include "FormatTransfer.h"
 
 STR2  BCN;
-//extern const double PI;
+
+extern  int 	A ;
+extern const double PI;
+extern const char * MONTHS[12];
+
 
 int main(int argc, char *argv[])
 {

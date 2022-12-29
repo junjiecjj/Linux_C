@@ -20,6 +20,27 @@ using namespace std;
 #include<algorithm>
 #include<numeric>
 
+class Stamp{
+    char value[64];
+    string Wday[7] = {"Sun","Mon","Tue","Wed","Thu","Fri","Sat"};
+
+    public:
+    Stamp(){
+        //time_t now = time(nullptr);
+        time_t Timep;
+        struct tm *P;
+        //char Time[255];
+        time(&Timep);
+        P = localtime(&Timep);
+        sprintf(value, "%d/%d/%d %s %d:%d:%d",(1900+P->tm_year), (1+P->tm_mon), P->tm_mday, Wday[P->tm_wday].c_str(), P->tm_hour, P->tm_min, P->tm_sec);
+        //sprintf(value, "%s", ctime(&now));
+    }
+    const char* Str() const {return value;}
+
+};
+
+Stamp stamp;
+
 void show(const vector<int> Vec)
 {
     cout << "打印向量\n";
@@ -32,9 +53,9 @@ void show(const vector<int> Vec)
 
 int main(int argc, char *argv[])
 {
-    //vector<int> vec = {1,2,3,4,5,6,7,8,9,10};
+    vector<int> vec = {1,2,3,4,5,6,7,8,9,10};
     //vector<int> vec(10,1);
-    vector<int> vec;
+    //vector<int> vec;
     for(int i = 0; i < 10; i++)
         vec.push_back(i+1);
     vec.push_back(20);
@@ -99,6 +120,28 @@ int main(int argc, char *argv[])
     cout << "清空向量" << endl;
     vec.clear();
     cout << "vector的容量大小为:" << vec.size() << endl;
+
+    vector<string> Wday   = {"Sun","Mon","Tue","Wed","Thu","Fri","Sat"};
+    // Wday.push_back("Sun");
+    // Wday.push_back("Sun");
+    // Wday.push_back("Sun");
+    // Wday.push_back("Sun");
+    // Wday.push_back("Sun");
+    // Wday.push_back("Sun");
+    // Wday.push_back("Sun");
+
+
+
+    printf("Wday len = %d\n", Wday.size());
+
+    for(int i=0; i < Wday.size();  ++i)
+    {
+        printf("Wday[%d] = %s\n",i, Wday[i].c_str());
+    }
+    printf("%s\n", stamp.Str());
+
+    printf("%s\n", stamp.Str());
+
     return 0;
 
 }
@@ -106,44 +149,44 @@ int main(int argc, char *argv[])
  输出为:
 
 打印向量
-1  2  3  4  5  6  7  8  9  10  20  19  14  13  12  18  17  16  22  15  
+1  2  3  4  5  6  7  8  9  10  20  19  14  13  12  18  17  16  22  15
 
 vector的容量大小为:20
 vector的最大容量为:4611686018427387903
 打印向量
-1  2  3  4  5  6  7  8  9  10  20  19  14  13  12  18  17  16  22  15  
+1  2  3  4  5  6  7  8  9  10  20  19  14  13  12  18  17  16  22  15
 
 vector最后的元素为:15
 删除vector最后的元素:
 打印向量
-1  2  3  4  5  6  7  8  9  10  20  19  14  13  12  18  17  16  22  
+1  2  3  4  5  6  7  8  9  10  20  19  14  13  12  18  17  16  22
 
 vector最后的元素为:22
 删除vector最后的元素:
 打印向量
-1  2  3  4  5  6  7  8  9  10  20  19  14  13  12  18  17  16  
+1  2  3  4  5  6  7  8  9  10  20  19  14  13  12  18  17  16
 
 向量是否为空,1为空，0为非空:0
 vector首部的元素为:1
 不能用vec.pop_front()删除vector首部的元素:
 打印向量
-1  2  3  4  5  6  7  8  9  10  20  19  14  13  12  18  17  16  
+1  2  3  4  5  6  7  8  9  10  20  19  14  13  12  18  17  16
 
 第三个元素为:3
 第5个元素为:5
 改变向量vec的第3个第5个元素
 打印向量
-1  2  33  4  99  6  7  8  9  10  20  19  14  13  12  18  17  16  
+1  2  33  4  99  6  7  8  9  10  20  19  14  13  12  18  17  16
 
-7  8  9  10  20  19  14  13  12  18  17  16  
+7  8  9  10  20  19  14  13  12  18  17  16
 找到 7 了:7
 反转并打印向量
 打印向量
-16  17  18  12  13  14  19  20  10  9  8  7  6  99  4  33  2  1  
+16  17  18  12  13  14  19  20  10  9  8  7  6  99  4  33  2  1
 
 排序并打印向量
 打印向量
-1  2  4  6  7  8  9  10  12  13  14  16  17  18  19  20  33  99  
+1  2  4  6  7  8  9  10  12  13  14  16  17  18  19  20  33  99
 
 向量和为:308
 清空向量

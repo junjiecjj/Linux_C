@@ -49,8 +49,7 @@ int main(int argc, char *argv[])
     S.push_back('N');
     S.push_back('P');
 
-    cout << "字符串不支持string.push_front\n"
-         << endl;
+    cout << "字符串不支持string.push_front\n" << endl;
     //S.push_front('M');                        //string不支持string.push_front()
 
     cout << "打印字符串\n";
@@ -149,16 +148,15 @@ int main(int argc, char *argv[])
     char S9[] = {'h', 'e', 'l', 'l', 'o', '\0', ' ', 'w', 'o', 'r', 'l', 'd'};
     char S10[] = {'h', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'}; //strlen(S10)产生未定义的结果，因为S10不是以'\0'结尾，strlen可能一直向前查找直到遇到空字符
     const char *S11 = "hello world";
+
     string S12 = "hello world";
     string S13 = {'h', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'};
     string S14 = "hello\0world";
     string S15 = {'h', 'e', 'l', 'l', 'o', '\0', 'w', 'o', 'r', 'l', 'd'};
 
-    printf("strlen(S4) = %zd , strlen(S5) = %zd , strlen(S6) = %zd , strlen(S7) = %zd , strlen(S8) = %zd , strlen(S9) = %zd , strlen(S10) = %zd , strlen(S11) = %zd\n",
-           strlen(S4), strlen(S5), strlen(S6), strlen(S7), strlen(S8), strlen(S9), strlen(S10), strlen(S11));
+    printf("strlen(S4) = %zd , strlen(S5) = %zd , strlen(S6) = %zd , strlen(S7) = %zd , strlen(S8) = %zd , strlen(S9) = %zd , strlen(S10) = %zd , strlen(S11) = %zd\n", strlen(S4), strlen(S5), strlen(S6), strlen(S7), strlen(S8), strlen(S9), strlen(S10), strlen(S11));
 
-    printf("sizeof(S4) = %zd , sizeof(S5) = %zd , sizeof(S6) = %zd , sizeof(S7) = %zd , sizeof(S8) = %zd, sizeof(S9) = %zd , sizeof(S10) = %zd , sizeof(S11) = %zd\n",
-           sizeof(S4), sizeof(S5), sizeof(S6), sizeof(S7), sizeof(S8), sizeof(S9), sizeof(S10), sizeof(S11));
+    printf("sizeof(S4) = %zd , sizeof(S5) = %zd , sizeof(S6) = %zd , sizeof(S7) = %zd , sizeof(S8) = %zd, sizeof(S9) = %zd , sizeof(S10) = %zd , sizeof(S11) = %zd\n", sizeof(S4), sizeof(S5), sizeof(S6), sizeof(S7), sizeof(S8), sizeof(S9), sizeof(S10), sizeof(S11));
 
     //  strlen()只能以char *作为参数,不能以类型作为参数,该函数实际完成的功能是从代表该字符串的第一个地址开始遍历，直到遇到结束符'\0'。返回的长度大小不包括'\0'。
     //  c/c++ strlen(str)和str.length()和str.size()都可以求字符串长度。
@@ -166,22 +164,22 @@ int main(int argc, char *argv[])
     //  strlen(str)是用于求字符数组的长度，其参数是char*
 
     //cout << "strlen(S12) = " << strlen(S12) << endl;
-    cout << "S12.size() = " << S12.size() << endl;
+    cout << "\nS12.size() = " << S12.size() << endl;
     cout << "S12.length() = " << S12.length() << endl;
     cout << "sizeof(S12) = " << sizeof(S12) << endl;
 
     //cout << "strlen(S13) = " << strlen(S13) << endl;
-    cout << "S13.size() = " << S13.size() << endl;
+    cout << "\nS13.size() = " << S13.size() << endl;
     cout << "S13.length() = " << S13.length() << endl;
     cout << "sizeof(S13) = " << sizeof(S13) << endl;
 
     //cout << "strlen(S14) = " << strlen(S14) << endl;
-    cout << "S14.size() = " << S14.size() << endl;
+    cout << "\nS14.size() = " << S14.size() << endl;
     cout << "S14.length() = " << S14.length() << endl;
     cout << "sizeof(S14) = " << sizeof(S14) << endl;
 
     //cout << "strlen(S15) = " << strlen(S15) << endl;
-    cout << "S15.size() = " << S15.size() << endl;
+    cout << "\nS15.size() = " << S15.size() << endl;
     cout << "S15.length() = " << S15.length() << endl;
     cout << "sizeof(S15) = " << sizeof(S15) << endl;
     return 0;

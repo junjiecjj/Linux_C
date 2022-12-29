@@ -21,6 +21,12 @@ struct timezone{
 //返回北京时间
 char * GetTimeOfNow();
 
+
+void timeExamp(void);
+
+
+int timeTest(void);
+
 #endif // _TIME_CJJ
 
 

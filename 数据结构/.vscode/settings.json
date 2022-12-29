@@ -32,19 +32,5 @@
     "**/.*/**",
     "**/.vscode",
     "**/.vscode/**"
-  ],
-  "files.associations": {
-    "*.cjson": "jsonc",
-    "*.wxss": "css",
-    "*.wxs": "javascript",
-    "time.h": "c",
-    "net.h": "c",
-    "doa.h": "c",
-    "struct.h": "c",
-    "stdio.h": "c",
-    "diceroll.h": "c",
-    "ctime": "cpp",
-    "sstream": "cpp",
-    "regex": "cpp"
-  }
+  ]
 }
