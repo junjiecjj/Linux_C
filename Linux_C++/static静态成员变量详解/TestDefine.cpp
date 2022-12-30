@@ -125,10 +125,16 @@ const char*  Stamp::GetStartTime(void) const {return value;}
 // CEmployee 类
 //==========================================================================================================================================
 //构造函数
-// CEmployee::CEmployee()
-// {
-//     arr_point=NULL; arr_len=0;
-// }
+CEmployee::CEmployee()
+{
+    m_arr_point=NULL;
+    m_arr_len=0;
+}
+
+//采用初始化列表
+CEmployee::CEmployee(char *szname, int age, float salary): m_name(szname), m_Age(age), m_Salary(salary){
+    //TODO:
+}
 
 CEmployee::CEmployee(const char *szname,  const char* nm,  int age, float salary, int arr[], int arrlen)
 {
@@ -190,7 +196,15 @@ float CEmployee::getSalary(void) const{
 
 void CEmployee::ShowEmployee(void)
 {
-    printf("外号:%s(真名:%s) 的工资为%.3f, 年龄为:%d\n",m_szName, m_name, m_Age, m_Salary );
+    if(m_name == NULL || m_szName == NULL ||  m_Age<=0)
+    {
+        cout<<"成员变量还未初始化"<<endl;
+    }
+    else
+    {
+        printf("外号:%s(真名:%s) 的工资为%.3f, 年龄为:%d\n",m_szName, m_name, m_Age, m_Salary );
+    }
+
 }
 
 void CEmployee::averageSalary(CEmployee el, CEmployee e2)
