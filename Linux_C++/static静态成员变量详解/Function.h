@@ -16,7 +16,10 @@ https://www.runoob.com/w3cnote/cpp-static-const.html
 
 void ChangeStu(Student *student);
 
-
-
+void Swap(int *a, int *b);
+void Swap(float *a, float *b);
+void Swap(char *a, char *b);
+void Swap(bool *a, bool *b);
+void TestSwap(void);
 
 #endif // _TASKFUNC_H_

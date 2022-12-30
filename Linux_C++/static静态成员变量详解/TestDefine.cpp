@@ -132,74 +132,77 @@ const char*  Stamp::GetStartTime(void) const {return value;}
 
 CEmployee::CEmployee(const char *szname,  const char* nm,  int age, float salary, int arr[], int arrlen)
 {
-    strcpy(szName,  szname);
+    strcpy(m_szName,  szname);
 
-    //  name = new char[strlen(nm) + 1];  //成员变量是指针，所以应该用new来分配内存，+1是因为有结束标志符,  ok
-    name = (char *) malloc(strlen(nm) + 1);
-    strcpy(name, nm);
+    // m_name = new char[strlen(nm) + 1];  //成员变量是指针，所以应该用new来分配内存，+1是因为有结束标志符,  ok
+    m_name = (char *) malloc(strlen(nm) + 1);
+    strcpy(m_name, nm);
 
-    Age = age;
-    Salary  =  salary;
+    m_Age = age;
+    m_Salary  =  salary;
 
     //  在C++中，当类中有指针类型的数据成员时，必须注意在构造函数中，分配专门的存储单元，并将地址赋值给指针型数据成员。
     // https://blog.csdn.net/sxhelijian/article/details/7492646
-	arr_point=new int[arrlen];  //arr_point指向了属于自己的新空间
+	m_arr_point=new int[arrlen];  //arr_point指向了属于自己的新空间
 	for (int i=0; i<arrlen; ++i)
-		*(arr_point+i)=*(arr+i);   //将数组a中元素逐个赋值
-	arr_len=arrlen;
+		*(m_arr_point+i)=*(arr+i);   //将数组a中元素逐个赋值
+	m_arr_len=arrlen;
 }
 
 // 析构函数
 // 如果一个类中有指针类型的成员变量，就要在构造函数中new动态分配内存，也需要在析构函数中delete释放内存.
 CEmployee::~CEmployee()
 {
-    // delete[] name;    // ok
-    free(name);
+    //  delete[] m_name;    // ok
+    free(m_name);
 
 
-	if (!arr_point) // 等同于if (arr_point!=NULL)
-		delete [] arr_point; //释放在类的生命周期中分配的，arr_point指向的空间
+	if (!m_arr_point) // 等同于if (arr_point!=NULL)
+		delete [] m_arr_point; //释放在类的生命周期中分配的，arr_point指向的空间
 
+    // delete  删除的是 指针原本所指的那部分内存而已 指针还可以使用 但是避免野指针
+    // delete命令指示释放了那个指针原本所指的那部分内存而已。被delete后的指针p的值（地址值）并非就是NULL，而是随机值。
+    //  也就是被delete后，如果不再加上一句p=NULL，p就成了“野指针”，在内存里乱指一通。
 }
 
 
 
 void CEmployee::setName(const char* name) {
-    strcpy(szName, name);  //ok
+    strcpy(m_szName, name);  //ok
 }
 void CEmployee::getName(char* name) const{
-    strcpy(name, szName);  //ok
+    strcpy(name, m_szName);  //ok
 }
 
 void CEmployee::setAge(int age) {
-    Age = age;  //ok
+    m_Age = age;  //ok
 }
 int CEmployee::getAge(void) const{
-    return Age;  //ok
+    return m_Age;  //ok
 }
 
 void CEmployee::setSalary(float salary) {
-    Salary = salary;  //ok
+    m_Salary = salary;  //ok
 }
 float CEmployee::getSalary(void) const{
-    return Salary;  //ok
+    return m_Salary;  //ok
 }
 
 void CEmployee::ShowEmployee(void)
 {
-    printf("外号:%s(真名:%s) 的工资为%.3f, 年龄为:%d\n",szName, name, Age, Salary );
+    printf("外号:%s(真名:%s) 的工资为%.3f, 年龄为:%d\n",m_szName, m_name, m_Age, m_Salary );
 }
 
 void CEmployee::averageSalary(CEmployee el, CEmployee e2)
 {
-    Salary = (el.Salary + e2.Salary) / 2;
+    m_Salary = (el.m_Salary + e2.m_Salary) / 2;
 }
 
 
 void CEmployee::showArray() const
 {
-	for (int i=0; i<arr_len; ++i)
-		cout<<*(arr_point+i)<<' '; //或cout<<arr_point[i]<<' '
+	for (int i=0; i<m_arr_len; ++i)
+		cout<<*(m_arr_point+i)<<' '; //或cout<<arr_point[i]<<' '
 	cout<<endl;
 	return;
 }

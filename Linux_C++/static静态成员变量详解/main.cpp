@@ -20,6 +20,27 @@ using namespace std;
 #include "RamDefLib.h"
 #include "Function.h"
 
+//将类定义在命名空间中
+namespace Diy{
+    class Student{
+    public:
+        char *name;
+        int age;
+        float score;
+
+    public:
+        void say(){
+            printf("%s的年龄是 %d，成绩是 %.3f\n", name, age, score);
+        }
+    };
+}
+
+namespace Li{  //小李的变量定义
+    FILE* fp = NULL;
+}
+namespace Han{  //小韩的变量定义
+    FILE* fp = NULL;
+}
 
 
 int main(int argc, char* argv[]){
@@ -73,10 +94,13 @@ int main(int argc, char* argv[]){
 	for (int i=0; i<5; ++i)
 		x[i]=i+1;
 
+    //在栈上创建对象
     CEmployee E("jack", "junjie", 28, 123.212,  x, 5);
     E.ShowEmployee();
+    E.m_flag = 1;
+    printf("E.flag = %d\n",E.m_flag);
 
-    strcpy(E.szName, "Tom1234567889");  //ok
+    strcpy(E.m_szName, "Tom1234567889");  //ok
     E.ShowEmployee();
 
     E.setName("Tom1234");  //ok
@@ -116,6 +140,96 @@ int main(int argc, char* argv[]){
 	E.showArray();   // 输出1 2 3 4 5, arr使用专属的存储空间！
 	delete [] x;
 	E.showArray();   // 输出1 2 3 4 5, arr使用专属的存储空间！！
+
+    printf("\n\n********************************** 使用类指针 ***************************************************\n\n");
+
+    x=new int[5];
+	for (int i=0; i<5; ++i)
+	x[i]=i+1;
+
+     //在堆上创建对象
+    CEmployee *pEmp;
+    pEmp  = new CEmployee;
+    pEmp = &E;
+
+    pEmp->ShowEmployee();
+    pEmp->m_flag = 0;
+    printf("E.flag = %d\n",pEmp->m_flag);
+
+    strcpy(pEmp->m_szName, "Tom1234567889");  //ok
+    pEmp->ShowEmployee();
+
+    pEmp->setName("Tom1234");  //ok
+    pEmp->ShowEmployee();
+
+    pEmp->setAge(48);  //ok
+    pEmp->ShowEmployee();
+
+    pEmp->setSalary(983.7456);  //ok
+    pEmp->ShowEmployee();
+
+    pEmp->getName(name);
+
+    pEmp->getName(nameP);
+
+    age = pEmp->getAge();
+
+    salar =   pEmp->getSalary();
+
+    printf("姓名:%s,  年龄:%d,  薪资:%.3f\n",nameP,age, salar);
+    printf("姓名:%s,  年龄:%d,  薪资:%.3f\n",name,age, salar);
+
+
+    //  E.Salary = 5000;  //编译出错，不能访问私有成员
+
+    // array
+
+
+	pEmp->showArray();   // 输出1 2 3 4 5
+	x[3]=999;
+	pEmp->showArray();   // 输出1 2 3 4 5, arr使用专属的存储空间！
+	delete [] x;
+	pEmp->showArray();   // 输出1 2 3 4 5, arr使用专属的存储空间！！
+
+
+    // delete  pEmp;    // error, 由于pEmp被 delete，此时E的内存被清空,而E还有内容。
+    pEmp =  nullptr;       //正确的 做法
+
+
+
+
+    int *p1 = new int[10];  //分配10个int型的内存空间
+    delete[] p1;
+
+    //E.ShowEmployee();    // 此时E还在
+    /********************************************************************************
+     * 4 namespace
+    ********************************************************************************/
+
+    printf("\n\n***************************  测试 namespace 类   *******************************************\n\n");
+
+    Diy::Student stu1;
+    stu1.name = "小明";
+    stu1.age = 15;
+    stu1.score = 92.5f;
+    stu1.say();
+    std::printf("http://c.biancheng.net\n");
+
+    TestSwap( );
+
+
+    // ok
+    int *p;//
+    p = new int;  //分配1个int型的内存空间
+    delete p;  //释放内存
+
+    // error
+    int *p2;//
+    int aa = 3;
+    p2 = new int;  //分配1个int型的内存空间
+    p2 = &aa;
+    p2 =  nullptr;
+    delete p2;  //释放内存
 
 
     return 0;

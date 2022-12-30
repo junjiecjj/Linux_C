@@ -4,6 +4,7 @@
         "*.wxss": "css",
         "*.wxs": "javascript",
         "time.h": "c",
-        "diceroll.h": "c"
+        "diceroll.h": "c",
+        "names.h": "c"
     }
 }
