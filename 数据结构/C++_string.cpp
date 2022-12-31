@@ -182,6 +182,134 @@ int main(int argc, char *argv[])
     cout << "\nS15.size() = " << S15.size() << endl;
     cout << "S15.length() = " << S15.length() << endl;
     cout << "sizeof(S15) = " << sizeof(S15) << endl;
+
+    // 转换为C风格的字符串
+    // 虽然 C++ 提供了 string 类来替代C语言中的字符串，但是在实际编程中，有时候必须要使用C风格的字符串（例如打开文件时的路径），为此，string 类为我们提供了一个转换函数 c_str()，该函数能够将 string 字符串转换为C风格的字符串，并返回该字符串的 const 指针（const char*）。请看下面的代码：
+    string path = "./test.txt";
+    FILE *fp = fopen(path.c_str(), "rt");
+    fclose(fp);
+
+    // string 字符串也可以像C风格的字符串一样按照下标来访问其中的每一个字符。string 字符串的起始下标仍是从 0 开始。请看下面的代码：
+    string s = "1234567890";
+    for(int i=0,len=s.length(); i<len; i++){
+        cout<<s[i]<<" ";
+    }
+    cout<<endl;
+    s[5] = '5';
+    cout<<s<<endl;
+
+    // 字符串的拼接
+    //  有了 string 类，我们可以使用+或+=运算符来直接拼接字符串，非常方便，再也不需要使用C语言中的 strcat()、strcpy()、malloc() 等函数来拼接字符串了，再也不用担心空间不够会溢出了。
+
+    //用+来拼接字符串时，运算符的两边可以都是 string 字符串，也可以是一个 string 字符串和一个C风格的字符串，还可以是一个 string 字符串和一个字符数组，或者是一个 string 字符串和一个单独的字符。请看下面的例子：
+    string s1 = "first ";
+    string s2 = "second ";
+    char *s3 = "third ";
+    char s4[] = "fourth ";
+    char ch = '@';
+    string s5 = s1 + s2;
+    string s6 = s1 + s3;
+    string s7 = s1 + s4;
+    string s8 = s1 + ch;
+    cout<<s5<<endl<<s6<<endl<<s7<<endl<<s8<<endl;
+
+
+    //string 字符串的增删改查
+    //一. 插入字符串
+    //insert() 函数可以在 string 字符串中指定的位置插入另一个字符串，它的一种原型为：
+    //string& insert (size_t pos, const string& str);
+
+    //pos 表示要插入的位置，也就是下标；str 表示要插入的字符串，它可以是 string 字符串，也可以是C风格的字符串。
+    string ss1, ss2, ss3;
+    ss1 = ss2 = "1234567890";
+    ss3 = "aaa";
+    ss1.insert(5, ss3);
+    cout<< ss1 <<endl;
+    ss2.insert(5, "bbb");
+    cout<< ss2 <<endl;
+
+    // 二. 删除字符串
+    // erase() 函数可以删除 string 中的一个子字符串。它的一种原型为：
+    // string& erase (size_t pos = 0, size_t len = npos);
+
+    // pos 表示要删除的子字符串的起始下标，len 表示要删除子字符串的长度。如果不指明 len 的话，那么直接删除从 pos 到字符串结束处的所有字符（此时 len = str.length - pos）。
+
+    // 请看下面的代码：
+    string sss1, sss2, sss3;
+    sss1 = sss2 = sss3 = "1234567890";
+    sss2.erase(5);
+    sss3.erase(5, 3);
+    cout<< sss1 <<endl;
+    cout<< sss2 <<endl;
+    cout<< sss3 <<endl;
+
+    // 三. 提取子字符串
+    // substr() 函数用于从 string 字符串中提取子字符串，它的原型为：
+    // string substr (size_t pos = 0, size_t len = npos) const;
+
+    // pos 为要提取的子字符串的起始下标，len 为要提取的子字符串的长度。
+    // 系统对 substr() 参数的处理和 erase() 类似：
+    // 如果 pos 越界，会抛出异常；
+    // 如果 len 越界，会提取从 pos 到字符串结尾处的所有字符。
+    // 请看下面的代码：
+    string sa1 = "first second third";
+    string sa2;
+    sa2 = sa1.substr(6, 6);
+    cout<< sa1 <<endl;
+    cout<< sa2 <<endl;
+
+
+    // 四. 字符串查找
+    // string 类提供了几个与字符串查找有关的函数，如下所示。
+    // 1) find() 函数
+    // find() 函数用于在 string 字符串中查找子字符串出现的位置，它其中的两种原型为：
+    // size_t find (const string& str, size_t pos = 0) const;
+    // size_t find (const char* s, size_t pos = 0) const;
+
+    // 第一个参数为待查找的子字符串，它可以是 string 字符串，也可以是C风格的字符串。第二个参数为开始查找的位置（下标）；如果不指明，则从第0个字符开始查找。
+    //find() 函数最终返回的是子字符串第一次出现在字符串中的起始下标。本例最终是在下标 6 处找到了 s2 字符串。如果没有查找到子字符串，那么会返回 string::npos，它是 string 类内部定义的一个静态常成员，用来表示 size_t 类型所能存储的最大值。
+    // 请看下面的代码：
+    string sq1 = "first second third";
+    string sq2 = "second";
+    int indexq = sq1.find(sq2,5);
+    if(indexq < sq1.length())
+        cout<<"Found at index : "<< indexq <<endl;
+    else
+        cout<<"Not found"<<endl;
+
+    // 2) rfind() 函数
+    // rfind() 和 find() 很类似，同样是在字符串中查找子字符串，不同的是 find() 函数从第二个参数开始往后查找，而 rfind() 函数则最多查找到第二个参数处，如果到了第二个参数所指定的下标还没有找到子字符串，则返回 string::npos。
+
+    // 请看下面的例子：
+    string sw1 = "first second third";
+    string sw2 = "second";
+    int indexw = sw1.rfind(sw2,6);
+    if(indexw < sw1.length())
+        cout<<"Found at index : "<< indexw <<endl;
+    else
+        cout<<"Not found"<<endl;
+
+
+    // 3) find_first_of() 函数
+    // find_first_of() 函数用于查找子字符串和字符串共同具有的字符在字符串中首次出现的位置。请看下面的代码：
+
+    string se1 = "first second second third";
+    string se2 = "asecond";
+    int indexe = se1.find_first_of(se2);
+    if(indexe < se1.length())
+        cout<<"Found at index : "<< indexe <<endl;
+    else
+        cout<<"Not found"<<endl;
+
+
+
+
+
+
+
+
+
+
     return 0;
 }
 /*

@@ -5,6 +5,7 @@
         "*.wxs": "javascript",
         "time.h": "c",
         "diceroll.h": "c",
-        "names.h": "c"
+        "names.h": "c",
+        "ostream": "cpp"
     }
 }

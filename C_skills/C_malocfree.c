@@ -46,9 +46,9 @@ typedef struct STRUCT2
 
 } STR2;
 
-void showstr(STR2 *p)
+void showStruct(const STR2 *p)
 {
-    printf("a = %d, b = %lf, c = %f, \n",p->a,p->b,p->c,);
+    printf("a = %d, b = %.3lf, c = %.3f, \n",p->a,p->b,p->c);
 }
 
 char *s_gets(char *st, int n)
@@ -69,9 +69,22 @@ char *s_gets(char *st, int n)
     return ret_val;
 }
 
+STR2 stu1;
+
 int main(int argc, char *argv[])
 {
+    STR2 stu2;
+    STR2 *p;
+    STR2 *P;
 
 
+    P = (STR2 *)malloc(2 * sizeof(STR2));
+
+    stu2.a = 12;
+    stu2.b  = 87.32;
+    stu2.c = 32.65;
+    showStruct(&stu2);
+
+    free(P); P = NULL;
     return 0;
 }
