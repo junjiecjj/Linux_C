@@ -74,7 +74,7 @@ STR2 stu1;
 int main(int argc, char *argv[])
 {
     STR2 stu2;
-    STR2 *p;
+    STR2 *p  = ;
     STR2 *P;
 
 
