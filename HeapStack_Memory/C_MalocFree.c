@@ -6,7 +6,7 @@
 >> 此程序的功能是：
 >> Last Modified : 2021年03月10日 星期三 11时10分03秒
 
-*/
+*************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -71,8 +71,7 @@ char *s_gets(char *st, int n)
 
 STR2 stu1;
 
-int main(int argc, char *argv[])
-{
+void TestStruMalloc(void){
     STR2 stu2;
     STR2 *p  = ;
     STR2 *P;
@@ -86,5 +85,10 @@ int main(int argc, char *argv[])
     showStruct(&stu2);
 
     free(P); P = NULL;
+}
+
+int main(int argc, char *argv[])
+{
+    TestStruMalloc();
     return 0;
 }

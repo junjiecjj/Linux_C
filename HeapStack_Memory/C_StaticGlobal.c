@@ -419,15 +419,54 @@ Here are your %d entries:
         -----------------------------------------------------------------------存储类别和动态内存分配-- --------------------------------------------------------------
         存储类别和动态内存分配有何联系？我们来看一个理想化模型。可以认为程序把它可用的内存分为3部分：一部分供具有外部链接、内部链接和无链接的静态变量使用；一部分供自动变量使用；一部分供动态内存分配。静态存储类别所用的内存数量在编译时确定，只要程序还在运行，就可访问存储在该部分的数据。该类别的变量在程序开始执行时被创建，在程序结束时被销毁。然而，自动存储类别的变量在程序进入变量定义所在块时存在，在程序离开块时消失。因此，随着程序调用函数和函数结束，自动变量所用的内存数量也相应地增加和减少。这部分的内存通常作为栈来处理，这意味着新创建的变量按顺序加入内存，然后以相反的顺序销毁。动态分配的内存在调用malloc() 或相关函数时存在，在调用free() 后释放。这部分的内存由程序员管理，而不是一套规则。所以内存块可以在一个函数中创建，在另一个函数中销毁。正是因为这样，这部分的内存用于动态内存分配会支离破碎。也就是说，未使用的内存块分散在已使用的内存块之间。另外，使用动态内存通常比使用栈内存慢。总而言之，程序把静态对象、自动对象和动态分配的对象存储在不同的区域。
 * /
-*/
+*******************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "diceroll.h"
+#include "C_StaticGlobal.h"
+#include "C_StaticGlo.h"
+
+void report_count();
+void accumulate(int k);
+int count = 0;       // file scope, external linkage
 
 int main(int argc, char *argv[])
 {
+
+    int value;       // 自动变量
+    register int i;  // 寄存器变量
+
+    printf("Enter a positive integer (0 to quit): ");
+    while (scanf("%d", &value) == 1 && value > 0)
+    {
+        ++count;     // use file scope variable
+        for (i = value; i >= 0; i--)
+            accumulate(i);
+        printf("Enter a positive integer (0 to quit): ");
+    }
+    report_count();
+
+    //***************************************************************************************************
+    printf("静态外部连接，所有函数外\n");
+    int aa = 222;
+    printf("[file:%s,fun:%s, Line:%d] aa = %d\n", __FILE__, __func__, __LINE__, aa);
+    printf("[file:%s,fun:%s, Line:%d] globalA = %d\n", __FILE__, __func__, __LINE__, globalA);
+    aa = AChangeGlobal();
+    printf("[file:%s,fun:%s, Line:%d] aa = %d\n", __FILE__, __func__, __LINE__,aa);
+    printf("[file:%s,fun:%s, Line:%d] globalA = %d\n", __FILE__, __func__, __LINE__,globalA); // 全局变量先定义，然后在另一个
+
+    //***************************************************************************************************
+    printf("\n静态无连接，块内，stastic\n");
+    for (int count = 1; count <= 3; count++)
+    {
+        printf("Here comes iteration %d:\n", count);
+        trystat();
+    }
+
+    //***************************************************************************************************
+    printf("\n静态外部连接，所有函数外\n");
+    // 掷骰子游戏
     int dice, roll;
     int sides;
     int status;
@@ -452,8 +491,7 @@ int main(int argc, char *argv[])
             }
         }
         roll = roll_n_dice(dice, sides);
-        printf("You have rolled a %d using %d %d-sided dice.\n",
-               roll, dice, sides);
+        printf("You have rolled a %d using %d %d-sided dice.\n", roll, dice, sides);
         printf("How many sides? Enter 0 to stop.\n");
     }
     printf("The rollem() function was called %d times.\n",
@@ -463,3 +501,42 @@ int main(int argc, char *argv[])
 
     return 0;
 }
+
+void report_count()
+{
+    printf("Loop executed %d times\n", count);
+}
+
+
+static int rollem(int sides) // 该文件属于该私有文件*/
+{
+    int roll;
+
+    roll = rand() % sides + 1;
+    ++roll_count; /* 计算函数被调次数 */
+
+    return roll;
+}
+
+
+int roll_n_dice(int dice, int sides)
+{
+    int d;
+    int total = 0;
+    if (sides < 2)
+    {
+        printf("Need at least 2 sides.\n");
+        return -2;
+    }
+    if (dice < 1)
+    {
+        printf("Need at least 1 die.\n");
+        return -1;
+    }
+
+    for (d = 0; d < dice; d++)
+        total += rollem(sides);
+
+    return total;
+}
+

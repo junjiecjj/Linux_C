@@ -20,21 +20,21 @@
 #include <time.h>
 #include <complex.h>
 
-void getmemory(char *p)
-{
-    p = (char *)malloc(100);
-    strcpy(p, "hello world");
-}
+// void getmemory(char *p)
+// {
+//     p = (char *)malloc(100);
+//     strcpy(p, "hello world");
+// }
 
-int main(int argc, char *argv[])
-{
-    char *str = NULL;
-    getmemory(str);
-    printf("%s ", str);
-    free(str);
-    return 0;
+// int main(int argc, char *argv[])
+// {
+//     char *str = NULL;
+//     getmemory(str);
+//     printf("%s ", str);
+//     free(str);
+//     return 0;
     /*
-答案：程序崩溃， getmemory 中的 malloc 不不能返回动态内存， free（）对 str 操作很危险，程序会崩溃，出现段错误这道题目初一看跟我们前面的一道题目非常相像，但是却又截然不同。
+答案：程序崩溃， getmemory 中的 malloc 不能返回动态内存， free（）对 str 操作很危险，程序会崩溃，出现段错误这道题目初一看跟我们前面的一道题目非常相像，但是却又截然不同。
 
 在该程序中， getmemory 中 p 是形参，所谓形参在运行中会产生一个临时变量，只会把外界传入的参数的值接收到，所有的改变不会影响外界的实际参数。 getmemory 函数中，因为我们要改变传入的 str 指针的指向，也就是说要改变 str 指针变量的值，应该传入的是指针变量的地址。
 
@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 
 应该修改成指向指针的指针 void getmemory (char **p) ，这样 malloc 返回的地址付给 p（即 str 变量本身）。
     */
-}
+
 
 /*
 来看另外的一道题目：
@@ -97,3 +97,59 @@ return str;
 }
 
 */
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <float.h>
+#include <limits.h>
+#include <math.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <stddef.h>
+#include <locale.h>
+#include <time.h>
+#include <complex.h>
+
+#define Len 20
+
+char *strA()
+{
+    char * str ="hello world";
+    return str;
+}
+
+
+void test1(void)
+{
+    char *str = (char *) malloc(sizeof(char)*Len);
+    //str = strA();
+    //str = "hello,jack....";
+    for(int i=0; i<Len; i++){
+        str[i] = 'A'+i;
+    }
+
+    printf("%s\n", str);
+
+    free(str);
+}
+
+void test2(void)
+{
+    char *str = (char *) malloc(sizeof(char)*Len);
+    str = strA();
+
+    printf("%s\n", str);
+
+    //free(str); //编译ok，运行段错误，这是因为free只能释放malloc分配的内存空间，而这里是分配后直接把一个指针赋值给str,正确的做法应该是malloc后往这块内存填东西，然后释放内存，如test1()
+}
+
+int main(int argc, char *argv[])
+{
+
+    test1();
+    test2();
+
+    return 0;
+
+}

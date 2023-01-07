@@ -85,7 +85,7 @@ void GetTimeOfNow(char * GlobalTime)
 //==========================================================================================================================================
 // Stamp类
 //==========================================================================================================================================
-const int Stamp::AA = 48271;
+const int Stamp::AA; //  = 48271;
 // const vector<string> Stamp::Wday = {"Sun","Mon","Tue","Wed","Thu","Fri","Sat"};
 
 
@@ -116,6 +116,10 @@ void Stamp::ShowWday(void)
     }
 }
 
+void Stamp::ShowAA(void)
+{
+    printf("AA = %d\n",AA);
+}
 
 const char*  Stamp::GetStartTime(void) const {return value;}
 
@@ -124,20 +128,42 @@ const char*  Stamp::GetStartTime(void) const {return value;}
 //==========================================================================================================================================
 // CEmployee 类
 //==========================================================================================================================================
+
+
+int CEmployee::m_total = 0;
+float CEmployee::m_points = 0.0;
+
+
+
 //构造函数
-CEmployee::CEmployee()
+CEmployee::CEmployee(float score, int len):m_Score(score), m_len(len)
 {
     m_arr_point=NULL;
     m_arr_len=0;
+
+    if(len > 0){ m_arr = new int[len];  /*分配内存*/ }
+    else{ m_arr = NULL; }
+
+    m_total++;
+    m_points += score;
+
 }
 
 //采用初始化列表
-CEmployee::CEmployee(char *szname, int age, float salary): m_name(szname), m_Age(age), m_Salary(salary){
+CEmployee::CEmployee(char *szname, int age, float salary, float score, int len): m_name(szname), m_Age(age), m_Salary(salary), m_Score(score), m_len(len){
+    m_arr_point=NULL;
+    m_arr_len=0;
+
     //TODO:
+    if(len > 0){ m_arr = new int[len];  /*分配内存*/ }
+    else{ m_arr = NULL; }
 }
 
-CEmployee::CEmployee(const char *szname,  const char* nm,  int age, float salary, int arr[], int arrlen)
+CEmployee::CEmployee(const char *szname,  const char* nm,  int age, float salary, float score, int arr[], int arrlen, int len):m_len(len)
 {
+    m_arr_point=NULL;
+    m_arr_len=0;
+
     strcpy(m_szName,  szname);
 
     // m_name = new char[strlen(nm) + 1];  //成员变量是指针，所以应该用new来分配内存，+1是因为有结束标志符,  ok
@@ -146,6 +172,7 @@ CEmployee::CEmployee(const char *szname,  const char* nm,  int age, float salary
 
     m_Age = age;
     m_Salary  =  salary;
+    m_Score = score;
 
     //  在C++中，当类中有指针类型的数据成员时，必须注意在构造函数中，分配专门的存储单元，并将地址赋值给指针型数据成员。
     // https://blog.csdn.net/sxhelijian/article/details/7492646
@@ -153,6 +180,13 @@ CEmployee::CEmployee(const char *szname,  const char* nm,  int age, float salary
 	for (int i=0; i<arrlen; ++i)
 		*(m_arr_point+i)=*(arr+i);   //将数组a中元素逐个赋值
 	m_arr_len=arrlen;
+
+    if(len > 0){
+        m_arr = new int[len];  /*分配内存*/
+    }
+    else{
+        m_arr = NULL;
+    }
 }
 
 // 析构函数
@@ -169,10 +203,14 @@ CEmployee::~CEmployee()
     // delete  删除的是 指针原本所指的那部分内存而已 指针还可以使用 但是避免野指针
     // delete命令指示释放了那个指针原本所指的那部分内存而已。被delete后的指针p的值（地址值）并非就是NULL，而是随机值。
     //  也就是被delete后，如果不再加上一句p=NULL，p就成了“野指针”，在内存里乱指一通。
+
+    delete[] m_arr;  //释放内存
+
+
 }
 
 
-
+//  获取和设置姓名
 void CEmployee::setName(const char* name) {
     strcpy(m_szName, name);  //ok
 }
@@ -180,6 +218,7 @@ void CEmployee::getName(char* name) const{
     strcpy(name, m_szName);  //ok
 }
 
+//  获取和设置年龄
 void CEmployee::setAge(int age) {
     m_Age = age;  //ok
 }
@@ -187,11 +226,20 @@ int CEmployee::getAge(void) const{
     return m_Age;  //ok
 }
 
+//  获取和设置薪资
 void CEmployee::setSalary(float salary) {
     m_Salary = salary;  //ok
 }
 float CEmployee::getSalary(void) const{
     return m_Salary;  //ok
+}
+
+//  获取和设置成绩
+void CEmployee::setScore(float score) {
+    m_Score = score;  //ok
+}
+float CEmployee::getScore(void) const{
+    return m_Score;  //ok
 }
 
 void CEmployee::ShowEmployee(void)
@@ -202,7 +250,7 @@ void CEmployee::ShowEmployee(void)
     }
     else
     {
-        printf("外号:%s(真名:%s) 的工资为%.3f, 年龄为:%d\n",m_szName, m_name, m_Age, m_Salary );
+        printf("外号:%s(真名:%s) 的工资为%.3f, 年龄为:%d, 成绩为:%.3f\n",m_szName, m_name, m_Age, m_Salary, m_Score);
     }
 
 }
@@ -219,4 +267,27 @@ void CEmployee::showArray() const
 		cout<<*(m_arr_point+i)<<' '; //或cout<<arr_point[i]<<' '
 	cout<<endl;
 	return;
+}
+
+
+void CEmployee::input(){
+    for(int i=0; m_p=at(i); i++){ cin>>*at(i); }
+}
+void CEmployee::show(){
+    for(int i=0; m_p=at(i); i++){
+        if(i == m_len - 1){ cout<<*at(i)<<endl; }
+        else{ cout<<*at(i)<<", "; }
+    }
+}
+int * CEmployee::at(int i){
+    if(!m_arr || i<0 || i>=m_len){ return NULL; }
+    else{ return m_arr + i; }
+}
+
+//定义静态成员函数
+int CEmployee::getTotal(){
+    return m_total;
+}
+float CEmployee::getPoints(){
+    return m_points;
 }

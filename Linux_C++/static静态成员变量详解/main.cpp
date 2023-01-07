@@ -42,12 +42,29 @@ namespace Han{  //小韩的变量定义
     FILE* fp = NULL;
 }
 
+class Demo{
+public:
+    Demo(string s);
+    ~Demo();
+private:
+    string m_s;
+};
+Demo::Demo(string s): m_s(s){ }
+Demo::~Demo(){ cout<<m_s<<endl; }
+void func(){
+    //局部对象
+    Demo obj1("1");
+}
+
+//全局对象
+Demo obj2("2");
 
 int main(int argc, char* argv[]){
     GetTimeOfNow(Time);
 
     printf("通过Stamp类获取的时间为:%s\n",stamp.GetStartTime());
     printf("通过C语言函数类获取的时间为:%s\n",Time);
+    stamp.ShowAA();
 
 
     /********************************************************************************
@@ -95,7 +112,7 @@ int main(int argc, char* argv[]){
 		x[i]=i+1;
 
     //在栈上创建对象
-    CEmployee E("jack", "junjie", 28, 123.212,  x, 5);
+    CEmployee E("jack", "junjie", 28, 123.212, 92.89, x, 5, 6);
     E.ShowEmployee();
     E.m_flag = 1;
     printf("E.flag = %d\n",E.m_flag);
@@ -147,19 +164,32 @@ int main(int argc, char* argv[]){
 	for (int i=0; i<5; ++i)
 	x[i]=i+1;
 
+
+    //创建一个有n个元素的数组（对象）
+    int pEmpn;
+    cout<<"Input array length: ";
+    cin>>pEmpn;
+
      //在堆上创建对象
-    CEmployee *pEmp;
-    pEmp  = new CEmployee;
-    pEmp = &E;
+    CEmployee *pEmp  = new CEmployee("vicktor", "chen", 13, 76.32, 89.65, x, 5, pEmpn);
+
+
+    //输入数组元素
+    cout<<"Input "<<pEmpn<<" numbers: ";
+    pEmp -> input();
+    //输出数组元素
+    cout<<"Elements: ";
+    pEmp -> show();
+    //删除数组（对象）
 
     pEmp->ShowEmployee();
     pEmp->m_flag = 0;
     printf("E.flag = %d\n",pEmp->m_flag);
 
-    strcpy(pEmp->m_szName, "Tom1234567889");  //ok
+    strcpy(pEmp->m_szName, "Tom22222222222");  //ok
     pEmp->ShowEmployee();
 
-    pEmp->setName("Tom1234");  //ok
+    pEmp->setName("Dick1234");  //ok
     pEmp->ShowEmployee();
 
     pEmp->setAge(48);  //ok
@@ -192,14 +222,12 @@ int main(int argc, char* argv[]){
 	pEmp->showArray();   // 输出1 2 3 4 5, arr使用专属的存储空间！！
 
 
-    // delete  pEmp;    // error, 由于pEmp被 delete，此时E的内存被清空,而E还有内容。
-    pEmp =  nullptr;       //正确的 做法
+    delete  pEmp;    //  由于pEmp被 delete，此时E的内存被清空,而E还有内容。
 
 
 
 
-    int *p1 = new int[10];  //分配10个int型的内存空间
-    delete[] p1;
+
 
     //E.ShowEmployee();    // 此时E还在
     /********************************************************************************
@@ -223,13 +251,30 @@ int main(int argc, char* argv[]){
     p = new int;  //分配1个int型的内存空间
     delete p;  //释放内存
 
-    // error
-    int *p2;//
-    int aa = 3;
-    p2 = new int;  //分配1个int型的内存空间
-    p2 = &aa;
-    p2 =  nullptr;
-    delete p2;  //释放内存
+
+    int *p1 = new int[10];  //分配10个int型的内存空间
+    delete[] p1;
+
+
+    printf("\n\n***************************  析构函数的执行时机   *******************************************\n\n");
+    //局部对象
+    Demo obj3("3");
+    //new创建的对象
+    Demo *pobj4 = new Demo("4");
+    func();
+    cout<<"main"<<endl;
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     return 0;
