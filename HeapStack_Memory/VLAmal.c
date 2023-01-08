@@ -3,7 +3,7 @@
 #include  "VLAmal.h"
 
 
-const int days[MONTHS] = {31,28,31,30,31,30,31,31,30,31,30,31};
+
 /**************************************************************************************************************************
     被调函数创建一个数组并返回指针， 供主调函数访问， 然后主调函数在末尾调用free()释放之前被调函数分配的内存。
     另外， free()所用的指针变量可以与 malloc()的指针变量不同， 但是两个指针必须储存相同的地址。 但是， 不能释放同一块内存两次。
@@ -76,7 +76,7 @@ void  FreeLocalPoint(int *LocalPoint)
 
 void DisplayMonth(void)
 {
-
+    const int days[MONTHS] = {31,28,31,30,31,30,31,31,30,31,30,31};
     for (int index = 0; index < MONTHS; index++)
         printf("Month %d has %2d days.\n", index +1, days[index]);
 
