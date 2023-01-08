@@ -17,23 +17,21 @@ C99定义的这种变长数组的使用是有限制的，不能像在C++等语�
 
 
 #include <stdio.h>
-#include  "Utility.h"
+//#include  "Utility.h"
 
 #define MONTHS 12
 #define LEN 10
 
-extern int *GlobalPoint;
+// extern int *GlobalPoint;
 
 extern const int days[MONTHS];
 
+// int   *MallocAndReturnLocalPoint(void);
+// void  UseLocalPoint(void);
+// void  FreeLocalPoint(int *LocalPoint);
 
 
-int   *MallocAndReturnLocalPoint(void);
-void  UseLocalPoint(void);
-void  FreeLocalPoint(int *LocalPoint);
-
-
-//void DisplayMonth(void);
+// //void DisplayMonth(void);
 
 
 

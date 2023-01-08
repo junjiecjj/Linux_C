@@ -47,8 +47,6 @@ int *MallocAndReturnLocalPoint()
 // 被调函数返回的内存赋值给另一个指针，然后使用这个指针。
 void  UseLocalPoint(void)
 {
-
-
     // 利用全局指针打印这块内存的值。
     //  displayArray1(GlobalPoint, LEN); //段错误，得先为GlobalPoint 分配内存，因为还没给GlobalPoint分配内存，无打印
 
@@ -58,11 +56,11 @@ void  UseLocalPoint(void)
     GlobalPoint  =  MallocAndReturnLocalPoint();
 
     // 再利用全局指针打印这块内存的值。
-    displayArray1(GlobalPoint, LEN);
+    Display1DIntArray(GlobalPoint, LEN);
 
     GlobalPoint[0] = 765;
 
-    displayArray1(GlobalPoint, LEN);
+    Display1DIntArray2(GlobalPoint, LEN);
 
 }
 
@@ -72,11 +70,12 @@ void  FreeLocalPoint(int *LocalPoint)
     free(LocalPoint);
 }
 
+const int days[MONTHS] = {31,28,31,30,31,30,31,31,30,31,30,31};
 
 
 void DisplayMonth(void)
 {
-    const int days[MONTHS] = {31,28,31,30,31,30,31,31,30,31,30,31};
+    // const int days[MONTHS] = {31,28,31,30,31,30,31,31,30,31,30,31};
     for (int index = 0; index < MONTHS; index++)
         printf("Month %d has %2d days.\n", index +1, days[index]);
 

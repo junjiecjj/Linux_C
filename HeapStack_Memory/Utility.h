@@ -26,7 +26,29 @@
 
 
 
-void displayArray1(int *arr, int size);
+int Sum1DIntArray(const int ar[], int n);
+int Sum1DIntArray1(const int ar[], int n);
+
+int Sum1DIntArra2(int *start, int *end);
+void Display1DIntArray(const int arr[], int size);
+
+void Display1DIntArray2(const int arr[], int size);
+
+void Display1DIntArray3(const int *arr, int size);
+
+void Display1DIntArray4(const int *arr, int size);
+
+void Display2DIntArray(int m, int n, const int (*A)[n]);
+
+void Display2DIntArray1(int m, int n, const int A[][n]);
+
+//适用于int **A形式申明的二维数组,内存连续或者不连续都行
+void Display2DIntArray2DPoint(int row, int col, const int **A);
+//适用于A[m][n]形式申明的二维数组
+void Display2DIntArrayNorm(int rows, int cols, const int ar[rows][cols]);
+
+//适用于int **A形式申明的二维数组,内存连续,不连续时编译不会出错但是不对
+void Display2DIntArrayUse1D(int rows, int cols, const int *ar);
 
 
 
