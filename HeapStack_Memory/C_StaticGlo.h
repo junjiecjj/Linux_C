@@ -13,7 +13,7 @@
 #include <stdlib.h>
 
 
-#define LEN 10
+
 
 extern int globalA;
 

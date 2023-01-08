@@ -21,6 +21,7 @@
 #define MONTHS 12
 #define SIZE 4
 
+
 int sum(int ar[], int n) // how big an array?
 {
     int i;
