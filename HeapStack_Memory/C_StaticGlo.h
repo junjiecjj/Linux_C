@@ -6,12 +6,20 @@
 >> 此程序的功能是：
 ************************************************************/
 
+#ifndef _StaticGlob_CJJ
+#define _StaticGlob_CJJ
 
+#include <stdio.h>
+#include <stdlib.h>
+
+
+#define LEN 10
 
 extern int globalA;
 
 int AChangeGlobal(void);
 
-void trystat(void);
+void ChangeGlob(void);
 
-void accumulate(int k); // prototype
+
+#endif  //  _StaticGlob_CJJ

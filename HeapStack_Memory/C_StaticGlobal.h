@@ -7,16 +7,20 @@
 
 **************************************************************************/
 
+
+
+
+#ifndef _C_staticGlobal_CJJ
+#define _C_staticGlobal_CJJ
+
 #include <stdio.h>
 #include <stdlib.h>
 
-extern int roll_count;
 
 
-int roll_n_dice(int dice, int sides);
-static int rollem(int sides);
 
 
+#endif // _C_staticGlobal_CJJ
 
 
 

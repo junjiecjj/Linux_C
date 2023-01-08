@@ -6,14 +6,11 @@
 >> 此程序的功能是：展示static、global、register、const、变量作用域和生存周期等。
 ************************************************************/
 
-#include <stdio.h>
-#include <stdlib.h>
+
 #include "C_StaticGlo.h"
 
 
-
-
-//============================================================================
+//================================== 外部链接 ，静态存储期，文件作用域，所有函数外 ==========================================
 int globalA = 347;  /* 外部链接 ，静态存储期，文件作用域*/
 int AChangeGlobal(void)
 {
@@ -23,42 +20,13 @@ int AChangeGlobal(void)
     return a;
 }
 
-
-//============================================================================
-int roll_count = 0; /* 外部链接 */
-
-
-
-void trystat(void)
+void ChangeGlob(void)
 {
-    int fade = 1;
-    static int stay = 1;  // 块作用域的静态变量，无链接
-
-    printf("fade = %d and stay = %d\n", fade++, stay++);
+    int aa = 222;
+    printf("[file:%s,fun:%s, Line:%d] aa = %d\n", __FILE__, __func__, __LINE__, aa);
+    printf("[file:%s,fun:%s, Line:%d] globalA = %d\n", __FILE__, __func__, __LINE__, globalA);
+    aa = AChangeGlobal();
+    printf("[file:%s,fun:%s, Line:%d] aa = %d\n", __FILE__, __func__, __LINE__,aa);
+    printf("[file:%s,fun:%s, Line:%d] globalA = %d\n", __FILE__, __func__, __LINE__,globalA); // 全局变量先定义，然后在另一个
 }
 
-
-//============================================================================
-extern int count;       // 外部变量，外部链接
-
-static int total = 0;   //内部链接，文件作用域，静态存储期，
-
-
-
-
-void accumulate(int k)  // k是块作用域，无链接
-{
-    static int subtotal = 0;  //无链接，块作用域的静态变量，静态存储期，
-
-    if (k <= 0)
-    {
-        printf("loop cycle: %d\n", count);
-        printf("subtotal: %d; total: %d\n", subtotal, total);
-        subtotal = 0;
-    }
-    else
-    {
-        subtotal += k;
-        total += k;
-    }
-}
