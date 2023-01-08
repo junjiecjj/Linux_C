@@ -48,6 +48,10 @@
     "initializer_list": "c",
     "regex": "c",
     "utility": "c",
-    "valarray": "c"
+    "valarray": "c",
+    "variable.h": "c",
+    "where.h": "c",
+    "vlamal.h": "c",
+    "loc_stat.h": "c"
   }
 }
