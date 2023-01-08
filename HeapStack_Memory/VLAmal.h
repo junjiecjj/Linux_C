@@ -24,7 +24,7 @@ C99定义的这种变长数组的使用是有限制的，不能像在C++等语�
 
 extern int *GlobalPoint;
 
-extern  int days[MONTHS];
+extern const int days[MONTHS];
 
 int   *MallocAndReturnLocalPoint(void);
 void  UseLocalPoint(void);

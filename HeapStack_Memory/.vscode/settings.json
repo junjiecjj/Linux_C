@@ -52,6 +52,11 @@
     "variable.h": "c",
     "where.h": "c",
     "vlamal.h": "c",
-    "loc_stat.h": "c"
+    "loc_stat.h": "c",
+    "utility.h": "c",
+    "c_staticglobal.h": "c",
+    "c_staticglo.h": "c",
+    "diceroll.h": "c",
+    "s_and_r.h": "c"
   }
 }
