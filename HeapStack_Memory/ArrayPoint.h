@@ -18,10 +18,10 @@ int pnt_addr(void);
 
 void  TestArrayPoint(void);
 
-
+void Show1DArrayKindsOfWays(void);
 void Show2DArrayKindsOfWaysC(void);
 
-
+int ptr_ops(void);
 
 void C_stack();
 void C_malloc();
