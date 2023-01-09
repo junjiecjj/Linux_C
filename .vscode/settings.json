@@ -6,6 +6,8 @@
         "time.h": "c",
         "diceroll.h": "c",
         "names.h": "c",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "where.h": "c",
+        "partab.h": "c"
     }
 }
