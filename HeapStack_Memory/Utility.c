@@ -4,7 +4,7 @@
 
 #include  "Utility.h"
 
-
+#define LEN 10
 
 
 /**************************************************************************************************************************
@@ -132,6 +132,7 @@ void Display2DIntArray2DPoint(int rows, int cols, const int **A)
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
             printf("%5d  ", A[i][j]);
+            //printf("%5d  ", A[i*cols+j]);  //错误的做法
         }
     printf("\n");
     }
@@ -170,6 +171,8 @@ void Display2DIntArrayUse1D(int rows, int cols, const int *ar)
 
     printf("\n");
 }
+
+
 
 
 /*************************************************************************************************************

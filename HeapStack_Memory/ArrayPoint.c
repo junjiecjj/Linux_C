@@ -26,7 +26,7 @@ void Show2DArrayKindsOfWays(void)
     int m = 5, n = 10;
     printf("================== A[m][n]的方式申请数组=============================\n");
 
-    int A[m][n];
+    int A[m][n]; // 这样的内存是连续的
     for (int i = 0; i < m; i++)
     {
         for (int j = 0; j < n; j++)
@@ -34,6 +34,15 @@ void Show2DArrayKindsOfWays(void)
             A[i][j] = i * n + j;
         }
     }
+    // printf("打印A[m][n]方式申请的数组的元素地址\n");
+    // for (int i = 0; i < m; i++)
+    // {
+    //     for (int j = 0; j < n; j++)
+    //     {
+    //         printf("%15p",&A[i][j]);
+    //     }
+    //     printf("\n");
+    // }
 
     printf("打印数组A第一次......\n");
     Display2DIntArray(m, n, A);  //ok
@@ -56,7 +65,7 @@ void Show2DArrayKindsOfWays(void)
     printf("================== int **A的方式申请数组,不连续分配=============================\n");
 
     int **D;
-    //这样分配内存不连续
+    //这样分配内存不连续,行内连续，行间不一定连续
     D = (int **)malloc(m * sizeof(int *));
     for (int i = 0; i < m; i++)
     {
@@ -70,25 +79,44 @@ void Show2DArrayKindsOfWays(void)
             D[i][j] = i * n + j;
         }
     }
-    printf("D[1][2] = %d\n", D[1][2]);
 
+    // printf("打印**D方式申请的数组的元素地址\n");
+    // for (int i = 0; i < m; i++)
+    // {
+    //     for (int j = 0; j < n; j++)
+    //     {
+    //         printf("%15p",&D[i][j]);
+    //     }
+    //     printf("\n");
+    // }
+    // printf("打印**D方式申请的数组的元素地址\n");
+    // for (int i = 0; i < m; i++)
+    // {
+    //     for (int j = 0; j < n; j++)
+    //     {
+    //         printf("%15p",&D[i*n+j]);
+    //     }
+    //     printf("\n");
+    // }
 
-    printf("打印数组A第一次......\n");
+    printf("打印数组D第一次......\n");
     Display2DIntArray(m, n,&D[0]); //这样编译不会出错，但是结果不对
     printf("\n");
     Display2DIntArray(m, n, D); //这样编译不会出错，但是结果不对
+    printf("\n");
+    Display2DIntArray(m, n, D[0]); //这样编译不会出错，但是结果不对
 
-    printf("打印数组A第二次......\n");
+    printf("打印数组D第二次......\n");
     Display2DIntArray1(m, n, D); //这样编译不会出错，但是结果不对
 
-    printf("打印数组A第三次......\n");
+    printf("打印数组D第三次......\n");
     Display2DIntArrayNorm(m, n, D); //这样编译不会出错，但是结果不对
 
-    printf("打印数组A第四次......\n");
+    printf("打印数组D第四次......\n");
     Display2DIntArrayUse1D(m, n, &D[0][0]); //这样编译不会出错，但是结果不对
     Display2DIntArrayUse1D(m, n, D);        //这样编译不会出错，但是结果不对
 
-    printf("打印数组A第五次......\n");
+    printf("打印数组D第五次......\n");
     Display2DIntArray2DPoint(m, n, D); //正确的方式
 
 
@@ -116,26 +144,41 @@ void Show2DArrayKindsOfWays(void)
             E[i][j] =  i * n + j;
         }
     }
-
+    // printf("打印**E方式申请的数组的元素地址\n");
+    // for (int i = 0; i < m; i++)
+    // {
+    //     for (int j = 0; j < n; j++)
+    //     {
+    //         printf("%15p",&E[i][j]);
+    //     }
+    //     printf("\n");
+    // }
 
     printf("E[1][2] = %d\n", E[1][2]);
 
 
-    printf("打印数组A第一次......\n");
-    Display2DIntArray(m, n, &E[0]); //这样编译不会出错，但是结果不对
+    printf("打印数组E第一次......\n");
+    Display2DIntArray(m, n, E[0]); //这样编译不会出错，但是结果不对
 
-    printf("打印数组A第二次......\n");
+    printf("打印数组E第二次......\n");
     Display2DIntArray1(m, n, E); //这样编译不会出错，但是结果不对
 
-    printf("打印数组A第三次......\n");
+    printf("打印数组E第三次......\n");
     Display2DIntArrayNorm(m, n, E); //这样编译不会出错，但是结果不对
 
-    printf("打印数组A第四次......\n");
+    printf("打印数组E第四次......\n");
+    Display2DIntArrayUse1D(m, n, &E[0][0]); //这样可以，把内存连续分配的二维数组当做一维打印
+    printf("\n");
     Display2DIntArrayUse1D(m, n, E[0]); //这样可以，把内存连续分配的二维数组当做一维打印
+    printf("\n");
+    Display2DIntArrayUse1D(m, n, &E[0]); //这样编译不会出错，但是结果不对
+    printf("\n");
+    // Display2DIntArrayUse1D(m, n, E[0][0]); //  段错误
+    printf("\n");
+    Display2DIntArrayUse1D(m, n, E); //这样编译不会出错，但是结果不对
 
-    printf("打印数组A第五次......\n");
-    Display2DIntArrayUse1D(m, n, E); //正确的方式
-
+    printf("打印数组E第五次......\n");
+    Display2DIntArray2DPoint(m, n, E); //正确的方式
 
 
     printf("%ld\n", sizeof(E));    //8，指针
