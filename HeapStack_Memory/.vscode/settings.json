@@ -57,6 +57,7 @@
     "c_staticglobal.h": "c",
     "c_staticglo.h": "c",
     "diceroll.h": "c",
-    "s_and_r.h": "c"
+    "s_and_r.h": "c",
+    "arraypoint.h": "c"
   }
 }

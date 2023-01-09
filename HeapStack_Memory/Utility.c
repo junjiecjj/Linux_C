@@ -10,22 +10,12 @@
 /**************************************************************************************************************************
             常用的打印函数，如打印一维二维数组函数，
 ***************************************************************************************************************************/
-int Sum1DIntArray(const int ar[], int n) // how big an array?
-{
-    int i;
-    int total = 0;
 
-    for (i = 0; i < n; i++)
-        total += ar[i];
-    printf("The size of ar is %zd bytes.\n", sizeof(ar));
-
-    return total;
-}
 
 int Sum1DIntArray1(const int ar[], int n)
 {
     int total = 0;
-    for (int i; i < n; ++i)
+    for (int i=0; i < n; ++i)
     {
         total += ar[i];
     }
@@ -37,7 +27,7 @@ int Sum1DIntArray1(const int ar[], int n)
 
 这里一定要理解，这样使用const并不是要求原数组是常量，而是该函数在处理数组时将其视为常量，不可更改。这样使用const可以保护数组的数据不被修改，就像按值传递可以保护基本数据类型的原始值不被改变一样。一般而言，如果编写的函数需要修改数组，在声明数组形参时则不使用const；如果编写的函数不用修改数组，那么在声明数组形参时最好使用const。
 */
-int Sum1DIntArra2(int *start, int *end)
+int Sum1DIntArray2(int *start, int *end)
 {
     int total = 0;
 
@@ -103,8 +93,8 @@ void Display1DIntArray4(const int *arr, int size)
 *************************************************************************************************************/
 
 
-//适用于A[m][n]形式申明的二维数组
-void Display2DIntArray(int rows, int cols, const int (*A)[cols])
+//适用于A[m][n]形式申明的二维数组,C++中无法使用
+void Display2DIntArray(int rows, int cols,int (*A)[cols])
 {
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
@@ -114,7 +104,8 @@ void Display2DIntArray(int rows, int cols, const int (*A)[cols])
     }
 }
 
-void Display2DIntArray1(int rows, int cols, const int A[][cols])
+//C++中无法使用
+void Display2DIntArray1(int rows, int cols, int A[][cols])
 {
     for (int i = 0; i < rows; ++i)
     {
@@ -126,8 +117,8 @@ void Display2DIntArray1(int rows, int cols, const int A[][cols])
     }
 }
 
-//适用于int **A形式申明的二维数组,内存连续或者不连续都行
-void Display2DIntArray2DPoint(int rows, int cols, const int **A)
+//适用于int **A形式申明的二维数组,内存连续或者不连续都行,推荐
+void Display2DIntArray2DPoint(int rows, int cols, int **A)
 {
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
@@ -140,7 +131,7 @@ void Display2DIntArray2DPoint(int rows, int cols, const int **A)
 
 
 
-//适用于A[m][n]形式申明的二维数组
+//适用于A[m][n]形式申明的二维数组,C++中无法使用
 void Display2DIntArrayNorm(int rows, int cols, const int ar[rows][cols])
 {
     for(int i=0; i< rows;++i)
@@ -157,7 +148,7 @@ void Display2DIntArrayNorm(int rows, int cols, const int ar[rows][cols])
 
 //适用于int **A形式申明的二维数组,内存连续,不连续时编译不会出错但是不对;
 // A[m][n]形式声明的数组也行
-void Display2DIntArrayUse1D(int rows, int cols, const int *ar)
+void Display2DIntArrayUse1D(int rows, int cols, int *ar)
 {
     for(int i=0; i< rows;++i)
     {
@@ -173,7 +164,14 @@ void Display2DIntArrayUse1D(int rows, int cols, const int *ar)
 }
 
 
-
+void Free2DMatrix(int** pm,int r,int c){
+    for(int i=0;  i<r; ++i){
+        free(pm[i]);
+        pm[i] = NULL;
+    }
+    free(pm);
+    pm = NULL;
+}
 
 /*************************************************************************************************************
  * 打印二维Int数组

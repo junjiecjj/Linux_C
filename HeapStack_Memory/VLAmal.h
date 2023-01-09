@@ -33,7 +33,7 @@ void  UseLocalPoint(void);
 void  FreeLocalPoint(int *LocalPoint);
 
 
-//void DisplayMonth(void);
+void DisplayMonth(void);
 
 
 

@@ -17,6 +17,11 @@
 #define		VECTER_COMPUT_MAX_LEN				1024		//矢量运算的最大长度
 
 
+// 为了在C++代码中调用用C写成的库文件，就需要用extern "C"来告诉编译器:这是一个用C写成的库文件，请用C的方式来链接它们。
+#ifdef __cplusplus
+extern "C"	{
+#endif
+
 
 /*基本函数*/
 float  float_round(float x, float y);
@@ -145,13 +150,12 @@ RMATRIX real_matrix_constant_diff(RMATRIX xdata, float ydata);
 RMATRIX real_matrix_constant_multiper(RMATRIX xdata, float ydata);
 
 
- //Z=X/Y
- RMATRIX real_matrix_constant_divider(RMATRIX xdata, float ydata);
+ //Z=X/YRMATRIX real_matrix_constant_divider(RMATRIX xdata, float ydata);
 
 
-/*
+/**********************************************************************************************
 矩阵相关，求行列式 ，逆矩阵 、伴随式、等
-*/
+***********************************************************************************************/
 //求解矩阵行列式的值
 float Matrix_Determinant(RMATRIX arcs,int n);//按第一行展开计算|A|
 //求解矩阵的伴随阵
@@ -166,8 +170,6 @@ void find_max_ID_In_Matrix(RMATRIX *arcs,int *rMaxId,int *cMaxId);
 double dCalDeltaAzimuth(double Course1,double Course2);
 #ifdef __cplusplus
 }
-
-
 #endif
 
 
