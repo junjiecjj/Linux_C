@@ -31,7 +31,7 @@ extern "C" {
 
 //一维数组求和
 int Sum1DIntArray1(const int ar[], int n);
-int Sum1DIntArray2(const int ar[], int n);
+int Sum1DIntArray2(int *start, int *end);
 
 //一维数组打印
 void Display1DIntArray(const int arr[], int size);
@@ -41,6 +41,9 @@ void Display1DIntArray2(const int arr[], int size);
 void Display1DIntArray3(const int *arr, int size);
 
 void Display1DIntArray4(const int *arr, int size);
+void mult_array(double ar[], int n, double mult);
+
+
 
 // C++中无法使用
 void Display2DIntArray(int rows, int cols, int (*A)[cols]);

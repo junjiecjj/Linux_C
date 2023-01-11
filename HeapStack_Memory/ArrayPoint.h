@@ -28,6 +28,7 @@ void C_malloc();
 // void CXX_stack();
 // void CXX_new();
 
+int ptr_ops(void);
 
 #ifdef __cplusplus
 };
