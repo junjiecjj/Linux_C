@@ -23,8 +23,9 @@ int pnt_addr(void)
 
 /*
 用栈声明的时候很明显，都是连续的。
-在堆上的时候，由于是分批次分配内存（首先new出或malloc多少行，然后每一行再分别new），因此其存放是平行的几条连续存储，每一行是连续的，行与行之间并不连续。为此，我们尝试创建一个2X4的二维矩阵如下
+在堆上的时候，由于是分批次分配内存（首先new出或malloc多少行，然后每一行再分别new），因此其存放是平行的几条连续存储，每一行是连续的，行与行之间并不连续。为此，我们尝试创建一个2X4的二维矩阵如下:
 */
+// 测试C语言的栈内存分配
 void C_stack(){
     printf("====== C stack ======\n");
     char str[2][4] = { {65,66,67,68}, {69,70,71,72} };
@@ -36,6 +37,7 @@ void C_stack(){
     }
     printf("=====================\n\n");
 }
+// 测试C语言的堆内存分配
 void C_malloc(){
     printf("====== C malloc ======\n");
 
@@ -359,10 +361,11 @@ int ptr_ops(void)
     printf("\nsubtracting an int from a pointer:\n");
     printf("ptr3 = %p, ptr3 - 2 = %p\n",   ptr3,  ptr3 - 2);
 
-
-
     return 0;
 }
+
+
+// 指针与多维数组
 
 
 void  TestArrayPoint(void)
