@@ -3,7 +3,7 @@
 #include "ArrayPoint.h"
 
 //演示数组元素的地址和指针+1的含义
-int pnt_addr(void)
+int pnt_add(void)
 {
     short dates [SIZE];
     short * pti;
@@ -20,6 +20,18 @@ int pnt_addr(void)
     return 0;
 }
 
+
+void PntAddress(void)
+{
+    int arr[10] = {0,1,2,3,4,5,6,7,8,9};
+    int *pt;
+    pt = arr;
+    for(int idx = 0; idx<10; ++idx)
+    {
+        
+    }
+    printf("");
+}
 
 /*
 用栈声明的时候很明显，都是连续的。
@@ -366,12 +378,44 @@ int ptr_ops(void)
 
 
 // 指针与多维数组
+void zippo1(void)
+{
+    int zippo[4][2] = { {2,4}, {6,8}, {1,3}, {5, 7} };
+    Display2DIntArrayNorm(4,2,zippo);
+    printf("   zippo  = %p,    zippo + 1 = %p\n", zippo,  zippo + 1);
+    printf("&zippo[0] = %p\n", zippo);
+    printf("zippo[0]  = %p, zippo[0] + 1 = %p\n", zippo[0], zippo[0] + 1);
+    printf("  *zippo  = %p,   *zippo + 1 = %p\n", *zippo,   *zippo + 1);
+    printf("zippo[0][0] = %d\n", zippo[0][0]);
+    printf("  *zippo[0] = %d\n", *zippo[0]);
+    printf("    **zippo = %d\n", **zippo);
+    printf("      zippo[2][1] = %d\n", zippo[2][1]);
+    printf("*(*(zippo+2) + 1) = %d\n", *(*(zippo+2) + 1));
+
+}
+
+void zippo2(void)
+{
+    int zippo[4][2] = { {2,4}, {6,8}, {1,3}, {5, 7} };
+    int (*pz)[2];
+    pz = zippo;
+
+    printf("   pz = %p,    pz + 1 = %p\n",  pz,         pz + 1);
+    printf("pz[0] = %p, pz[0] + 1 = %p\n", pz[0],      pz[0] + 1);
+    printf("  *pz = %p,   *pz + 1 = %p\n", *pz,        *pz + 1);
+    printf("pz[0][0] = %d\n", pz[0][0]);
+    printf("  *pz[0] = %d\n", *pz[0]);
+    printf("    **pz = %d\n", **pz);
+    printf("      pz[2][1] = %d\n", pz[2][1]);
+    printf("*(*(pz+2) + 1) = %d\n", *(*(pz+2) + 1));
+
+}
 
 
 void  TestArrayPoint(void)
 {
     printf(" ************************* 演示数组元素的地址和指针+1的含义 ************************\n");
-    pnt_addr();
+    pnt_add();
     printf(" ************************* 演示A[m][n]内存连续和int **A; malloc分配的内存不连续 ************************\n");
     C_stack();
     C_malloc();
@@ -380,6 +424,10 @@ void  TestArrayPoint(void)
     // 打印分配一维二维数组
     Show1DArrayKindsOfWays();
     Show2DArrayKindsOfWaysC();
+
+    printf("************************* 指针和多维数组 *************************\n");
+    zippo1();
+    zippo2();
 
     ptr_ops();
 }

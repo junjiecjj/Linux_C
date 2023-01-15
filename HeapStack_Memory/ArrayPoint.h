@@ -14,7 +14,7 @@
 extern "C" {
 #endif
 
-int pnt_addr(void);
+int pnt_add(void);
 
 void  TestArrayPoint(void);
 
@@ -29,6 +29,9 @@ void C_malloc();
 // void CXX_new();
 
 int ptr_ops(void);
+
+void zippo1(void);
+void zippo2(void);
 
 #ifdef __cplusplus
 };
