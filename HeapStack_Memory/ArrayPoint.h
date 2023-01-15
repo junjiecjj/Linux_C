@@ -15,6 +15,7 @@ extern "C" {
 #endif
 
 int pnt_add(void);
+void PntAddress(void);
 
 void  TestArrayPoint(void);
 

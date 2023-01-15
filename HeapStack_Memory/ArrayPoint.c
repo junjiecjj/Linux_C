@@ -20,7 +20,7 @@ int pnt_add(void)
     return 0;
 }
 
-
+// 测试一维数组的首地址和元素地址。
 void PntAddress(void)
 {
     int arr[10] = {0,1,2,3,4,5,6,7,8,9};
@@ -28,9 +28,13 @@ void PntAddress(void)
     pt = arr;
     for(int idx = 0; idx<10; ++idx)
     {
-        
+        printf("address of arr[%d] is %p\n", idx, &arr[idx]);
     }
-    printf("");
+    printf("\narr数组的首地址为:%p = %p\n", arr, &arr[0]);
+    for(int idx = 0; idx<10; ++idx)
+    {
+        printf("address of arr[%d] is %p\n", idx, pt+idx );
+    }
 }
 
 /*
@@ -342,6 +346,7 @@ void Show2DArrayKindsOfWaysC(void)
 
 int ptr_ops(void)
 {
+    printf("********************** 指针操作 ***********************\n");
     int urn[5] = {100,200,300,400,500};
     int * ptr1, * ptr2, *ptr3;
 
@@ -380,22 +385,26 @@ int ptr_ops(void)
 // 指针与多维数组
 void zippo1(void)
 {
+    printf("************************* 指针和多维数组 *************************\n");
     int zippo[4][2] = { {2,4}, {6,8}, {1,3}, {5, 7} };
     Display2DIntArrayNorm(4,2,zippo);
-    printf("   zippo  = %p,    zippo + 1 = %p\n", zippo,  zippo + 1);
-    printf("&zippo[0] = %p\n", zippo);
-    printf("zippo[0]  = %p, zippo[0] + 1 = %p\n", zippo[0], zippo[0] + 1);
-    printf("  *zippo  = %p,   *zippo + 1 = %p\n", *zippo,   *zippo + 1);
-    printf("zippo[0][0] = %d\n", zippo[0][0]);
-    printf("  *zippo[0] = %d\n", *zippo[0]);
-    printf("    **zippo = %d\n", **zippo);
-    printf("      zippo[2][1] = %d\n", zippo[2][1]);
+    printf("   zippo          = %p,    zippo + 1 = %p\n", zippo,  zippo + 1);
+    printf("&zippo[0]         = %p\n", &zippo[0]);
+    printf("zippo[0]          = %p, zippo[0] + 1 = %p\n", zippo[0], zippo[0] + 1);
+    printf("&zippo[0][0]      = %p\n", &zippo[0][0]);
+    printf("&zippo            = %p\n", &zippo);
+    printf("  *zippo          = %p,   *zippo + 1 = %p\n", *zippo,   *zippo + 1);
+    printf("zippo[0][0]       = %d\n", zippo[0][0]);
+    printf("  *zippo[0]       = %d\n", *zippo[0]); // 所以*(zippo[0])表示储存在zippo[0][0]上的值（即一个int类型的值）
+    printf("    **zippo       = %d\n", **zippo);
+    printf(" zippo[2][1]      = %d\n", zippo[2][1]);
     printf("*(*(zippo+2) + 1) = %d\n", *(*(zippo+2) + 1));
 
 }
 
 void zippo2(void)
 {
+    printf("************************* 指向多维数组的指针 *************************\n");
     int zippo[4][2] = { {2,4}, {6,8}, {1,3}, {5, 7} };
     int (*pz)[2];
     pz = zippo;
@@ -414,22 +423,27 @@ void zippo2(void)
 
 void  TestArrayPoint(void)
 {
-    printf(" ************************* 演示数组元素的地址和指针+1的含义 ************************\n");
-    pnt_add();
-    printf(" ************************* 演示A[m][n]内存连续和int **A; malloc分配的内存不连续 ************************\n");
-    C_stack();
-    C_malloc();
-    // CXX_stack();
-    // CXX_new();
-    // 打印分配一维二维数组
-    Show1DArrayKindsOfWays();
-    Show2DArrayKindsOfWaysC();
+    // printf(" ************************* 演示数组元素的地址和指针+1的含义 ************************\n");
+    // pnt_add();
+    // printf("************************* 一维数组与指针 *************************\n");
+    // PntAddress();
+    // printf(" ************************* 演示A[m][n]内存连续和int **A; malloc分配的内存不连续 ************************\n");
+    // C_stack();
+    // C_malloc();
+    // // CXX_stack();
+    // // CXX_new();
+    // // 打印分配一维二维数组
+    // Show1DArrayKindsOfWays();
+    // Show2DArrayKindsOfWaysC();
 
-    printf("************************* 指针和多维数组 *************************\n");
+    // ptr_ops();
+
+
+
     zippo1();
     zippo2();
 
-    ptr_ops();
+
 }
 
 
