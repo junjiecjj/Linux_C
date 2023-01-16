@@ -9,6 +9,9 @@
 #include "Utility.h"
 
 #define SIZE 4
+#define ROWS 3
+#define COLS 4
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -33,6 +36,16 @@ int ptr_ops(void);
 
 void zippo1(void);
 void zippo2(void);
+
+
+void sum_rows(int ar[][COLS], int rows);
+void sum_cols(int [][COLS], int );    // ok to omit names
+int sum2d(int (*ar)[COLS], int rows); // another syntax
+int array2d(void);
+
+int sum2dvar(int rows, int cols, int ar[rows][cols]);
+
+int vararr2d(void);
 
 #ifdef __cplusplus
 };

@@ -139,7 +139,7 @@ void Display2DIntArray2DPoint(int rows, int cols, int **A)
 }
 
 
-
+// 带变长数组形参的函数
 //适用于A[m][n]形式申明的二维数组,C++中无法使用
 void Display2DIntArrayNorm(int rows, int cols, const int ar[rows][cols])
 {
