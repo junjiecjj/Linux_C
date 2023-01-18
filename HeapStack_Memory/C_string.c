@@ -152,11 +152,19 @@ mytalents中的指针指向初始化时所用的字符串字面量的位置，�
 void arrchar(void)
 {
   const char *mytalents[LIM] = {
-    "Adding numbers swiftly", "Multiplying accurately", "Stashing data",
-    "Following instructions to the letter", "Understanding the C language"};
-    char yourtalents[LIM][SLEN] = {"Walking in a straight line", "Sleeping",
-                                "Watching television", "Mailing letters",
-                                "Reading email"};
+        "Adding numbers swiftly",
+        "Multiplying accurately",
+        "Stashing data",
+        "Following instructions to the letter",
+        "Understanding the C language"};
+
+    char yourtalents[LIM][SLEN] = {
+        "Walking in a straight line",
+        "Sleeping",
+        "Watching television",
+        "Mailing letters",
+        "Reading email"};
+
     int i;
 
     puts("Let's compare talents.");
@@ -396,7 +404,10 @@ void LenSizeofStr(void)
     //  strlen(str)是用于求字符数组的长度，其参数是char*
 }
 
-int main(int argc, char *argv[]) {
+int CString(void)
+{
+    printf("**************************** 测试字符串和指针 ******************************\n");
+
     printf("**************************** test1 ******************************\n");
     ArrDiffPnt();
 
