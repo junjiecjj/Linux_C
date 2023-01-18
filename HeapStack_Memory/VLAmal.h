@@ -17,6 +17,7 @@ C99定义的这种变长数组的使用是有限制的，不能像在C++等语�
 
 
 #include <stdio.h>
+#include <stdlib.h>
 #include  "Utility.h"
 
 #define MONTHS 12
@@ -25,12 +26,16 @@ C99定义的这种变长数组的使用是有限制的，不能像在C++等语�
 extern int *GlobalPoint;
 
 extern const int days[MONTHS];
-
-
+extern   int *valpi;
+// extern static int *valpi;
 
 int   *MallocAndReturnLocalPoint(void);
 void  UseLocalPoint(void);
 void  FreeLocalPoint(int *LocalPoint);
+
+void InitStaticMemory(void);
+void ChangeStaticMem(void);
+void FreeStaticMem(void);
 
 
 void DisplayMonth(void);
