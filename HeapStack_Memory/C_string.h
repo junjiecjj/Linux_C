@@ -28,7 +28,7 @@ void copy3(void);
 void format(void);
 void LenSizeofStr(void);
 void p_and_s(void);
-
+void strptr(void);
 
 
 int CString(void);

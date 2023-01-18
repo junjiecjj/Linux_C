@@ -20,7 +20,7 @@
 #include "S_and_r.h"
 #include "VLAmal.h"
 #include "ArrayPoint.h"
-
+#include "C_string.h"
 
 int main(int argc, char *argv[])
 {
@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 
     CString();
 
-    TestArrayPoint();
+    // TestArrayPoint();
 
 
     // printf("******************* 测试全局和静态变量的定义、初始化、使用 *******************\n");

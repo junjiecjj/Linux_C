@@ -8,6 +8,7 @@
         "names.h": "c",
         "ostream": "cpp",
         "where.h": "c",
-        "partab.h": "c"
+        "partab.h": "c",
+        "arraypoint.h": "c"
     }
 }
