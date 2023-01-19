@@ -7,12 +7,12 @@
 
 
 
-#define MAX 20
-#define WORDS "beast"
-#define TARGSIZE 7
-#define SIZE1 40
-#define SLEN 40
-#define LIM 5
+#define  MAX 20
+#define  WORDS "beast"
+#define  TARGSIZE 7
+#define  SIZE1 40
+#define  SLEN 40
+#define  LIM 5
 #define  MSG "I'm special"
 
 
