@@ -70,7 +70,7 @@ char *strcpy(char * restrict s1, const char * restrict s2);
 
 ************************************************************************/
 
-#include "C_string.h"
+#include "String.h"
 
 char *s_gets(char *st, int n)
 {

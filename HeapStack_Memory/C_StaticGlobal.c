@@ -20,7 +20,7 @@
 #include "S_and_r.h"
 #include "VLAmal.h"
 #include "ArrayPoint.h"
-#include "C_string.h"
+#include "String.h"
 
 int main(int argc, char *argv[])
 {
