@@ -47,6 +47,20 @@ int sum2dvar(int rows, int cols, int ar[rows][cols]);
 
 int vararr2d(void);
 
+
+char *returnStr(void);
+int ReturnStr(void);
+
+char *returnStr1(void);
+int ReturnStr1(void);
+
+char *returnStr2(void);
+int ReturnStr2(void);
+
+char *GetMemory3(int num);
+void ReturnHeap(void);
+
+
 #ifdef __cplusplus
 };
 #endif

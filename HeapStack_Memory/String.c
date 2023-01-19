@@ -248,12 +248,12 @@ Tranquility"拷贝至str指向的地址上，但是str未被初始化，所以�
 void copy1(void)
 {
     printf("**************************** strcpy()函数 ******************************\n");
-    char qwords[LIM][SIZE];
-    char temp[SIZE];
+    char qwords[LIM][SIZE1];
+    char temp[SIZE1];
     int i = 0;
 
     printf("Enter %d words beginning with q:\n", LIM);
-    while (i < LIM && s_gets(temp, SIZE)) {
+    while (i < LIM && s_gets(temp, SIZE1)) {
         if (temp[0] != 'q')
         printf("%s doesn't begin with q!\n", temp);
         else {
@@ -273,7 +273,7 @@ void copy2(void)
 {
     printf("**************************** strcpy()的其他属性 ******************************\n");
     const char *orig = WORDS;
-    char copy[SIZE] = "Be the best that you can be.";
+    char copy[SIZE1] = "Be the best that you can be.";
     char *ps;
 
     puts(orig);
@@ -299,11 +299,11 @@ void copy3(void)
 {
     printf("**************************** strncpy()函数 ******************************\n");
     char qwords[LIM][TARGSIZE];
-    char temp[SIZE];
+    char temp[SIZE1];
     int i = 0;
 
     printf("Enter %d words beginning with q:\n", LIM);
-    while (i < LIM && s_gets(temp, SIZE)) {
+    while (i < LIM && s_gets(temp, SIZE1)) {
         if (temp[0] != 'q')
         printf("%s doesn't begin with q!\n", temp);
         else {
@@ -426,7 +426,6 @@ void LenSizeofStr(void)
     printf("strlen(k) = %zd\n", strlen(k));
     printf("sizeof(k) = %zd\n\n", sizeof(k));
     printf("k = %s\n", k);
-    return 0;
 
     //  strlen()只能以char
     //  *作为参数,不能以类型作为参数,该函数实际完成的功能是从代表该字符串的第一个地址开始遍历，直到遇到结束符'\0'。返回的长度大小不包括'\0'。
