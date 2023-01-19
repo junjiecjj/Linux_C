@@ -661,6 +661,20 @@ void saferFree(void **pp)
     }
 }
 
+int testSaveFree(void)
+{
+    printf("*********************** 自己实现的安全的free函数 ***********************\n");
+    int *pi;
+    pi = (int *)malloc(sizeof(int));
+    *pi = 5;
+    printf("Before: %p\n", pi);
+    safeFree(pi);
+    printf("After: %p\n", pi);
+    safeFree(pi);
+    return (EXIT_SUCCESS);
+
+}
+
 void  TestArrayPoint(void)
 {
     // printf(" ************************* 演示数组元素的地址和指针+1的含义 ************************\n");
@@ -687,6 +701,7 @@ void  TestArrayPoint(void)
     ReturnStr1();
     ReturnStr2();
     ReturnHeap();
+    testSaveFree();
 }
 
 

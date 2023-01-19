@@ -11,7 +11,7 @@
 #define SIZE 4
 #define ROWS 3
 #define COLS 4
-
+#define safeFree(p)  saferFree((void **)&(p))
 
 #ifdef __cplusplus
 extern "C" {
@@ -59,8 +59,8 @@ int ReturnStr2(void);
 
 char *GetMemory3(int num);
 void ReturnHeap(void);
-
-
+void saferFree(void **pp);
+int testSaveFree(void);
 #ifdef __cplusplus
 };
 #endif
