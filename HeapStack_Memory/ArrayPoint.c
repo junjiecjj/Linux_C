@@ -652,6 +652,15 @@ void ReturnHeap(void)
 }
 
 
+void saferFree(void **pp)
+{
+    if(pp != NULL && *pp != NULL)
+    {
+        free(*pp);
+        *pp = NULL;
+    }
+}
+
 void  TestArrayPoint(void)
 {
     // printf(" ************************* 演示数组元素的地址和指针+1的含义 ************************\n");
