@@ -312,12 +312,6 @@ void Show2DArrayKindsOfWaysC(void)
 
 
 
-void zip1darray(void)
-{
-    int vector[5] = {1,2,3,4,5};
-    int *pv = vector;
-
-}
 
 /*********************************************************************
 下面分别描述了指针变量的基本操作。
@@ -731,6 +725,34 @@ int MallocFree3D(void)
     return 0;
 }
 
+
+void zip1darray(void)
+{
+    printf("******************* 一维数组与指针 ********************\n");
+    int vector[5] = {1,2,3,4,5};
+    int *pv = vector;
+    printf("vector     = %p\n", vector);
+    printf("vector+1   = %p\n", vector+1);
+    printf("&vector[0]   = %p\n", &vector[0]);
+    printf("&vector[0]+1 = %p\n", &vector[0]+1);
+
+    printf("&vector     = %p\n", &vector);
+    printf("&vector+1   = %p\n", &vector+1);
+
+    printf("sizeof(vector) = %d\n", sizeof(vector));
+    // vector     = 0x7fff405e9680
+    // vector+1   = 0x7fff405e9684
+    // &vector[0]   = 0x7fff405e9680
+    // &vector[0]+1 = 0x7fff405e9684
+    // &vector     = 0x7fff405e9680
+    // &vector+1   = 0x7fff405e9694
+
+}
+
+void Malloc1D(void)
+{
+    
+}
 
 void Array2D(void)
 {
