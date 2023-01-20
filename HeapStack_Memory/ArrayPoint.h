@@ -29,7 +29,7 @@ void  TestArrayPoint(void);
 
 void Show1DArrayKindsOfWays(void);
 void Show2DArrayKindsOfWaysC(void);
-
+void zip1darray(void);
 int ptr_ops(void);
 
 void C_stack();

@@ -312,6 +312,13 @@ void Show2DArrayKindsOfWaysC(void)
 
 
 
+void zip1darray(void)
+{
+    int vector[5] = {1,2,3,4,5};
+    int *pv = vector;
+
+}
+
 /*********************************************************************
 下面分别描述了指针变量的基本操作。
 ·赋值：可以把地址赋给指针。例如，用数组名、带地址运算符（&）的变量名、另一个指针进行赋值。在该例中，把urn数组的首地址赋给了ptr1，该地址的编号恰好是0x7fff5fbff8d0。变量ptr2获得数组urn的第3个元素（urn[2]）的地址。注意，地址应该和指针类型兼容。也就是说，不能把double类型的地址赋给指向int的指针，至少要避免不明智的类型转换。C99/C11已经强制不允许这样做。
@@ -758,7 +765,7 @@ void  TestArrayPoint(void)
     // // 打印分配一维二维数组
     // Show1DArrayKindsOfWays();
     // Show2DArrayKindsOfWaysC();
-
+    zip1darray();
     // ptr_ops();
 
     // array2d();
