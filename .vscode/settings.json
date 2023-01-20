@@ -10,6 +10,9 @@
         "where.h": "c",
         "partab.h": "c",
         "arraypoint.h": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "c_staticglobal.h": "c",
+        "c_staticglo.h": "c",
+        "loc_stat.h": "c"
     }
 }

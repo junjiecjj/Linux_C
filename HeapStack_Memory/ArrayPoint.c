@@ -661,7 +661,7 @@ void saferFree(void **pp)
     }
 }
 
-int testSaveFree(void)
+int testSafeFree(void)
 {
     printf("*********************** 自己实现的安全的free函数 ***********************\n");
     int *pi;
@@ -673,6 +673,75 @@ int testSaveFree(void)
     safeFree(pi);
     return (EXIT_SUCCESS);
 
+}
+
+
+/*
+三维数组的分配和释放：
+*/
+int MallocFree3D(void)
+{
+    printf("*********************** 三维数组指针的分配和释放 ***********************\n");
+    int i,j,k;   // p[2][3][4]
+
+    int ***p;
+    p = malloc( sizeof(int **)*high);
+    for(i=0; i<high; i++)
+    {
+        p[i]= malloc( sizeof(int *)*row);//new int *[3];
+        for(j=0; j<row; j++)
+            p[i][j]= malloc( sizeof(int )*col);//new int[4];
+    }
+
+    //输出 p[i][j][k] 三维数据
+    for(i=0; i<high; i++)
+    {
+        for(j=0; j<row; j++)
+        {
+            for(k=0;k<col;k++)
+            {
+                p[i][j][k]=i+j+k;
+                printf("%d ",p[i][j][k]);
+            }
+            printf("\n");
+        }
+        printf("\n");
+    }
+
+    // 释放内存
+    for(i=0; i<high; i++)
+    {
+        for(j=0; j<row; j++)
+        {
+            free(p[i][j]);
+        }
+    }
+    for(i=0; i<high; i++)
+    {
+        free(p[i]);
+    }
+    free(p);
+    return 0;
+}
+
+
+void Array2D(void)
+{
+    int m=2, n=3;
+    int A[m][n];
+    for(int i = 0; i<m; ++i)
+    {
+        for(int j = 0; j<n; ++j)
+        {
+            A[i][j] = i*n+j;
+        }
+    }
+
+    printf("*************** 打印二维数组每行的地址 ******************\n");
+    for(int i=0; i<m; ++i)
+    {
+        printf("&A[%d]: %p sizeof(A[%d]): %lu \n", i, &A[i], i, sizeof(A[i]));
+    }
 }
 
 void  TestArrayPoint(void)
@@ -701,7 +770,9 @@ void  TestArrayPoint(void)
     ReturnStr1();
     ReturnStr2();
     ReturnHeap();
-    testSaveFree();
+    testSafeFree();
+    MallocFree3D();
+    Array2D();
 }
 
 

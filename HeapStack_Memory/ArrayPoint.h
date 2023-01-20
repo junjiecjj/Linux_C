@@ -11,6 +11,11 @@
 #define SIZE 4
 #define ROWS 3
 #define COLS 4
+
+#define high 2
+#define row  3
+#define col  4
+
 #define safeFree(p)  saferFree((void **)&(p))
 
 #ifdef __cplusplus
@@ -60,7 +65,24 @@ int ReturnStr2(void);
 char *GetMemory3(int num);
 void ReturnHeap(void);
 void saferFree(void **pp);
-int testSaveFree(void);
+
+int MallocFree3D(void);
+int testSafeFree(void);
+
+void Array2D(void);
+
+
+
+
+
+
+
+
+
+
+
+
+
 #ifdef __cplusplus
 };
 #endif
