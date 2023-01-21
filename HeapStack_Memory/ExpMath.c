@@ -27,11 +27,11 @@ float float_min(float x, float y)
 {
 	if(x>y)
 	{
-	    return y;
+		return y;
 	}
 	else
 	{
-	    return x;
+		return x;
 	}
 
 }
@@ -40,11 +40,11 @@ float float_max(float x, float y)
 {
 	if(x>y)
 	{
-	    return x;
+		return x;
 	}
 	else
 	{
-	    return y;
+		return y;
 	}
 }
 
@@ -113,7 +113,7 @@ float StdUpdata(float mean_old, float std_old, float samp_new,  unsigned int N)
 
 void Quick_sort(float *input, unsigned int first,unsigned int end,unsigned int *idx)
 {
-	 unsigned int i,j,Itemp;
+	unsigned int i,j,Itemp;
 	float Ftemp;
 
 	i=first;  j=end;
@@ -122,17 +122,17 @@ void Quick_sort(float *input, unsigned int first,unsigned int end,unsigned int *
 
 	while(i<j)
 	{
-	    while(i<j && Ftemp<input[j])
-	    {
-	    	j--;
-	    }
-	    input[i]=input[j];  idx[i]=idx[j];
+		while(i<j && Ftemp<input[j])
+		{
+			j--;
+		}
+		input[i]=input[j];  idx[i]=idx[j];
 
-	    while(i<j && input[i]<=Ftemp)
-	    {
-	    	i++;
-	    }
-	    input[j]=input[i];  idx[j]=idx[i];
+		while(i<j && input[i]<=Ftemp)
+		{
+			i++;
+		}
+		input[j]=input[i];  idx[j]=idx[i];
 
 	}
 	input[i]=Ftemp;     idx[i]=Itemp;
@@ -140,12 +140,12 @@ void Quick_sort(float *input, unsigned int first,unsigned int end,unsigned int *
 
 	if(first<i-1 && i>=1)
 	{
-	    Quick_sort(input,first,i-1,idx);
+		Quick_sort(input,first,i-1,idx);
 	}
 
 	if(i+1<end)
 	{
-	    Quick_sort(input,i+1,end,idx);
+		Quick_sort(input,i+1,end,idx);
 	}
 
 	return;
@@ -162,11 +162,11 @@ void Quick_sort_noidx(float *input, unsigned int first, unsigned int end)
 
 	while(i<j)
 	{
-	    while(i<j && Ftemp<input[j])
-	    {
+		while(i<j && Ftemp<input[j])
+		{
 	    	j--;
-	    }
-	    input[i]=input[j];
+		}
+		input[i]=input[j];
 
 	    while(i<j && input[i]<=Ftemp)
 	    {
@@ -1433,101 +1433,101 @@ CMATRIX complex_matrix_point_divider(CMATRIX xdata, CMATRIX ydata)
  编写作者：贾可新
  编写日期：2016.07.05
  *********************************************************************************************************/
- RMATRIX real_matrix_constant_adder(RMATRIX xdata, float ydata)
- {
-	 unsigned int		knum = 0;
+RMATRIX real_matrix_constant_adder(RMATRIX xdata, float ydata)
+{
+	unsigned int		knum = 0;
 
-	 unsigned int		gnum = 0;
+	unsigned int		gnum = 0;
 
-	 RMATRIX			zdata;
+	RMATRIX			zdata;
 
-	 //提取行号
-	 unsigned int		xMatrixRow = xdata.MatrixRow;
+	//提取行号
+	unsigned int		xMatrixRow = xdata.MatrixRow;
 
-	 //提取列号
-	 unsigned int		xMatrixCol = xdata.MatrixCol;
+	//提取列号
+	unsigned int		xMatrixCol = xdata.MatrixCol;
 
-	 //存储矩阵的行号和列号
-	 zdata.MatrixCol = xMatrixRow;
+	//存储矩阵的行号和列号
+	zdata.MatrixCol = xMatrixRow;
 
-	 zdata.MatrixRow = xMatrixCol;
+	zdata.MatrixRow = xMatrixCol;
 
 	 //计算矩阵和
-	 for (knum=0; knum< xMatrixCol; knum++)
-	 {
-		 for (gnum=0; gnum<xMatrixRow; gnum++)
-		 {
-			 zdata.ArrayMatrix[knum][gnum] = xdata.ArrayMatrix[knum][gnum] + ydata;
-		 }
-	 }
+	for (knum=0; knum< xMatrixCol; knum++)
+	{
+		for (gnum=0; gnum<xMatrixRow; gnum++)
+		{
+			zdata.ArrayMatrix[knum][gnum] = xdata.ArrayMatrix[knum][gnum] + ydata;
+		}
+	}
 
-	 return zdata;
- }
+	return zdata;
+}
 
 
- RMATRIX real_matrix_constant_diff(RMATRIX xdata, float ydata)
- {
-	 unsigned int		knum = 0;
+RMATRIX real_matrix_constant_diff(RMATRIX xdata, float ydata)
+{
+	unsigned int		knum = 0;
 
-	 unsigned int		gnum = 0;
+	unsigned int		gnum = 0;
 
-	 RMATRIX			zdata;
+	RMATRIX			zdata;
 
-	 //提取行号
-	 unsigned int		xMatrixRow = xdata.MatrixRow;
+	//提取行号
+	unsigned int		xMatrixRow = xdata.MatrixRow;
 
-	 //提取列号
-	 unsigned int		xMatrixCol = xdata.MatrixCol;
+	//提取列号
+	unsigned int		xMatrixCol = xdata.MatrixCol;
 
-	 //存储矩阵的行号和列号
-	 zdata.MatrixCol = xMatrixRow;
+	//存储矩阵的行号和列号
+	zdata.MatrixCol = xMatrixRow;
 
-	 zdata.MatrixRow = xMatrixCol;
+	zdata.MatrixRow = xMatrixCol;
 
 	 //计算矩阵差
-	 for (knum=0; knum< xMatrixCol; knum++)
-	 {
-		 for (gnum=0; gnum<xMatrixRow; gnum++)
-		 {
-			 zdata.ArrayMatrix[knum][gnum] = xdata.ArrayMatrix[knum][gnum] - ydata;
-		 }
-	 }
+	for (knum=0; knum< xMatrixCol; knum++)
+	{
+		for (gnum=0; gnum<xMatrixRow; gnum++)
+		{
+			zdata.ArrayMatrix[knum][gnum] = xdata.ArrayMatrix[knum][gnum] - ydata;
+		}
+	}
 
-	 return zdata;
- }
+	return zdata;
+}
 
  //Z=X*Y
- RMATRIX real_matrix_constant_multiper(RMATRIX xdata, float ydata)
- {
-	 unsigned int		knum = 0;
+RMATRIX real_matrix_constant_multiper(RMATRIX xdata, float ydata)
+{
+	unsigned int		knum = 0;
 
-	 unsigned int		gnum = 0;
+	unsigned int		gnum = 0;
 
 
-	 RMATRIX			zdata;
+	RMATRIX			zdata;
 
-	 //提取行号
-	 unsigned int		xMatrixRow = xdata.MatrixRow;
+	//提取行号
+	unsigned int		xMatrixRow = xdata.MatrixRow;
 
-	 //提取列号
-	 unsigned int		xMatrixCol = xdata.MatrixCol;
+	//提取列号
+	unsigned int		xMatrixCol = xdata.MatrixCol;
 
-	 //存储矩阵的行号和列号
-	 zdata.MatrixCol = xMatrixCol;
+	//存储矩阵的行号和列号
+	zdata.MatrixCol = xMatrixCol;
 
-	 zdata.MatrixRow = xMatrixRow;
+	zdata.MatrixRow = xMatrixRow;
 
-	 //计算矩阵乘法
-	 for (knum=0; knum< xMatrixRow; knum++)
-	 {
-		 for (gnum=0; gnum<xMatrixCol; gnum++)
-		 {
-			 zdata.ArrayMatrix[knum][gnum] = xdata.ArrayMatrix[knum][gnum] * ydata;
-		 }
-	 }
+	//计算矩阵乘法
+	for (knum=0; knum< xMatrixRow; knum++)
+	{
+		for (gnum=0; gnum<xMatrixCol; gnum++)
+		{
+			zdata.ArrayMatrix[knum][gnum] = xdata.ArrayMatrix[knum][gnum] * ydata;
+		}
+	}
 
-	 return zdata;
- }
+	return zdata;
+}
  //求解矩阵行列式的值
 float Matrix_Determinant(RMATRIX arcs,int n)//按第一行展开计算|A|
 {
@@ -1563,49 +1563,50 @@ float Matrix_Determinant(RMATRIX arcs,int n)//按第一行展开计算|A|
 	return  ans;
 }
   //Z=X/Y
- RMATRIX real_matrix_constant_divider(RMATRIX xdata, float ydata)
- {
-	 unsigned int		knum = 0;
+RMATRIX real_matrix_constant_divider(RMATRIX xdata, float ydata)
+{
+	unsigned int		knum = 0;
 
-	 unsigned int		gnum = 0;
+	unsigned int		gnum = 0;
 
-	 RMATRIX			zdata;
+	RMATRIX			zdata;
 
-	 //提取行号
-	 unsigned int		xMatrixRow = xdata.MatrixRow;
+	//提取行号
+	unsigned int		xMatrixRow = xdata.MatrixRow;
 
-	 //提取列号
-	 unsigned int		xMatrixCol = xdata.MatrixCol;
+	//提取列号
+	unsigned int		xMatrixCol = xdata.MatrixCol;
 
-	 //存储矩阵的行号和列号
-	 zdata.MatrixCol = xMatrixCol;
+	//存储矩阵的行号和列号
+	zdata.MatrixCol = xMatrixCol;
 
-	 zdata.MatrixRow = xMatrixRow;
+	zdata.MatrixRow = xMatrixRow;
 
-	 //计算矩阵乘法
-	 for (knum=0; knum< xMatrixRow; knum++)
-	 {
-		 for (gnum=0; gnum<xMatrixCol; gnum++)
-		 {
-			 zdata.ArrayMatrix[knum][gnum] = xdata.ArrayMatrix[knum][gnum] / ydata;
-		 }
-	 }
+	//计算矩阵乘法
+	for (knum=0; knum< xMatrixRow; knum++)
+	{
+		for (gnum=0; gnum<xMatrixCol; gnum++)
+		{
+			zdata.ArrayMatrix[knum][gnum] = xdata.ArrayMatrix[knum][gnum] / ydata;
+		}
+	}
 
-	 return zdata;
- }
+	return zdata;
+}
  //A-1
-  RMATRIX Matrix_Invers(RMATRIX acr,int n)
- {
-	 float r = Matrix_Determinant( acr, n);
+RMATRIX Matrix_Invers(RMATRIX acr,int n)
+{
+	float r = Matrix_Determinant( acr, n);
 
-	 RMATRIX result,invers;
+	RMATRIX result,invers;
 
-	 Matrix_Adjoint(acr,n,&result);
+	Matrix_Adjoint(acr,n,&result);
 
 	invers = real_matrix_constant_divider(result,r);
 
 	return invers;
- }
+}
+
 //求解矩阵的伴随矩阵
 void Matrix_Adjoint(RMATRIX arcs,int n,RMATRIX *ans)//计算每一行每一列的每个元素所对应的余子式，组成A*
 {
@@ -1641,6 +1642,7 @@ void Matrix_Adjoint(RMATRIX arcs,int n,RMATRIX *ans)//计算每一行每一列�
 		}
 	}
 }
+
 void find_max_ID_In_Matrix(RMATRIX *arcs,int *rMaxId,int *cMaxId)
 {
 	int		cID = 0,rID = 0;
@@ -1675,8 +1677,8 @@ void find_max_ID_In_Matrix(RMATRIX *arcs,int *rMaxId,int *cMaxId)
 }
 
 /**********************************************************************************************************
- 程序说明：寻找value在长度为dlen的序列dmin:dstep:dmax中位置，注意，在matlab中数组从1开始，不是零
- 函数形式：
+程序说明：寻找value在长度为dlen的序列dmin:dstep:dmax中位置，注意，在matlab中数组从1开始，不是零
+函数形式：
 		void find_local_comput(float value,float dmax,float dmin, float dstep, unsigned short dlen, unsigned short *local)
 参数说明：
 		*local ：value值的索引值
@@ -1718,19 +1720,11 @@ unsigned short find_local_comput_HJ(long value,long dmax,long dmin, double dstep
 
 /*****************************************************************************
 函数名：    dCalDeltaAzimuth
-
 描述:        计算两方位夹角
-
 详细描述：    计算两方位之间的夹角
-
-
-
 参数:        方位1，方位2
-
 返回值：    夹角
-
 注意事项:    无
-
 函数定义:
 ******************************************************************************/
 double dCalDeltaAzimuth(double Course1,double Course2)

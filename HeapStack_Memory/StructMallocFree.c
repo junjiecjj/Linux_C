@@ -8,45 +8,14 @@
 
 *************************************************************************/
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <float.h>
-#include <limits.h>
-#include <math.h>
-#include <string.h>
-//#include <sys/socket.h>
-#include <stddef.h>
-#include <locale.h>
-#include <time.h>
-#include <complex.h>
-
-char *s_gets(char *st, int n);
-#define MAXTITL 41
-#define MAXAUTL 31
-#define MAXBKS 100
-#define LEN 20
-#define FUNDLEN 50
-#define SLEN 81
+#include "StructMallocFree.h"
 
 
 
-typedef struct names
-{ // first structure
-    char first[LEN];
-    char last[LEN];
-} NAME;
 
 
 
-typedef struct STRUCT2
-{
-    int a ;
-    double b;
-    float c;
-
-} STR2;
-
-void showStruct(const STR2 *p)
+void showStruct(const DATASTR *p)
 {
     printf("a = %d, b = %.3lf, c = %.3f, \n",p->a,p->b,p->c);
 }
@@ -69,19 +38,27 @@ char *s_gets(char *st, int n)
     return ret_val;
 }
 
-STR2 stu1;
+DATASTR ReturnStruct(void)
+{
+    DATASTR tmp;
+    tmp.m_age = 12;
+    tmp.m_sala  = 11287.32;
+    tmp.m_score = 92.65;
+    showStruct(&tmp);
+    return tmp;
+}
 
-void TestStruMalloc(void){
-    STR2 stu2;
-    STR2 *p  = ;
-    STR2 *P;
+void UseReturnStru(void){
+    DATASTR stu2;
+    DATASTR *p  = ;
+    DATASTR *P;
 
 
-    P = (STR2 *)malloc(2 * sizeof(STR2));
+    P = (DATASTR *)malloc(2 * sizeof(DATASTR));
 
-    stu2.a = 12;
-    stu2.b  = 87.32;
-    stu2.c = 32.65;
+    stu2.m_age = 12;
+    stu2.m_sala  = 11287.32;
+    stu2.m_score = 92.65;
     showStruct(&stu2);
 
     free(P); P = NULL;
