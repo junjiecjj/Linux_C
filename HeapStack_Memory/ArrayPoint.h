@@ -72,7 +72,8 @@ int testSafeFree(void);
 void Array2D(void);
 void Pnt2DArray(void);
 
-
+void AllocateArray(int **arr, int size, int value);
+void TestAllocateArray(void);
 
 
 

@@ -314,6 +314,7 @@ void Show2DArrayKindsOfWaysC(void)
 
 
 /*********************************************************************
+%p是打印地址（指针地址）的，是十六进制的形式，但是会全部打完，即有多少位打印多少位。
 下面分别描述了指针变量的基本操作。
 ·赋值：可以把地址赋给指针。例如，用数组名、带地址运算符（&）的变量名、另一个指针进行赋值。在该例中，把urn数组的首地址赋给了ptr1，该地址的编号恰好是0x7fff5fbff8d0。变量ptr2获得数组urn的第3个元素（urn[2]）的地址。注意，地址应该和指针类型兼容。也就是说，不能把double类型的地址赋给指向int的指针，至少要避免不明智的类型转换。C99/C11已经强制不允许这样做。
 ·解引用：*运算符给出指针指向地址上存储的值。因此，*ptr1的初值是100，该值存储在编号为0x7fff5fbff8d0的地址上。
@@ -784,6 +785,25 @@ void Array2D(void)
     }
 }
 
+void AllocateArray(int **arr, int size, int value)
+{
+    *arr = (int *)malloc(size*sizeof(int));
+    if(*arr != NULL)
+    {
+        for(int i=0; i<size; ++i)
+        {
+            *(*arr+i) = value;
+        }
+    }
+}
+
+void TestAllocateArray(void)
+{
+    printf("*************** 传递指针的指针 ***************\n");
+    int *vector = NULL;
+    AllocateArray(&vector,5,45);
+}
+
 void  TestArrayPoint(void)
 {
     // printf(" ************************* 演示数组元素的地址和指针+1的含义 ************************\n");
@@ -806,14 +826,17 @@ void  TestArrayPoint(void)
     // zippo1();
     // zippo2();
 
-    ReturnStr();
-    ReturnStr1();
-    ReturnStr2();
-    ReturnHeap();
-    testSafeFree();
-    MallocFree3D();
-    Array2D();
-    Pnt2DArray();
+    // ReturnStr();
+    // ReturnStr1();
+    // ReturnStr2();
+    // ReturnHeap();
+    // testSafeFree();
+    // MallocFree3D();
+    // Array2D();
+    // Pnt2DArray();
+    // TestAllocateArray();
+
+
 }
 
 
