@@ -237,7 +237,7 @@ void Show2DArrayKindsOfWaysC(void)
     printf("打印数组D第五次......\n");
     Display2DIntArray2DPoint(m, n, D); //正确的方式，推荐
 
-    Free2DMatrix(D, m, n);
+    Free2DContinueMem(D, m, n);
     // for(int i=0; i<m; i++)
     // {
     //     free(D[i]);
@@ -305,7 +305,7 @@ void Show2DArrayKindsOfWaysC(void)
     free(E[0]);  //
     // for(int i=0; i<m; i++)
     // {  段错误
-    //     free(E[i]);
+    //     free(E[i]); // 重复释放
     // }
     free(E); E = NULL;
 }
@@ -739,7 +739,7 @@ void zip1darray(void)
     printf("&vector     = %p\n", &vector);
     printf("&vector+1   = %p\n", &vector+1);
 
-    printf("sizeof(vector) = %d\n", sizeof(vector));
+    printf("sizeof(vector) = %lu\n", sizeof(vector));
     // vector     = 0x7fff405e9680
     // vector+1   = 0x7fff405e9684
     // &vector[0]   = 0x7fff405e9680
@@ -749,9 +749,20 @@ void zip1darray(void)
 
 }
 
-void Malloc1D(void)
+void Pnt2DArray(void)
 {
-    
+    printf("******************* 指针和多维数组 ********************\n");
+    int matrix[2][5] = {{1,2,3,4,5},{6,7,8,9,10}};
+    for(int i=0; i<2; ++i)
+    {
+        for(int j = 0; j<5; ++j)
+        {
+            printf("matrix[%d][%d] Adress: %p Value: %d\n",i, j, &matrix[i][j], matrix[i][j]);
+        }
+    }
+    int (*pmat)[5] = matrix;
+    printf("matrix   = %p\n", matrix);
+    printf("matrix+1 = %p", matrix+1);
 }
 
 void Array2D(void)
@@ -802,6 +813,7 @@ void  TestArrayPoint(void)
     testSafeFree();
     MallocFree3D();
     Array2D();
+    Pnt2DArray();
 }
 
 

@@ -61,7 +61,7 @@ void Display2DIntArrayNorm(int rows, int cols, const int ar[rows][cols]);
 void Display2DIntArrayUse1D(int rows, int cols,  int *ar);
 
 
-void Free2DMatrix(int** pm,int r,int c);
+void Free2DContinueMem(int** pm,int r,int c);
 
 
 #ifdef __cplusplus

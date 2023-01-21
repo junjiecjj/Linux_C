@@ -70,7 +70,7 @@ int MallocFree3D(void);
 int testSafeFree(void);
 
 void Array2D(void);
-
+void Pnt2DArray(void);
 
 
 
