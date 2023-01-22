@@ -1,5 +1,6 @@
 
 
+
 #include <stdio.h>
 #include <math.h>
 
@@ -73,7 +74,7 @@ end:
     return 0;
 }
 
-float determinant(float matrix[20][20],int order)
+float determinant(float matrix[20][20], int order)
 {
     float result = 0,sign = 1;
     int i;
@@ -83,20 +84,21 @@ float determinant(float matrix[20][20],int order)
     else
         for(i = 0;i < order;i ++)
         {
-            result += sign * matrix[i][0] * cofactor(matrix,order,i,0);
+            result += sign * matrix[i][0] * cofactor(matrix, order, i, 0);
             sign *= -1;
         }
 
     return result;
 }
 
-float cofactor(float matrix[20][20],int order,int r,int c)
-{
-    float result = 0,cofactor[20][20];
-    int original_i,original_j,i,j;
 
-    for(i = 0;i < order;i ++)
-        for(j = 0;j < order;j ++)
+float cofactor(float matrix[20][20], int order, int r, int c)
+{
+    float result = 0, cofactor[20][20];
+    int original_i, original_j, i, j;
+
+    for(i = 0; i < order; i ++)
+        for(j = 0; j < order; j ++)
         {
             original_i = i;
             original_j = j;
