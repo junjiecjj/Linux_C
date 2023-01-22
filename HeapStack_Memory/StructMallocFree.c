@@ -17,26 +17,26 @@
 
 void showStruct(const DATASTR *p)
 {
-    printf("a = %d, b = %.3lf, c = %.3f, \n",p->a,p->b,p->c);
+    printf("m_age = %d,  m_sala = %.3lf,  m_score = %.3f \n",p->m_age, p->m_sala, p->m_score);
 }
 
-char *s_gets(char *st, int n)
-{
-    char *ret_val;
-    char *find;
+// char *s_gets(char *st, int n)
+// {
+//     char *ret_val;
+//     char *find;
 
-    ret_val = fgets(st, n, stdin);
-    if (ret_val)
-    {
-        find = strchr(st, '\n'); // 查找换行符
-        if (find)                // 如果地址不是NULL,
-            *find = '\0';        // 此处放置一个空字符
-        else
-            while (getchar() != '\n')
-                continue; // dispose of rest of line
-    }
-    return ret_val;
-}
+//     ret_val = fgets(st, n, stdin);
+//     if (ret_val)
+//     {
+//         find = strchr(st, '\n'); // 查找换行符
+//         if (find)                // 如果地址不是NULL,
+//             *find = '\0';        // 此处放置一个空字符
+//         else
+//             while (getchar() != '\n')
+//                 continue; // dispose of rest of line
+//     }
+//     return ret_val;
+// }
 
 DATASTR ReturnStruct(void)
 {
@@ -44,28 +44,28 @@ DATASTR ReturnStruct(void)
     tmp.m_age = 12;
     tmp.m_sala  = 11287.32;
     tmp.m_score = 92.65;
-    showStruct(&tmp);
+    //showStruct(&tmp);
     return tmp;
 }
 
-void UseReturnStru(void){
-    DATASTR stu2;
-    DATASTR *p  = ;
-    DATASTR *P;
+void UseReturnStru(void)
+{
+    DATASTR stu = ReturnStruct();
+    showStruct(&stu);
 
 
-    P = (DATASTR *)malloc(2 * sizeof(DATASTR));
+    // P = (DATASTR *)malloc(2 * sizeof(DATASTR));
 
-    stu2.m_age = 12;
-    stu2.m_sala  = 11287.32;
-    stu2.m_score = 92.65;
-    showStruct(&stu2);
+    // stu2.m_age = 12;
+    // stu2.m_sala  = 11287.32;
+    // stu2.m_score = 92.65;
+    // showStruct(&stu2);
 
-    free(P); P = NULL;
+    // free(P); P = NULL;
 }
 
-int main(int argc, char *argv[])
+int TestStruct(void)
 {
-    TestStruMalloc();
+    UseReturnStru();
     return 0;
 }

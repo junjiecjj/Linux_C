@@ -40,5 +40,8 @@ typedef struct _DATASTRUCT
 } DATASTR;
 
 void showStruct(const DATASTR *p);
-char *s_gets(char *st, int n);
+// char *s_gets(char *st, int n);
 
+DATASTR ReturnStruct(void);
+void UseReturnStru(void);
+int TestStruct(void);
