@@ -120,7 +120,7 @@ float cofactor(float matrix[20][20], int order, int r, int c)
     return result;
 }
 
-float adjugate_matrix(float matrix[20][20],int order,int r,int c)
+float adjugate_matrix(float matrix[20][20], int order, int r, int c)
 {
     float result = 0;
 
