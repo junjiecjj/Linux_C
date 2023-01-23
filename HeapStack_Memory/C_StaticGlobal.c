@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 
     //CString();
     TestStruct();
-    //TestArrayPoint();
+    TestArrayPoint();
 
 
     // printf("******************* 测试全局和静态变量的定义、初始化、使用 *******************\n");
