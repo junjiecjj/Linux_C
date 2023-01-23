@@ -18,7 +18,6 @@ int main()
 {
     float matrix[20][20];
     int r,c,i,j,choice;
-
 begin:
     printf("输入矩阵的行规模:");
     scanf("%d",&r);
@@ -69,7 +68,6 @@ menu:
         printf("指令错误，重新输入!\n");
         goto menu;
     }
-
 end:
     return 0;
 }
@@ -115,7 +113,7 @@ float cofactor(float matrix[20][20], int order, int r, int c)
             }
         }
     if(order >= 2)
-        result = determinant(cofactor,order - 1);
+        result = determinant(cofactor, order - 1);
 
     return result;
 }
