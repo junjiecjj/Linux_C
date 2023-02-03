@@ -170,7 +170,7 @@ void Display2DIntArrayUse1D(int rows, int cols, int *ar)
 }
 
 
-void Free2DContinueMem(int** pm,int r,int c){
+void Free2DNotContinueMem(int** pm,int r,int c){
     for(int i=0;  i<r; ++i){
         free(pm[i]);
         pm[i] = NULL;

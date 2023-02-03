@@ -237,7 +237,7 @@ void Show2DArrayKindsOfWaysC(void)
     printf("打印数组D第五次......\n");
     Display2DIntArray2DPoint(m, n, D); //正确的方式，推荐
 
-    Free2DContinueMem(D, m, n);
+    Free2DNotContinueMem(D, m, n);
     // for(int i=0; i<m; i++)
     // {
     //     free(D[i]);
