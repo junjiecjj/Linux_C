@@ -58,6 +58,12 @@
     "c_staticglo.h": "c",
     "diceroll.h": "c",
     "s_and_r.h": "c",
-    "arraypoint.h": "c"
+    "arraypoint.h": "c",
+    "string.h": "c"
+  },
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#083607",
+    "titleBar.activeBackground": "#0C4B0A",
+    "titleBar.activeForeground": "#F0FDF0"
   }
 }

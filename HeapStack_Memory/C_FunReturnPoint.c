@@ -47,9 +47,9 @@ int main(void)
     printf("2 aa = %d\n", aa);
     printf("2 globalA = %d\n", globalA);
 
-    // char *str;
-    // str=returnStr();
-    // printf("%s\n", str);
+    // char *str1;
+    // str1 = returnStr();
+    // printf("%s\n", str1);
 
 
     char *str;
