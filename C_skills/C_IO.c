@@ -317,14 +317,11 @@ char *s_gets(char *st, int n) {
   return ret_val;
 }
 
-void C_IOTest(void) {
+int main(int argc, char *argv[]) {
   FILE *in, *out;
   int ch;
 
-
-
-  printf("************************************************ 1 *********************************************\n");
-  printf("************************ getc 从文件读取, putchar 输出到 stdout ************************\n");
+  printf("************************ 1 *********************\n");
   //用int getc(FILE *stream) 读取.txt文件，然后用putchar(int char) 显示在屏幕
   if ((in = fopen("./In.txt", "r")) == NULL) {
     printf("open failed ...\n");
@@ -337,92 +334,7 @@ void C_IOTest(void) {
 
   fclose(in);
 
-  printf("************************************************ 2 *********************************************\n");
-  printf("************************ getc 从文件读取, putc 输出到 stdout ************************\n");
-  //用int getc(FILE *stream) 读取.txt文件，然后用putchar(int char) 显示在屏幕
-  if ((in = fopen("./In.txt", "r")) == NULL) {
-    printf("open failed ...\n");
-  } else {
-    printf("open successful ...\n");
-  }
-  while ((ch = getc(in)) != EOF) {
-    putc(ch,stdout);
-  }
-
-  fclose(in);
-
-  printf("\n************************************************  3 ************************************************\n");
-  printf("************************ getc 从文件读取字符, putc 输出到 文件。 ************************\n");
-  //用int getc(FILE *stream)先读取In.txt文件，再用int putc(int char, FILE *stream) 输出到另外的文件out1.txt
-
-	if ((in = fopen("./In.txt", "r")) == NULL){
-			fprintf(stderr, "\n Cannot open the file!!!\n");
-			exit(1);
-	}
-
-	if ((out = fopen("./out1.txt", "w")) == NULL){
-			fprintf(stderr, "\n Cannot open the file!!!\n");
-			exit(1);
-	}
-
-  while ((ch = getc(in)) != EOF) {
-    putc(ch, out);
-  }
-
-  fclose(in);
-  fclose(out);
-
-  printf("%d",EOF);
-  printf("\n************************************************ 4 ************************************************\n");
-  printf("************************ getchar 从stdin读取文本, 然后用 putchar 写入stdout ************************\n");
-
-  while ((ch = getchar()) != EOF ) {
-    putchar(ch);
-  }
-
-
-  // printf("************************************************ 5 *********************************************\n");
-  // printf("************************ getc 从stdin 读取, putc 输出到 stdout ************************\n");
-
-  // while ((ch = getc(stdin)) != EOF  && ch != '\n') {
-  //   putc(ch, stdout);
-  // }
-  // getchar();
-
-  // printf("************************************************ 6 *********************************************\n");
-  // printf("************************ getc 从stdin 读取, putc 输出到 文件 ************************\n");
-	// if ((out = fopen("./out2.txt", "w")) == NULL){
-	// 		fprintf(stderr, "\n Cannot open the file!!!\n");
-	// 		exit(1);
-	// }
-
-  // while ((ch = getc(stdin)) != EOF && ch != '\n') { // Ctrl+D = EOF
-  //   putc(ch, out);
-  // }
-  // fclose(out);
-
-  // printf("\n************************************************ 7 ************************************************\n");
-  // printf("************************ getchar 从stdin读取文本, 然后用 putc 写入文件 ************************\n");
-  // //用int getchar(void) 从stdin读取文本，然后用int putc(int char, FILE *stream)写入文件
-  // out = fopen("./out3.txt", "w");
-  // while ((ch = getchar()) != EOF) {
-  //   putc(ch, out);
-  // }
-
-  // fclose(out);
-
-  // printf("\n************************************************ 8 ************************************************\n");
-  // printf("************************ getchar 从stdin读取文本, 然后用 putc 写入stdout ************************\n");
-
-  // while ((ch = getchar()) != EOF) {
-  //   putc(ch, stdout);
-  // }
-
-
-
-  printf("\n************************************************  9 ************************************************\n");
-  printf("************************ scanf 从 stdin 读取, printf 输出到 stdout ************************\n");
-
+  printf("\n********************* 2 ************************\n");
   char *S = (char *)malloc(LEN * sizeof(char));
   scanf("%s", S);
   printf("读取的字符串为：%s\n", S);
@@ -430,22 +342,18 @@ void C_IOTest(void) {
     continue;
   //如果输入chenjunjie回车，则S = "chenjunjie"，没有回车。
 
-  free(S);
-
-
-
-  printf("\n************************************************  10 ************************************************\n");
-  printf("************************ fgets 从 stdin 读取, puts/fputs 输出到 stdout ************************\n");
+  printf("\n*********************** 3 **********************\n");
   char words[STLEN];
 
   puts("Enter a string, please.");
-  fgets(words, STLEN, stdin);  //fgets()保留输入中的换行符，fputs()不在输出中添加换行符。
-  printf("Your string twice (puts(), then fputs()):\n"); //如果输入chen回车，则words="chen\n\0"；
+  fgets(words, STLEN, stdin);
+  printf(
+      "Your string twice (puts(), then fputs()):\n"); //如果输入chen回车，则words="chen\n\0"；
   printf("字符串长度:%lu\n", strlen(words));
   printf("words[3]=%c...\n", words[3]); // words[4]为'n'
-  printf("words[4]=%c...\n", words[4]);   // words[4]为回车
-  puts(words);                // puts() 在输出中添加换行符。
-  fputs(words, stdout);       // fputs()不在输出中添加换行符。
+  printf("words[4]=%c...", words[4]);   // words[4]为回车
+  puts(words);
+  fputs(words, stdout);
   puts("Enter another string, please.");
   fgets(words, STLEN, stdin);
   printf("Your string twice (puts(), then fputs()):\n");
@@ -495,8 +403,7 @@ void C_IOTest(void) {
   words[i] = '\0';
   */
 
-  printf("\n************************************************  11 ************************************************\n");
-  printf("************************ 该代码是统计输入的一段字符流(该字符流以'\\n'结尾)中输入的总字符、空格和tab键的个数。 ************************\n");
+  printf("************************** 4 **************************\n");
   /*
   该代码是统计输入的一段字符流(该字符流以\n结尾)中输入的总字符、空格和tab键的个数。
   */
@@ -513,69 +420,64 @@ void C_IOTest(void) {
   }
   printf("count = %d\n", count);
   printf("spacecount = %d\n", spacenum);
+  printf("**************************** 5 *************************\n");
+  //用int getc(FILE *stream)先读取In.txt文件，再用int putc(int char, FILE *stream) 输出到另外的文件out1.txt
+  in = fopen("./In.txt", "r");
+  out = fopen("./out1.txt", "w");
+  while ((ch = getc(in)) != EOF) {
+    putc(ch, out);
+  }
 
+  fclose(in);
+  fclose(out);
 
-  printf("\n************************************************  12 ************************************************\n");
-  printf("************************ fgets 从文件读取字符串, fputs 输出到 文件。 ************************\n");
+  printf("*********************** 6 ****************************\n");
   //用char *fgets(char *str, int n, FILE *stream) 读取文件，再用int fputs(const
   // char *str, FILE *stream) 写入文件
   char *cr = (char *)malloc(sizeof(char) * LEN);
   in = fopen("./In.txt", "r");
-  out = fopen("./out4.txt", "w");
+  out = fopen("./out2.txt", "w");
   while (fgets(cr, LEN, in) != NULL) {
     fputs(cr, out);
   }
 
   fclose(in);
   fclose(out);
-  free(cr);
 
-  printf("\n************************************************ 13 ************************************************\n");
-  printf("************************ fgets 从文件读取字符串, fputs 输出到 stdout。 ************************\n");
-  //用char *fgets(char *str, int n, FILE *stream) 读取文件，再用int fputs(const
-  // char *str, FILE *stream) 写入文件
-  char *cr3 = (char *)malloc(sizeof(char) * LEN);
-  in = fopen("./In.txt", "r");
-
-  while (fgets(cr3, LEN, in) != NULL) {
-    fputs(cr3, stdout);
-  }
-
-  fclose(in);
-  free(cr3);
-
-  printf("\n************************************************  14 ************************************************\n");
-  printf("************************ fgets 从 stdin 读取字符串, fputs 输出到 文件。 ************************\n");
+  printf("*************************** 7 ***************************\n");
   //用char *fgets(char *str, int n, FILE *stream) 从stdin读取数据，再用int
   // fputs(const char *str, FILE *stream) 写入文件
   char *cr1 = (char *)malloc(sizeof(char) * LEN);
   // in = fopen("./In.txt", "r");
-  out = fopen("./out5.txt", "w");
-  while (fgets(cr1, LEN, stdin) != NULL && cr1[0] != '\n') {
+  out = fopen("./out3.txt", "w");
+  while (fgets(cr1, LEN, stdin) != NULL) {
     fputs(cr1, out);
   }
 
   // fclose(in);
   fclose(out);
-  free(cr1);
 
-  printf("\n************************************************ 15 ************************************************\n");
-  printf("************************ fgets 从 stdin 读取字符串, fputs 输出到 stdout。 ************************\n");
+  printf("************************* 8 ****************************\n");
   //用char *fgets(char *str, int n, FILE *stream) 从stdin读取数据，再用int
   // fputs(const char *str, FILE *stream) 写入stdout
   char *cr2 = (char *)malloc(sizeof(char) * LEN);
   // in = fopen("./In.txt", "r");
   // out = fopen("./out3.txt", "w");
-  while (fgets(cr2, LEN, stdin) != NULL && cr2[0] != '\n') {
+  while (fgets(cr2, LEN, stdin) != NULL) {
     fputs(cr2, stdout);
   }
+  // fclose(in);
+  // fclose(out);
+  printf("*************************** 9 *****************************\n");
+  //用int getchar(void) 从stdin读取文本，然后用int putc(int char, FILE *stream)写入文件
+  out = fopen("./out4.txt", "w");
+  while ((ch = getchar()) != EOF) {
+    putc(ch, out);
+  }
 
-  free(cr2);
+  fclose(out);
 
-
-
-  printf("\n************************************************ 16 ************************************************\n");
-  printf("************************ fprintf 将数组写入.txt文件, 然后用 fscanf 从文件读取出来 ************************\n");
+  printf("************************ 10 *********************\n");
   //将数组写入.txt文件
   int m = 5, n = 10;
   int A[m][n];
@@ -613,20 +515,14 @@ void C_IOTest(void) {
   printf("打印数组A第二次........\n");
   showInt2DArray(m, n, AA);
 
-  printf("\n************************************************ 17 ************************************************\n");
-  printf("************************ fscanf 从.txt文件读取数组  ************************\n");
+  printf("\n************************ 11 ***************************\n");
   //用int fscanf(FILE *stream, const char *format, ...)
   //读取array.txt文件中的数组
 
   int B[4][6] = {0};
   printf("打印读取前的数组\n");
   showInt2DArray(4, 6, B);
-
-	if ((in = fopen("./array2.txt", "r")) == NULL){
-			fprintf(stderr, "\n Cannot open the file!!!\n");
-			exit(1);
-	}
-
+  in = fopen("./array2.txt", "r");
   for (int i = 0; i < 4; i++) {
     for (int j = 0; j < 6; j++) {
       fscanf(in, "%d,", &B[i][j]);
@@ -636,8 +532,7 @@ void C_IOTest(void) {
   printf("打印读取后的数组\n");
   showInt2DArray(4, 6, B);
 
-  printf("\n************************************************ 18 ************************************************\n");
-  printf("************************ fscanf 从.txt文件读取字符串, 然后用 fputs 输出到 stdout ************************\n");
+  printf("\n************************ 12 ***************************\n");
   //用fscanf读取.txt文件(字符串，不是矩阵)
   char buf[512];
 
@@ -649,8 +544,7 @@ void C_IOTest(void) {
   }
 
   fclose(in);
-  printf("\n************************************************ 19 ************************************************\n");
-  printf("************* fwrite 将 double 1D 数组写入二进制文件, 然后用 fread 从二进制文件读取 *************\n");
+  printf("\n************************ 13 ***************************\n");
   //用fread/fwrite将数组读取/写入.txt文件
 
   double earnings[10] = {1.12, 2.12, 3.12, 4.12, 5.12,
@@ -686,8 +580,7 @@ void C_IOTest(void) {
   fclose(Double1DFile_re);
   showDouble1DArray(10, earnings1);
 
-  printf("\n************************************************ 20 ************************************************\n");
-  printf("************* fwrite 将 int 2D 数组写入二进制文件, 然后用 fread 从二进制文件读取; C[m][n]方式 *************\n");
+  printf("\n************************ 14 ***************************\n");
   // int m = 5, n = 10;
   int C[m][n];
   for (int i = 0; i < m; i++)
@@ -727,8 +620,7 @@ void C_IOTest(void) {
 
   showInt2DArray(m, n, CC);
 
-  printf("\n************************************************ 21 ************************************************\n");
-  printf("************* fwrite 将 int 2D 数组写入二进制文件, 然后用 fread 从二进制文件读取 2D 数组; 指针方式 *************\n");
+  printf("\n************************ 15 ***************************\n");
   //用fread/fwrite将数组读取/写入.txt文件
 
   //************************************************************
@@ -792,8 +684,7 @@ void C_IOTest(void) {
   free(D);
   free(DD);
 
-  printf("\n************************************************ 22 ************************************************\n");
-  printf("************* fwrite 将 float 2D 数组写入二进制文件, 然后用 fread 从二进制文件读取 2D 数组; 指针方式 *************\n");
+  printf("\n************************ 16 ***************************\n");
   //用fread/fwrite将数组读取/写入.txt文件
 
   // int m = 5, n = 10;
@@ -857,8 +748,7 @@ void C_IOTest(void) {
   free(E);
   free(EE);
 
-  printf("\n************************************************ 23 ************************************************\n");
-  printf("************* fwrite 将 float 2D 数组写入二进制文件, 然后用 fread 从二进制文件读取 2D 数组; 指F[m][n]方式 *************\n");
+  printf("\n************************ 17 ***************************\n");
   //用fread/fwrite将数组读取/写入.txt文件
 
   // int m = 5, n = 10;
@@ -901,8 +791,7 @@ void C_IOTest(void) {
   //读取array1.txt文件中的数组
 
   showFloat2DArray(m, n, FF);
-  printf("\n************************************************ 24 ************************************************\n");
-  printf("************* fwrite 将 double 2D 数组写入二进制文件, 然后用 fread 从二进制文件读取 2D 数组; 指F[m][n]方式 *************\n");
+  printf("\n************************ 18 ***************************\n");
   //用fread/fwrite将数组读取/写入.txt文件
 
   // int m = 5, n = 10;
@@ -946,8 +835,7 @@ void C_IOTest(void) {
 
   showDouble2DArray(m, n, GG);
 
-  printf("\n************************************************ 25 ************************************************\n");
-  printf("************* fwrite 将 double 2D 数组写入二进制文件, 然后用 fread 从二进制文件读取 2D 数组; 指针方式 *************\n");
+  printf("\n************************ 19 ***************************\n");
 
   //用fread/fwrite将数组读取/写入.txt文件
 
@@ -1043,37 +931,4 @@ a+	打开一个文本文件，允许读写文件。如果文件不存在，则�
 
 **************************************************************************************/
 
-void C_IO_Mode(void)
-{
-  printf("***************************** 测试不同的IO模式的区别 ********************************\n");
-  FILE *fin, *fout;
-  char *cr = (char *)malloc(sizeof(char) * LEN);
-  int N=3;
 
-  printf("***************************** (1): r 打开一个已有的文本文件,允许读取文件. ********************************\n");
-
-  if ((fin = fopen("./In_unix.txt", "r")) == NULL){
-      fprintf(stderr, "\n Cannot open the file!!!\n");
-      exit(1);
-  }
-  while (fgets(cr, LEN, fin) != NULL) {
-    fputs(cr, stdout);
-  }
-
-  for(int i=0; i<N; ++i)
-  {
-      fprintf(fin, "\n%lf %12.10lf", i*1.0, i+2.6778);
-  }
-
-  fclose(fin);
-
-}
-
-
-int main(int argc, char *argv[])
-{
-  C_IOTest();
-  C_IO_Mode();
-
-  return 0;
-}
