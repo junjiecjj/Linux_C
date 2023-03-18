@@ -23,7 +23,7 @@ void GetFileNames(string path,vector<string>& filenames)
 }
 
 
-int C++main() {
+int CPlusMain() {
     vector<string> file_name;
     string data;
     string path = "./folder";
