@@ -26,8 +26,8 @@ int main(int argc, char *argv[])
 {
     /**************************************************************************************************/
 
-    //CString();
-    TestStruct();
+    // CString();
+    // TestStruct();
     // TestArrayPoint();
 
 

@@ -64,15 +64,20 @@ void Display2DIntArrayUse1D(int rows, int cols,  int *ar);
 void Free2DNotContinueMem(int** pm,int r,int c);
 
 
+float determinant(float matrix[20][20], int order);
+float cofactor(float matrix[20][20], int order, int r, int c);
+float adjugate_matrix(float matrix[20][20], int order, int r, int c);
+float inverse_matrix(float matrix[20][20], int order, int r, int c);
+float transposed_matrix(float matrix[20][20], int r, int c, int i, int j);
+void show_inverse_matrix(float matrix[20][20], int order);
+void show_adjugate_matrix(float matrix[20][20], int order);
+void show_transposed_matrix(float matrix[20][20], int r, int c);
+void menu(void);
+
+
 #ifdef __cplusplus
 };
 #endif
-
-
-
-
-
-
 
 
 

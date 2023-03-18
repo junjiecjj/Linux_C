@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <sys/types.h>
 #include <dirent.h>
@@ -21,10 +22,11 @@ void GetFileNames(string path,vector<string>& filenames)
     closedir(pDir);
 }
 
-int main() {
+
+int C++main() {
     vector<string> file_name;
     string data;
-    string path = "../folder";
+    string path = "./folder";
     ofstream outfile;
     outfile.open("sum.txt");
     GetFileNames(path, file_name);
@@ -40,3 +42,5 @@ int main() {
     outfile.close();
     return 0;
 }
+
+

@@ -1,0 +1,3 @@
+/home/jack/公共的/Linux_C/OpenCV/CMakeFiles/DisplayImage.dir
+/home/jack/公共的/Linux_C/OpenCV/CMakeFiles/edit_cache.dir
+/home/jack/公共的/Linux_C/OpenCV/CMakeFiles/rebuild_cache.dir

@@ -32,5 +32,10 @@
     "**/.*/**",
     "**/.vscode",
     "**/.vscode/**"
-  ]
+  ],
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#4B1408",
+    "titleBar.activeBackground": "#691C0C",
+    "titleBar.activeForeground": "#FEF9F8"
+  }
 }

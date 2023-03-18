@@ -14,7 +14,10 @@
         "c_staticglobal.h": "c",
         "c_staticglo.h": "c",
         "loc_stat.h": "c",
-        "structmallocfree.h": "c"
+        "structmallocfree.h": "c",
+        "new": "cpp",
+        "vlamal.h": "c",
+        "s_and_r.h": "c"
     },
     "workbench.colorCustomizations": {
         "activityBar.background": "#392C12",

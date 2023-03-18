@@ -27,7 +27,7 @@
 #  ①变量定义
 CC=gcc			# 定义变量，表示使用g++编译器
 # SRCS=main.cpp a.cpp	  # 表示项目中所需要的源文件，有更多直接在后面添加，换行用反斜杠
-SRCS= C_StaticGlobal.c  Diceroll.c  C_StaticGlo.c loc_stat.c PartAB.c S_and_r.c Where.c  VLAmal.c ExpMath.c  Utility.c  ArrayPoint.c String.c StructMallocFree.c
+SRCS= main.c  Diceroll.c  C_StaticGlo.c loc_stat.c PartAB.c S_and_r.c Where.c  VLAmal.c ExpMath.c  Utility.c  ArrayPoint.c String.c StructMallocFree.c
 
 OBJS=$(SRCS:.c=.o)	#  表示目标依赖文件.o，其又依赖于SRCS中的cpp文件
 EXEC=outexe		# 表示生成的可执行文件

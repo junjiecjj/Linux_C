@@ -585,8 +585,8 @@ void Formattransfer_test() {
 
   int a1 = 258;
   char s[32];
-  /* itoa(a1, s, 2); */
-  /* sprintf(); */
+  itoa(a1, s, 2);
+  printf("a1 = %s\n", s);
   printf("binary a1 == %s\n", s);
 
   printf("*********************** int  "
