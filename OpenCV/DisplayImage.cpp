@@ -8,8 +8,11 @@
 >> 此程序的功能是：
 ************************************************************************/
 
-#include <opencv2/opencv.hpp>
+#include<opencv2/opencv.hpp>
+/* #include "/home/jack/opencv_4_1/usr/local/include/opencv4/opencv2/opencv.hpp" */
 #include <stdio.h>
+
+
 using namespace cv;
 
 int main(int argc, char *argv[])

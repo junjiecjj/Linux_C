@@ -4,7 +4,7 @@
 CMakeFiles/DisplayImage.dir/DisplayImage.cpp.o
  /home/jack/公共的/Linux_C/OpenCV/DisplayImage.cpp
  /usr/include/stdc-predef.h
- /usr/local/include/opencv4/opencv2/opencv.hpp
+ /home/jack/opencv_4_1/usr/local/include/opencv4/opencv2/opencv.hpp
  /usr/local/include/opencv4/opencv2/opencv_modules.hpp
  /usr/local/include/opencv4/opencv2/core.hpp
  /usr/local/include/opencv4/opencv2/core/cvdef.h
