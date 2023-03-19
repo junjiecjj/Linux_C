@@ -8,7 +8,7 @@
 
 using namespace std;
 
-void GetFileNames(string path,vector<string>& filenames)
+void GetFileNames(string path, vector<string>& filenames)
 {
     DIR *pDir;
     struct dirent* ptr;
