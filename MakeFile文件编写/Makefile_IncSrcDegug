@@ -1,0 +1,82 @@
+
+
+
+
+
+
+
+
+
+
+
+
+#-------------变量定义
+EXEC=run
+CFLAGS=-Wall -O3 -g -I ${DIR_INC}	# 配置编译器，-Wall表示输出警告信息，-O表示编译优化，-g表示编译debug版本
+# LDLIBS += -L./usrLib -lm
+
+
+CC=g++
+#把不同的路径赋给相应的变量
+DIR_OBJ=./debug
+DIR_SRC=./source
+DIR_INC=./include
+LDLIBS += -L./usrLib -lm
+
+#把./source中的所有.c文件拿出来赋给变量SRC_PATH，包括.c文件的路径
+SRC_PATH=$(wildcard ${DIR_SRC}/*.cpp)
+
+#去掉SRC的路径，然后把所有.c文件后缀名，改为.o，最后把这些.o文件赋给变量
+OBJS = $(patsubst %.cpp,${DIR_OBJ}/%.o,$(notdir ${SRC_PATH}))
+
+
+#把debug文件夹下的所有.o文件赋给变量
+# OBJ_PATH=$(wildcard ${DIR_OBJ}/*.o)
+
+# OBJ_PATH=$(addprefix ${DIR_OBJ}/, ${OBJS})
+
+${EXEC}:${OBJS}
+	${CC}  ${OBJS}  -o $@   $(LDLIBS)
+
+${DIR_OBJ}/%.o:${DIR_SRC}/%.cpp
+	${CC}  $(CFLAGS)   -c $< -o $@
+
+
+
+clean:
+# rm -rf ${EXEC}
+	rm -rf $(OBJS)  #删除依赖文件
+#  find ${DIR_OBJ} -name *.o -exec rm -rf {}
+
+deleterun:
+	rm -rf $(OBJS)  #删除依赖文件
+	rm -rf ${EXEC}
+
+all:
+	@echo ${SRC_PATH}
+	@echo "\n"
+	@echo ${OBJS}
+	@echo "\n"
+
+
+
+
+
+# 一些常见的自动化变量说明如下：
+# 变量		  解析
+# $0		 当前脚本的文件名。
+# $n（n≥1）	 传递给脚本或函数的参数。n 是一个数字，表示第几个参数。例如，第一个参数是 $1，第二个参数是 $2>。
+# $#		传递给脚本或函数的参数个数。
+# $*		传递给脚本或函数的所有参数。
+# $@		表示目标文件。
+# $?		上个命令的退出状态，或函数的返回值。
+# $$		当前 Shell 进程 ID。对于 Shell 脚本，就是这些脚本所在的进程 ID。
+# $^			所有依赖文件的集合，用空格分开，如果其中有重复的依赖文件，则只保留一个。比如依赖文件有三个: 1.c, 2.c, 1.c，那么$^拿到的只有 1.c 和 2.c 两个文件，舍弃了一个1.c
+# $<			依赖文件中的第一个文件。如果依赖文件是以 “%” 定义的，那么 $< 就是依赖文件的集合。一般不会有重复的依赖文件，所以上面的 Makefile，用 $^ 替换掉 $< 也是可以的
+# $+			与 $^ 一样，只是如果有重复的依赖文件，不会舍弃重复的依赖文件
+# $@			目标文件的集合
+
+# wildcard、notdir、patsubst的意思:
+# wildcard : 扩展通配符
+# notdir :   去除路径
+# patsubst ：替换通配符
