@@ -7,7 +7,7 @@
 
 
 
-
+# https://cloud.tencent.com/developer/article/1673704
 
 
 #-------------变量定义
@@ -23,6 +23,10 @@ DIR_SRC=./source
 DIR_INC=./include
 LDLIBS += -L./usrLib -lm
 
+# DIR_BIN = ./bin
+# BIN_TARGET = ${DIR_BIN}/${EXEC}
+
+
 #把./source中的所有.c文件拿出来赋给变量SRC_PATH，包括.c文件的路径
 SRC_PATH=$(wildcard ${DIR_SRC}/*.cpp)
 
@@ -35,6 +39,7 @@ OBJS = $(patsubst %.cpp,${DIR_OBJ}/%.o,$(notdir ${SRC_PATH}))
 
 # OBJ_PATH=$(addprefix ${DIR_OBJ}/, ${OBJS})
 
+# ${BIN_TARGET}:${OBJ}
 ${EXEC}:${OBJS}
 	${CC}  ${OBJS}  -o $@   $(LDLIBS)
 
