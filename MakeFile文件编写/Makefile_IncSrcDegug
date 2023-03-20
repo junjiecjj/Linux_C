@@ -5,16 +5,46 @@
 
 
 
-
-
+# https://zhuanlan.zhihu.com/p/92010728
+# https://blog.csdn.net/Luckiers/article/details/124765087?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-4-124765087-blog-118769125.pc_relevant_landingrelevant&spm=1001.2101.3001.4242.3&utm_relevant_index=7
 # https://cloud.tencent.com/developer/article/1673704
 
 
-#-------------变量定义
-EXEC=run
-CFLAGS=-Wall -O3 -g -I ${DIR_INC}	# 配置编译器，-Wall表示输出警告信息，-O表示编译优化，-g表示编译debug版本
-# LDLIBS += -L./usrLib -lm
+# 实际当中程序文件比较大，这时候对文件进行分类，分为头文件、源文件、目标文件、可执行文件。也就是说通常将文件按照文件类型放在不同的目录当中，这个时候的Makefile需要统一管理这些文件，将生产的目标文件放在目标目录下，可执行文件放到可执行目录下。测试程序如下图所示：
 
+# ❯ ll
+# drwxrwxr-x⠀jack⠀jack⠀4.0K  ⠀Mar 20 21:31:03⠀ﱮ⠀.
+# drwxrwxrwx⠀jack⠀jack⠀4.0K  ⠀Mar 19 21:13:29⠀ﱮ⠀..
+# -rw-rw-r--⠀jack⠀jack⠀8.4K  ⠀May 29 11:01:58⠀⠀5GLDPCBG2a2_R0.50_K192.txt
+# -rw-rw-r--⠀jack⠀jack⠀11.1K ⠀May 29 12:14:10⠀⠀5GLDPCBG2a2_R0.50_K256.txt
+# -rw-rw-r--⠀jack⠀jack⠀46.3K ⠀Mar  9 14:58:50⠀⠀5GLDPCBG2a3_R0.50_K960.txt
+# -rw-rw-r--⠀jack⠀jack⠀630.7K⠀Nov 15 19:06:42⠀⠀a.txt
+# drwxrwxr-x⠀jack⠀jack⠀4.0K  ⠀Mar 20 21:31:03⠀⠀debug/
+# -rw-rw-r--⠀jack⠀jack⠀25.5K ⠀Mar 20 20:48:52⠀⠀Extra_snrberfer.txt
+# drwxrwxr-x⠀jack⠀jack⠀4.0K  ⠀Mar 20 17:47:27⠀⠀include/
+# -rw-rw-r--⠀jack⠀jack⠀192   ⠀Feb 24 10:13:48⠀⠀LDPC.txt
+# -rw-rw-r--⠀jack⠀jack⠀3.4K  ⠀Mar 20 21:30:35⠀⠀Makefile
+# -rw-rw-r--⠀jack⠀jack⠀2.3K  ⠀Mar 20 21:14:32⠀⠀Makefile_IncScr
+# -rw-rw-r--⠀jack⠀jack⠀3.4K  ⠀Mar 20 21:31:18⠀⠀Makefile_IncSrcDegug
+# -rw-rw-r--⠀jack⠀jack⠀3.0K  ⠀Mar 20 17:23:31⠀⠀Makefile_OneFileAuto
+# -rw-rw-r--⠀jack⠀jack⠀2.8K  ⠀Mar 20 17:22:48⠀⠀Makefile_OneFileManually
+# -rw-rw-r--⠀jack⠀jack⠀25.5K ⠀Mar 20 20:48:52⠀⠀Payload_snrberfer.txt
+# -rw-rw-r--⠀jack⠀jack⠀448   ⠀Mar 20 20:42:24⠀⠀RanXORLDPC.txt
+# -rw-rw-r--⠀jack⠀jack⠀1.6K  ⠀Dec  2 23:15:26⠀⠀readme.txt
+# -rwxrwxr-x⠀jack⠀jack⠀941.1K⠀Mar 20 21:31:03⠀⠀run*
+# -rw-rw-r--⠀jack⠀jack⠀167   ⠀Mar 29 22:08:14⠀⠀SeedSetting.txt
+# -rw-rw-r--⠀jack⠀jack⠀147   ⠀Mar 20 20:38:05⠀⠀Setup_of_EbitsinLDPC_BPSK_AWGN0.txt
+# drwxrwxr-x⠀jack⠀jack⠀4.0K  ⠀Mar 20 20:42:28⠀⠀source/
+# -rw-rw-r--⠀jack⠀jack⠀97    ⠀Mar 20 20:48:53⠀⠀temp_result.txt
+# drwxrwxr-x⠀jack⠀jack⠀4.0K  ⠀Mar 19 20:40:04⠀⠀.vscode/
+
+# ╭─   ~/公共的/编解码程序/TestMakeFile                                                                                                                                                                                           base  system at  21:32:18
+# ╰─❯
+
+
+
+
+#-------------变量定义
 
 CC=g++
 #把不同的路径赋给相应的变量
@@ -23,8 +53,8 @@ DIR_SRC=./source
 DIR_INC=./include
 LDLIBS += -L./usrLib -lm
 
-# DIR_BIN = ./bin
-# BIN_TARGET = ${DIR_BIN}/${EXEC}
+EXEC=run
+CFLAGS=-Wall -O3 -g -I ${DIR_INC}	# 配置编译器，-Wall表示输出警告信息，-O表示编译优化，-g表示编译debug版本
 
 
 #把./source中的所有.c文件拿出来赋给变量SRC_PATH，包括.c文件的路径
@@ -39,22 +69,22 @@ OBJS = $(patsubst %.cpp,${DIR_OBJ}/%.o,$(notdir ${SRC_PATH}))
 
 # OBJ_PATH=$(addprefix ${DIR_OBJ}/, ${OBJS})
 
-# ${BIN_TARGET}:${OBJ}
 ${EXEC}:${OBJS}
 	${CC}  ${OBJS}  -o $@   $(LDLIBS)
 
 ${DIR_OBJ}/%.o:${DIR_SRC}/%.cpp
-	${CC}  $(CFLAGS)   -c $< -o $@
+	${CC}  $(CFLAGS)   -c $<  -o $@
 
 
 
 clean:
 # rm -rf ${EXEC}
 	rm -rf $(OBJS)  #删除依赖文件
-#  find ${DIR_OBJ} -name *.o -exec rm -rf {}
+# find ${DIR_OBJ} -name *.o -exec rm -rf {}
 
 deleterun:
 	rm -rf $(OBJS)  #删除依赖文件
+# find ${DIR_OBJ} -name *.o -exec rm -rf {}
 	rm -rf ${EXEC}
 
 all:
@@ -65,6 +95,17 @@ all:
 
 
 
+# 基本格式如下：
+# targets: prerequisites
+#   command
+# targets：规则的目标，可以是 Object File（一般称它为中间文件），也可以是可执行文件，还可以是一个标签；
+# prerequisites：是我们的依赖文件，要生成 targets 需要的文件或者是目标。可以是多个，也可以是没有；
+# command：make 需要执行的命令（任意的 shell 命令）。可以有多条命令，每一条命令占一行。
+
+
+
+# 参数 -c 指示编译器产生 .o 目标文件
+# 编译时需要用 -L 指定静态库的路径，用 -l 指定静态库。
 
 
 # 一些常见的自动化变量说明如下：
@@ -73,11 +114,11 @@ all:
 # $n（n≥1）	 传递给脚本或函数的参数。n 是一个数字，表示第几个参数。例如，第一个参数是 $1，第二个参数是 $2>。
 # $#		传递给脚本或函数的参数个数。
 # $*		传递给脚本或函数的所有参数。
-# $@		表示目标文件。
+# $@		表示目标文件。规则的目标文件名(依赖关系中冒号:左边的文件，如果a: b c，那么$@指a)
 # $?		上个命令的退出状态，或函数的返回值。
 # $$		当前 Shell 进程 ID。对于 Shell 脚本，就是这些脚本所在的进程 ID。
 # $^			所有依赖文件的集合，用空格分开，如果其中有重复的依赖文件，则只保留一个。比如依赖文件有三个: 1.c, 2.c, 1.c，那么$^拿到的只有 1.c 和 2.c 两个文件，舍弃了一个1.c
-# $<			依赖文件中的第一个文件。如果依赖文件是以 “%” 定义的，那么 $< 就是依赖文件的集合。一般不会有重复的依赖文件，所以上面的 Makefile，用 $^ 替换掉 $< 也是可以的
+# $<			依赖文件中的第一个文件。如果依赖文件是以 “%” 定义的，那么 $< 就是依赖文件的集合。一般不会有重复的依赖文件，所以上面的 Makefile，用 $^ 替换掉 $< 也是可以的. 被依赖文件的第一项(如果a: b c，那么$<指b)
 # $+			与 $^ 一样，只是如果有重复的依赖文件，不会舍弃重复的依赖文件
 # $@			目标文件的集合
 

@@ -11,9 +11,6 @@
 
 
 #-------------变量定义
-EXEC=run
-CFLAGS=-Wall -O3 -g	# 配置编译器，-Wall表示输出警告信息，-O表示编译优化，-g表示编译debug版本
-# LDLIBS += -L./usrLib -lm
 
 
 CC=g++
@@ -21,6 +18,11 @@ CC=g++
 DIR_OBJ=./debug
 DIR_SRC=./source
 DIR_IND=./include
+
+EXEC=run
+CFLAGS=-Wall -O3 -g	# 配置编译器，-Wall表示输出警告信息，-O表示编译优化，-g表示编译debug版本
+LDLIBS += -L./usrLib -lm
+
 
 #把./source中的所有.c文件拿出来赋给变量SRC_PATH，包括.c文件的路径
 SRC_PATH=$(wildcard ${DIR_SRC}/*.cpp)
@@ -36,7 +38,7 @@ OBJS = $(patsubst %.cpp,%.o,$(notdir ${SRC_PATH}))
 OBJ_PATH=$(addprefix ${DIR_OBJ}/, ${OBJS})
 
 ${EXEC}:${OBJS}
-	${CC} ${OBJS}  -o ${EXEC}
+	${CC} ${OBJS}  -o ${EXEC}  $(LDLIBS)
 
 ${OBJS}:
 	${CC}   -c ${SRC_PATH} -I ${DIR_IND}
