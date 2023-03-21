@@ -11,21 +11,51 @@
 #include <unistd.h> // Linux系统中
 // #include <direct.h> // windows系统中
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <errno.h>
+#include <dirent.h>
 
 
+#define MODE777 (S_IRWXU | S_IRWXG | S_IRWXO)
+#define MODE664 (S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH)
 #define PATH_SIZE 255
 
-int GetCwd(void)
+
+/**********************************************************************
+功能: 获取当前目录
+***********************************************************************/
+void GetPwd(void)
 {
 	char path[PATH_SIZE];
-	if(!getcwd(path,PATH_SIZE)){
+	if(getcwd(path,PATH_SIZE) == NULL){
 		printf("Get path fail!\n");
-		return 0;
+		exit(EXIT_FAILURE);
 	}
 	printf("path = %s\n", path);
-    return 0;
+
+}
+
+void MkrDir(char *dir)
+{
+	DIR *mydir;
+
+	if((mydir = opendir(dir)) == NULL){
+		if(mkdir(dir, MODE777) != 0)
+		{
+			printf("mkdir %s failed\n", dir);
+		}
+		else
+		{
+			printf("mkdir %s success\n", dir);
+		}
+	}
+	else
+	{
+		printf("%s already exists !!!\n",dir);
+	}
 }
 
 
@@ -38,6 +68,9 @@ void  GetFileNames(char *Dirname, int MaxFileNum)
 
 int main(int argc, char *argv[])
 {
-    GetCwd();
+    GetPwd();
+	MkrDir("./testMkdir");                  // 以当前的exe文件为根目录建立文件夹
+	// MkrDir("/home/jack/tmp/testMkdir");  // 绝对路径
+
     return 0;
 }

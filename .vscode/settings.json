@@ -17,7 +17,8 @@
         "structmallocfree.h": "c",
         "new": "cpp",
         "vlamal.h": "c",
-        "s_and_r.h": "c"
+        "s_and_r.h": "c",
+        "stdio.h": "c"
     },
     "workbench.colorCustomizations": {
         "activityBar.background": "#392C12",
