@@ -1,6 +1,0 @@
-Beijing.txt
-东方明珠在上海！
-Shanghai.txt
-万里长城在北京！
-Shenzhen.txt
-深圳是经济特区！

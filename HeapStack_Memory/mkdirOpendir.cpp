@@ -26,21 +26,28 @@ void GetFileNames(string path, vector<string>& filenames)
 int CPlusMain() {
     vector<string> file_name;
     string data;
-    string path = "./folder";
+    string path = "/home/jack";
     ofstream outfile;
     outfile.open("sum.txt");
     GetFileNames(path, file_name);
     for(int i = 0; i <file_name.size(); i++)
     {
-        ifstream infile;
-        infile.open(path+"/"+file_name[i]);
-        infile >> data;
-        outfile << file_name[i] << "\n" << data << endl;
-        infile.close();
+        // ifstream infile;
+        // infile.open(path+"/"+file_name[i]);
+        // infile >> data;
+        // outfile << file_name[i] << "\n" << data << endl;
+        // infile.close();
         cout<<file_name[i]<<endl;
     }
     outfile.close();
     return 0;
 }
 
+
+int main(int argc, char *argv[])
+{
+    CPlusMain();
+
+    return 0;
+}
 
