@@ -2,6 +2,7 @@
 
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 
 float determinant(float matrix[20][20], int order);
@@ -14,7 +15,7 @@ void show_adjugate_matrix(float matrix[20][20], int order);
 void show_transposed_matrix(float matrix[20][20], int r, int c);
 void menu(void);
 
-int main()
+int testmain()
 {
     float matrix[20][20];
     int r,c,i,j,choice;
@@ -194,3 +195,67 @@ void menu(void)
     printf("输入你的选择:");
 }
 
+//适用于int **A形式申明的二维数组,内存连续或者不连续都行,推荐
+void Display2DFloatArray2DPoint(int rows, int cols, float **A)
+{
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            printf("%-12.3f", A[i][j]);
+            //printf("%5d  ", A[i*cols+j]);  //错误的做法
+        }
+    printf("\n");
+    }
+}
+
+//适用于A[m][n]形式申明的二维数组,C++中无法使用
+void Display2DFloatArrayNorm(int rows, int cols, const float ar[2][2])  // 带变长数组形参arr的函数,arr是一个变长数组
+{
+    for(int i=0; i< rows;++i)
+    {
+        for(int j=0; j< cols; ++j)
+        {
+            printf("%-12.3f", ar[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
+
+int main(int argc, char *argv[])
+{
+
+    int row = 3, col = 3;
+
+    float **matrix;
+    //这样分配内存不连续,行内连续，行间不一定连续，
+    matrix = (float **)malloc(row * sizeof(float *));  //每一行的首地址分配内存，不一定连续
+    for (int i = 0; i < row; i++)
+    {
+        matrix[i] = (float *)malloc(col * sizeof(float)); //每一行一定连续
+    }
+
+    for (int i = 0; i < row; i++)
+    {
+        for (int j = 0; j < col; j++)
+        {
+            matrix[i][j] = i * col + j+1;
+        }
+    }
+
+    printf("%-12.3lf\n", 12.23);
+    // printf("输入矩阵的行规模:");
+    // scanf("%d",&row);
+    // printf("输入矩阵的列规模:");
+    // scanf("%d",&col);
+    // printf("输入一个 %d x %d 矩阵:\n", row, col);
+    // for(i = 0; i < row; i ++)
+    //     for(j = 0; j < col; j ++)
+    //         scanf("%f",&matrix[i][j]);
+
+    Display2DFloatArray2DPoint(row, col, matrix);
+
+
+
+
+    return 0;
+}
