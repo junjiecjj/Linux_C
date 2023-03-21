@@ -75,7 +75,7 @@ end:
 
 float determinant(float matrix[20][20], int order)
 {
-    float result = 0,sign = 1;
+    float result = 0, sign = 1;
     int i;
 
     if(order == 1)
