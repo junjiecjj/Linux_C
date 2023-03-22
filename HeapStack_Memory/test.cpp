@@ -96,7 +96,7 @@ double Cofactor(double **arr, int row, int col, int order)
 	return result;
 }
 
-
+// https://blog.csdn.net/Dream_wave/article/details/119192417
 double DeterminantGauss(double **arr, int order)
 {
 
