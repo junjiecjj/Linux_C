@@ -99,6 +99,7 @@ float cofactor(float matrix[20][20], int order, int r, int c)
     int original_i, original_j, i, j;
 
     for(i = 0; i < order; i ++)
+    {
         for(j = 0; j < order; j ++)
         {
             original_i = i;
@@ -115,6 +116,7 @@ float cofactor(float matrix[20][20], int order, int r, int c)
                 j = original_j;
             }
         }
+    }
     if(order >= 2)
         result = determinant(cofactor, order - 1);
 

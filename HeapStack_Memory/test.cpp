@@ -7,17 +7,17 @@
 
 double Determinant(double  **arr, int order);
 double Cofactor(double  **arr, int raw, int col, int order);
-void Display2DFloatArray2DPoint(int rows, int cols, float **A)；
+void Display2DFloatArray2DPoint(int rows, int cols, double **arr);
 
 
 
 
 //适用于int **A形式申明的二维数组,内存连续或者不连续都行,推荐
-void Display2DFloatArray2DPoint(int rows, int cols, double **A)
+void Display2DFloatArray2DPoint(int rows, int cols, double **arr)
 {
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
-            printf("%-12.3lf", A[i][j]);
+            printf("%-12.3lf", arr[i][j]);
             //printf("%5d  ", A[i*cols+j]);  //错误的做法
         }
     printf("\n");
@@ -27,7 +27,7 @@ void Display2DFloatArray2DPoint(int rows, int cols, double **A)
 // 递归计算行列式,当 order 很大时不适用
 double Determinant(double **arr, int order)
 {
-    double M = 0, sum = 0;//i是第一行的列指标，M是余子式的值，sum是行列式的计算值
+    double  sum = 0;//i是第一行的列指标，M是余子式的值，sum是行列式的计算值
 
 	if (order == 1)//一阶行列式直接得出结果
 		return arr[0][0];
@@ -36,8 +36,7 @@ double Determinant(double **arr, int order)
         printf("here!!!\n");
 		for (int i = 0; i < order; i++)//按第一行展开
 		{
-			M = Cofactor(arr, 0, i, order);
-			sum += 1.0 * pow(-1, i) * arr[0][i] * M;
+			sum += 1.0 * pow(-1, i) * arr[0][i] * Cofactor(arr, 0, i, order);
 		}
 	}
 	return sum;
@@ -46,13 +45,13 @@ double Determinant(double **arr, int order)
 
 /**************************************************************
 功能:递归计算 arr 的 row 行 col 列的余子式.
-
 **************************************************************/
 double Cofactor(double **arr, int row, int col, int order)
 {
 
-    double result;
+    double result = 0;
 	double  **arr2;
+    int origin_i, origin_j, r, c;
 
     //分配内存
     arr2 = (double **)malloc((order-1) * sizeof(float *));  //每一行的首地址分配内存，不一定连续
@@ -62,18 +61,29 @@ double Cofactor(double **arr, int row, int col, int order)
     }
 
 	//以下为构造余子式的过程。由于C语言的特性，这个过程会比较复杂，需要观察余子式与原行列式的关系。
-		for (int j = 0; j < order - 1; j++)
-		{
-			for (int k = 0; k < order - 1; k++)
-			{
-				if (k < i)
-					arr2[j][k] = arr[j + 1][k];
-				else if (k >= i)
-					arr2[j][k] = arr[j + 1][k + 1];
-			}
-		}
-
-    result = Determinant(arr2, order - 1);//构造完后，余子式是一个新的行列式，返回DET函数进行计算。
+    for (int i = 0; i < order; i++)
+    {
+        for (int j = 0; j < order; j++)
+        {
+            origin_i = i;
+            origin_j = j;
+            if(i == r || j == c);
+            else
+            {
+                if(i > row)
+                    i --;
+                if(j > col)
+                    j --;
+                arr2[i][j] = arr[origin_i][origin_j];
+                i = origin_i;
+                j = origin_j;
+            }
+        }
+    }
+    if(order >= 2)
+    {
+        result = Determinant(arr2, order - 1);//构造完后，余子式是一个新的行列式，返回DET函数进行计算。
+    }
 
     // 释放内存
     for(int i=0;  i < order-1; ++i){
@@ -87,6 +97,10 @@ double Cofactor(double **arr, int row, int col, int order)
 }
 
 
+double DeterminantGauss(double **arr, int order)
+{
+
+}
 
 
 
@@ -126,20 +140,20 @@ int main()
         matrix[i] = (double *)malloc(order * sizeof(double)); //每一行一定连续
     }
 
-	// printf("请输入行列式：\n");
-	// for (int a = 0; a < order; a++) {
-	// 	for (int b = 0; b < order; b++) {
-	// 		scanf("%f", &matrix[a][b]);
-	// 	}
-	// }
+	printf("请输入行列式：\n");
+	for (int a = 0; a < order; a++) {
+		for (int b = 0; b < order; b++) {
+			scanf("%lf", &matrix[a][b]);
+		}
+	}
 
-    for (int i = 0; i < order; i++)
-    {
-        for (int j = 0; j < order; j++)
-        {
-            matrix[i][j] = rand()%10;
-        }
-    }
+    // for (int i = 0; i < order; i++)
+    // {
+    //     for (int j = 0; j < order; j++)
+    //     {
+    //         matrix[i][j] = rand()%10;
+    //     }
+    // }
 
     Display2DFloatArray2DPoint(order, order, matrix);
 
