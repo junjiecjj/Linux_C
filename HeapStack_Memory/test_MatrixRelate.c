@@ -73,6 +73,8 @@ end:
     return 0;
 }
 
+
+
 float determinant(float matrix[20][20], int order)
 {
     float result = 0, sign = 1;
@@ -221,8 +223,16 @@ void Display2DFloatArrayNorm(int rows, int cols, const float ar[2][2])  // Â∏¶Âè
     printf("\n");
 }
 
-# https://blog.csdn.net/Dream_wave/article/details/119192417
-#
+
+float DET(float **matrix, int order)
+{
+
+    return 0;
+}
+
+
+//https://blog.csdn.net/Dream_wave/article/details/119192417
+//
 
 int main(int argc, char *argv[])
 {
@@ -256,8 +266,6 @@ int main(int argc, char *argv[])
     //         scanf("%f",&matrix[i][j]);
 
     Display2DFloatArray2DPoint(row, col, matrix);
-
-
 
 
     return 0;
