@@ -314,14 +314,22 @@ double DeterminantGaussColPrime(double **matrix, int order)
     Display2DFloatArray2DPoint(order, order, arr);
 
     //================================================================
-    for(int i = 0; i < order-1; ++i){// 遍历对角线, 消元是以对角线为主轴的.
+    for(int i = 0; i < order - 1; ++i){// 遍历对角线, 消元是以对角线为主轴的.
 
-        maxval = arr[i][i];
-        for(int maxrow = i + 1; maxrow < order; ++maxrow ){
-            if(){
-
+        maxval = fabs(arr[i][i]);
+        maxrow = i;
+        for(int j = i + 1; maxrow < order; ++maxrow ){
+            if( fabs(arr[j][i]) > maxval ){
+                maxrow = j;
+                maxval = fabs(arr[j][i]);
             }
         }
+        if(maxval == 0.0)
+        {
+            printf("zero colum\n");
+            return 0;
+        }
+        
 
     }
 
