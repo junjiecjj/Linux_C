@@ -383,30 +383,6 @@ void useListAbsFileInDir(void)
 
 
 
-void release2Dchar(void)
-{
-    int n = 3;
-    int lens = 10;
-
-    char**pps8Output = (char **) malloc(n * sizeof(char *));
-
-    ///< malloc
-    for (int i = 0; i < n; i++)
-    {
-        pps8Output[i] = (char *) malloc(lens * sizeof(char));
-        printf("pps8Output[%d] ptr:%p \r\n", i, pps8Output[i]);
-    }
-
-    ///< free
-    for (int i = 0; i < n; i++)
-    {
-        free(pps8Output[i]);
-    }
-    free(pps8Output);
-
-
-	printf("release 2D char array done \n\n\n");
-}
 
 
 

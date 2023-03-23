@@ -101,9 +101,6 @@ int  ListFileInDir(char *Dirname, int MaxFileNum, char **FileName);
 void useListFileInDir(void);
 
 
-void release2Dchar(void);
-
-
 
 
 
