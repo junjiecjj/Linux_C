@@ -317,8 +317,10 @@ double DeterminantGaussColPrime(double **matrix, int order)
     for(int i = 0; i < order-1; ++i){// 遍历对角线, 消元是以对角线为主轴的.
 
         maxval = arr[i][i];
-        for(int maxrow = i + 1; maxrow < order - 1; ++maxrow ){
-            if()
+        for(int maxrow = i + 1; maxrow < order; ++maxrow ){
+            if(){
+
+            }
         }
 
     }
