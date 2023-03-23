@@ -37,7 +37,7 @@ print(f"A is \n{A}")
 
 
 
-# np.savetxt("/home/jack/snap/Matrix.txt", A, delimiter = ' ', fmt='%.04f')
+np.savetxt("/home/jack/snap/Matrix.txt", A, delimiter = ' ', fmt='%.04f')
 
 # [[2 5 5]
 #  [0 4 6]

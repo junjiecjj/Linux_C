@@ -174,6 +174,7 @@ double DeterminantGaussNormal(double **matrix, int order)
 	int n;				    // 阶数
 	int sign = 0;			// 行列式交换一次需要改变符号，此变量记录交换次数
 	double tmp;			    // 暂存乘积因子
+    double tmpvalue;        // 暂存矩阵的值
 	double sum = 1.0;       // 结果
 
     // 检查指针是否为空
@@ -182,27 +183,34 @@ double DeterminantGaussNormal(double **matrix, int order)
         exit(EXIT_FAILURE);
     }
 
+
+    //========================================================================
+    // 为了消元过程不影响原 matrix, 先分配内存并拷贝数值;
     //========================================================================
     double **arr;
-    // 为了消元过程不影响matrix, 先分配内存并拷贝数值;
-    arr = (double **)malloc(order * sizeof(double *));  //每一行的首地址分配内存，不一定连续
+    arr = (double **)malloc(order * sizeof(double *));
     for (int i = 0; i < order; i++)
     {
-        arr[i] = (double *)malloc(order * sizeof(double)); //每一行一定连续
+        arr[i] = (double *)malloc(order * sizeof(double));
     }
-
+    // 拷贝矩阵数值
 	for (int i = 0; i < order; i++) {
 		for (int j = 0; j < order; j++) {
 			arr[i][j] = matrix[i][j];
 		}
 	}
-    // printf("拷贝的 %d × %d 矩阵:\n",order,order);
-    // Display2DFloatArray2DPoint(order, order, arr);
 
-	for(int i = 0; i < order - 1; i++){
+    // 开始消元
+	for(int i = 0; i < order - 1; i++){// 遍历对角线, 消元是以对角线为主轴的.
 		k = 1;
-		while(arr[i][i] == 0.0 && i+k < order){	 //确保标准数不为0. 寻找第i行的第一个不为0 的元素的列，并交换i 和 j列.
-			SwapArrCol(arr, i, i+(k++), order);
+		while(arr[i][i] == 0.0 && i+k < order){	     //确保标准数不为0. 寻找第i行的第一个不为0 的元素的列，并交换i 和 j列.
+			// SwapArrCol(arr, i, i+(k++), order);
+            for(int raw = 0; raw < order; raw++){
+                tmpvalue = arr[raw][i];
+                arr[raw][i] = arr[raw][i+k];
+                arr[raw][i+k] = tmpvalue;
+            }
+            k++;
 			sign++;
 		}
         // printf("sign = %d\n", sign);
@@ -211,23 +219,22 @@ double DeterminantGaussNormal(double **matrix, int order)
 			return 0;
 		}
 		for(int j = i + 1; j < order; j++){     // 开始消去i行后的每一行;
-			if(arr[j][i] == 0.0){			// 如 j 行的第 i 列元素为0, 则那一行不用化简;
+			if(arr[j][i] == 0.0){			    // 如 j 行的第 i 列元素为0, 则那一行不用化简;
 				continue;
             }
 			else{
-				tmp = -(double)arr[j][i]/arr[i][i];		// 保存乘积因子;
+				tmp = -(double)arr[j][i]/arr[i][i];		    // 保存乘积因子;
 				for(k = i; k < order; k++)                  // 消去第 j 行的每一列元素;
 					arr[j][k] += (tmp*arr[i][k]);
 			}
 		}
-       // printf("第 %d 次消元后的矩阵\n", i);
-        // Display2DFloatArray2DPoint(order, order, arr);
+
 	}
 	for(int i = 0; i < order; i++)
 		sum *= arr[i][i];
-    sum = sum * pow(-1, sign);
+    sum = sum * pow(-1, sign); // 考虑列交换的次数
 
-    // 释放内存
+    //================ 释放内存 ======================
     for(int i = 0;  i < order; ++i){
         free(arr[i]);
         arr[i] = NULL;
@@ -238,58 +245,10 @@ double DeterminantGaussNormal(double **matrix, int order)
 }
 
 
-int main()
-{
-	int k,n,i,j;
-	double a[N][N],b[N],m[N][N],x[N],c[N],s=0.0;
-	printf("请输入未知数的个数："); //该方程组的未知数
-	scanf("%d",&n);
-	printf("请输入数据："); //输入增广矩阵
-	for(i=0;i<n;i++)
-	{
-		for(j=0;j<n+1;j++)
-		{
-			scanf("%lf",&a[i][j]);
-		}
-	}
-	for(i=0;i<n;i++)
-	{
-		b[i]=a[i][n];//将增广矩阵最后一列作为y的值
-	}
-	for(k=0;k<n-1;k++)
-    {
-        for(i=k+1;i<n;i++)
-        {   m[i][k]=1.0*a[i][k]/a[k][k];//这一步减少了计算机运算量，因为后面要用到
-            b[i]=b[i]-1.0*m[i][k]*b[k];//将y与每一行的变化保持一致
-            for(j=k;j<n;j++)
-            {
-                a[i][j]=a[i][j]-1.0*m[i][k]*a[k][j];//这一步实现消元，可自己用具体数值推导
-            }
-        }
-    }
-    //可以在这里加两个循环，查看矩阵中每一个位置的数是多少。就是上面输入增广矩阵下面那个双循环
-	//方程回代过程
-	x[n-1]=1.0*b[n-1]/a[n-1][n-1];//先计算最后未知数，从下上算
-    for(i=n-2;i>=0;i--)
-    {
-        s=0;                   //这一步非常重要，每一步都要更新为0，不然s保留参与下面计算出错
-        for(j=i+1;j<n;j++)
-        {
-            c[j]=1.0*a[i][j]*x[j];//计算过程
-            s=c[j]+s;
-		}
-		x[i]=1.0*(b[i]-s)/a[i][i];//将每一行的方程除未知数其他全部放到等式右边
-	}
-	for(i=0;i<n;i++)
-	{
-	    printf("x[%d]=%lf\n",i+1,x[i]); //将未知数按顺序打印出来
-	}
-	return 0;
-}
+
 
 
 /***********************************************************************************************************************************************************
-
 注意: 高斯消元法也分为 普通的高斯消元法 和 列主元的高斯消元法  和 全主元的高斯消元法，这里是列主元 的消元法;
 
 方法一: 列主元 的消元法
@@ -302,9 +261,7 @@ int main()
 5）选择主元：利用初等行变换，找出每列绝对值最大的数，与主元行互换（1.提高一定的精度 2.避免原函数主对角线有0）
 6）利用初等行变换进行消0
 
-
 高斯消去法在消元过程中可能出现零主元，即，这时消元过程将无法进行；也可能主元绝对值非常小，用它做除法将会导致舍入误差的扩散，使数值解不可靠。解决该问题的办法是避免使用绝对值过小的元素作主元。
-
 选择主元的方法：
 1）找到主对角线以下每列最大的数Max所在的行数k
 2）利用初等行变换——换行变换，将k行与当前主元行互换（记录总共换行次数n）
@@ -313,10 +270,20 @@ int main()
 5）每次进行高斯消去前都必须选择主元，计算n维的行列式，则需要进行n-1次主元选择
 
 原文链接：https://blog.csdn.net/why1472587/article/details/128140020
+https://blog.csdn.net/qq_59002046/article/details/121354692
+https://blog.csdn.net/why1472587/article/details/128140020
+https://blog.csdn.net/LanderXX/article/details/96686287
+https://blog.csdn.net/you_big_father/article/details/83016329
+https://blog.csdn.net/qq_49606218/article/details/124529117
+https://blog.csdn.net/qq_43452446/article/details/90731365
+https://blog.csdn.net/mohenxiang/article/details/122003372
+https://blog.csdn.net/lzyws739307453/article/details/89816311
 *****************************************************************************************/
 double DeterminantGaussColPrime(double **matrix, int order)
 {
     int k;
+    int maxrow;             // 暂存主元的行号
+    int maxval;             // 暂存对角线及以下元素的最大值
 	int n;				    // 阶数
 	int sign = 0;			// 行列式交换一次需要改变符号，此变量记录交换次数
 	double tmp;			    // 暂存乘积因子
@@ -327,8 +294,6 @@ double DeterminantGaussColPrime(double **matrix, int order)
         printf("[exist.  file:%s,fun:%s, Line:%d,  ] \n", __FILE__, __func__, __LINE__);
         exit(EXIT_FAILURE);
     }
-
-
 
     //=======================================================
     // 为了消元过程不影响matrix, 先分配内存并拷贝数值;
@@ -349,7 +314,14 @@ double DeterminantGaussColPrime(double **matrix, int order)
     Display2DFloatArray2DPoint(order, order, arr);
 
     //================================================================
+    for(int i = 0; i < order-1; ++i){// 遍历对角线, 消元是以对角线为主轴的.
 
+        maxval = arr[i][i];
+        for(int maxrow = i + 1; maxrow < order - 1; ++maxrow ){
+            if()
+        }
+
+    }
 
 
 
@@ -369,7 +341,86 @@ double DeterminantGaussColPrime(double **matrix, int order)
 }
 
 
+int main1()
+{
+	//我的坏毛病，参数过多，后面不一定有用上
+    int k,n,i,j,r,w,e,g;
+	double a[N][N+1],b[N],m[N][N],x[N],c[N],s=0,f,max,uu[N];
+	printf("请输入未知数的个数：");
+	scanf("%d",&n);
+	printf("请输入数据：");
+    for(i=0;i<n;i++)
+    {
+        for(j=0;j<n+1;j++)
+		{
+			scanf("%lf",&a[i][j]);
+		}
 
+	}
+	for(i=0;i<n;i++)
+	{
+		b[i]=a[i][n];
+	}
+	/*  验证代码是否正确 可将这段代码放到任何一个位置进行正确性检验
+	for(i=0;i<n;i++)
+	{
+		for(j=0;j<n;j++)
+		{
+			printf("%lf ",a[i][j]);
+		}
+		printf("%lf\n",b[i]);
+	}*/
+    for(r=0; r<n-1; r++)//这一步开始寻找每一列最大的数
+	{
+        k=r;
+        max=a[r][r];
+        for(w=r; w<n-1; w++)//寻找，若找到该列下面有比起始大的数，则进行标记
+        {
+            if(a[w+1][r] >= a[w][r])
+            {
+                max = a[w+1][r];
+                k = w+1;          //若找到下列大的数，标记
+            }
+        }
+        if(k >= r)//此时表示找到
+        {
+            for(e = r; e < n; e++)//将下列最大的数的那一行与这列起始数的那一行所有数进行行更换
+            {
+                f = a[r][e];
+                a[r][e] = a[k][e];
+                a[k][e] = f;
+            }
+            f = b[r];//让y保持与行同变化
+            b[r] = b[k];
+            b[k] = f;
+        }
+        for(i = r+1; i < n; i++)//与上面相同，进行高斯消去法，因为列已经变化完毕
+        {
+            m[i][r] = 1.0*a[i][r]/a[r][r];
+            b[i] = b[i] - 1.0*m[i][r]*b[r];
+            for(j =r; j < n; j++){
+                a[i][j] = a[i][j]-1.0*m[i][r]*a[r][j];
+            }
+        }
+    }
+	//回代过程
+	x[n-1]=1.0*b[n-1]/a[n-1][n-1];
+    for(i=n-2;i>=0;i--)
+    {
+        s=0;
+        for(j=i+1;j<n;j++)
+        {
+            c[j]=1.0*a[i][j]*x[j];
+            s=c[j]+s;
+		}
+		x[i]=1.0*(b[i]-s)/a[i][i];
+	}
+	for(i=0;i<n;i++)
+	{
+	    printf("x[%d]=%lf\n",i+1,x[i]);
+	}
+	return 0;
+}
 
 
 
@@ -410,7 +461,7 @@ void LinalgSolve(double **A, double *b, int order)
 }
 
 
-int main1()
+int main()
 {
     //=========================================================================================================
 
