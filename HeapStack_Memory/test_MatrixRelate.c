@@ -299,10 +299,10 @@ double DeterminantGaussColPrime(double **matrix, int order)
     // 为了消元过程不影响matrix, 先分配内存并拷贝数值;
     //=======================================================
     double **arr;
-    arr = (double **)malloc(order * sizeof(double *));  //每一行的首地址分配内存，不一定连续
+    arr = (double **)malloc(order * sizeof(double *));     // 每一行的首地址分配内存，不一定连续
     for (int i = 0; i < order; i++)
     {
-        arr[i] = (double *)malloc(order * sizeof(double)); //每一行一定连续
+        arr[i] = (double *)malloc(order * sizeof(double)); // 每一行一定连续
     }
 
 	for (int i = 0; i < order; i++) {
@@ -329,7 +329,7 @@ double DeterminantGaussColPrime(double **matrix, int order)
             printf("zero colum\n");
             return 0;
         }
-        
+
 
     }
 
