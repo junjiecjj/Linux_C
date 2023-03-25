@@ -1,8 +1,15 @@
-#include <stdio.h>
-#include <stdlib.h>
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<math.h>
+#include<string.h>
+#include<malloc.h>
 #include <math.h>
 #define MAX 200  //最大计算阶数，可以更改
-# define N 100
+#define N 100
+
+
+const double EPS = 1e-9;
 
 
 //两个函数的声明
@@ -13,8 +20,9 @@ double Cofactor(double  **arr, int order, int raw, int col);
 void Display2DFloatArray2DPoint(int rows, int cols, double **arr);
 void Display2DFloatArrayNorm(int rows, int cols, const double ar[MAX][MAX]);
 
-double DeterminantGaussNormal(double **arr, int order);  // 普通 gaussian 求行列式
-double DeterminantGaussColPrime(double **arr, int order);      // 列主元 gaussian 求行列式
+double DeterminantGaussNormal(double **arr, int order);         // 普通 gaussian 求行列式
+double DeterminantGaussColPrime(double **arr, int order);       // 列主元 gaussian 求行列式
+double DeterminantGaussGlobPrime(double **arr, int order);      // 全主元 gaussian 求行列式
 
 
 void swap(double* a,double*b);
@@ -139,11 +147,20 @@ void swap(double* a, double*b)
 	*b = tmp;
 }
 
+// 交换矩阵的两列
 void SwapArrCol(double **arr, int col_a, int col_b, int order)
 {
 
 	for(int i = 0; i < order; i++)
 		swap(&arr[i][col_a], &arr[i][col_b]);
+}
+
+
+// 交换矩阵的两行
+void SwapArrRaw(double **arr, int raw_a, int raw_b, int order)
+{
+	for(int i = 0; i < order; i++)
+		swap(&arr[raw_a][i], &arr[raw_b][i]);
 }
 
 /***********************************************************************************************************************************************************
@@ -153,6 +170,14 @@ https://blog.csdn.net/Dream_wave/article/details/119192417
 1）换行变换：交换两行（行列式需变号）
 2）倍法变换：将行列式的某一行（列）的所有元素同乘以数k（行列式需乘K倍）
 3）消法变换：把行列式的某一行（列）的所有元素乘以一个数k并加到另一行（列）的对应元素上（行列式不变）
+
+这里要用到几个性质：
+1） 矩阵的某行或某列全部元素乘上一个常数，则行列式的值也乘上这个常数。
+2） 矩阵的某行（列）全部加上另一行（列）的元素*常数，行列式的值不变。
+3） 下（上）三角矩阵的行列式等于其对角线元素的乘积。
+4） 矩阵的某行或某列全为零，行列式为零。
+5） 转置不改变行列式。
+6） 交换两行或两列，行列式取相反数。
 
 其中 1)会使矩阵的行列式的值反号;  2)会使得行列式的值变为 k*|A|;  3) 不改变行列式的值.
 因此我们主要使用 1)和3) 化简矩阵，需要记录操作 1) 的总次数，包括行交换次数a 和 列交换的次数 b, 使得其变为对角阵, 然后对角相乘，再乘以 (-1)^(a+b) 得到最后的结果;
@@ -244,14 +269,10 @@ double DeterminantGaussNormal(double **matrix, int order)
 	return sum;
 }
 
-
-
-
-
 /***********************************************************************************************************************************************************
 注意: 高斯消元法也分为 普通的高斯消元法 和 列主元的高斯消元法  和 全主元的高斯消元法，这里是列主元 的消元法;
 
-方法一: 列主元 的消元法
+方法二: 列主元 的消元法
 功能: 利用 列主元 的高斯消元法计算行列式：
 整体流程与代码
 1）判断传入指针是否为空
@@ -267,26 +288,129 @@ double DeterminantGaussNormal(double **matrix, int order)
 2）利用初等行变换——换行变换，将k行与当前主元行互换（记录总共换行次数n）
 3）以当前主元行为基，利用初等行变换——消法变换，将主对角线下方消0
 4）行列式每次换行需变号，行列式最后的符号为
-5）每次进行高斯消去前都必须选择主元，计算n维的行列式，则需要进行n-1次主元选择
-
-原文链接：https://blog.csdn.net/why1472587/article/details/128140020
-https://blog.csdn.net/qq_59002046/article/details/121354692
-https://blog.csdn.net/why1472587/article/details/128140020
-https://blog.csdn.net/LanderXX/article/details/96686287
-https://blog.csdn.net/you_big_father/article/details/83016329
-https://blog.csdn.net/qq_49606218/article/details/124529117
-https://blog.csdn.net/qq_43452446/article/details/90731365
-https://blog.csdn.net/mohenxiang/article/details/122003372
-https://blog.csdn.net/lzyws739307453/article/details/89816311
+5）每次进行高斯消去前都必须选择主元，计算n维的行列式，则需要进行n-1次主元选择.
 *****************************************************************************************/
 double DeterminantGaussColPrime(double **matrix, int order)
 {
     int k;
     int maxrow;             // 暂存主元的行号
     int maxval;             // 暂存对角线及以下元素的最大值
-	int n;				    // 阶数
+
+	int sign = 0;			 // 行列式交换一次需要改变符号，此变量记录交换次数
+	double tmp = 0;			 // 暂存乘积因子
+    double tmpv = 0;         // 暂存元素值
+	double sum = 1.0;        // 结果
+
+    // 检查指针是否为空
+    if(matrix == NULL){
+        printf("[exist.  file:%s,fun:%s, Line:%d,  ] \n", __FILE__, __func__, __LINE__);
+        exit(EXIT_FAILURE);
+    }
+
+
+    //=======================================================
+    // 为了消元过程不影响matrix, 先分配内存并拷贝数值;
+    //=======================================================
+    double **arr;
+    arr = (double **)malloc(order * sizeof(double *));     // 每一行的首地址分配内存，不一定连续
+    for (int i = 0; i < order; i++)
+    {
+        arr[i] = (double *)malloc(order * sizeof(double)); // 每一行一定连续
+    }
+
+	for (int i = 0; i < order; i++) {
+		for (int j = 0; j < order; j++) {
+			arr[i][j] = matrix[i][j];
+		}
+	}
+    printf("拷贝的 %d × %d 矩阵:\n",order,order);
+    Display2DFloatArray2DPoint(order, order, arr);
+
+    //================================================================
+    for(int i = 0; i < order - 1; ++i){// 遍历对角线, 消元是以对角线为主轴的.
+
+        maxval = fabs(arr[i][i]);
+        maxrow = i;
+        for(int j = i + 1; j < order; ++j ){ // 寻找 第 i 列的 >= i+1 中的最大元素的行.
+            if( fabs(arr[j][i]) > maxval ){
+                maxrow = j;
+                maxval = fabs(arr[j][i]);
+            }
+        }
+        // printf("i = %d, maxrow = %d\n", i, maxrow);
+
+        if(maxval == 0.0)
+        {
+            printf("zero colum\n");
+            return 0;
+        }
+        if(maxrow > i){
+            for(int j = 0; j < order; ++j) // 交换行
+            {
+                tmpv = arr[i][j];
+                arr[i][j] = arr[maxrow][j];
+                arr[maxrow][j] = tmpv;
+            }
+            sign++;
+        }
+
+        for(int k = i + 1; k < order; ++k) // 消元
+        {
+            if(arr[k][i] == 0.0){
+                continue;
+            }
+            else{
+                tmp = -(double)arr[k][i]/arr[i][i];;
+                for(int j = i; j < order; ++j){
+                    arr[k][j] += tmp*arr[i][j];
+                }
+            }
+        }
+    }
+
+	for(int i = 0; i < order; i++)
+		sum *= arr[i][i];
+    sum = sum * pow(-1, sign); // 考虑列交换的次数
+
+
+    //======================================
+    // 释放内存
+    //======================================
+    for(int i = 0;  i < order; ++i){
+        free(arr[i]);
+        arr[i] = NULL;
+    }
+    free(arr);
+
+	return sum;
+
+}
+
+
+/***********************************************************************************************************************************************************
+注意: 高斯消元法也分为 普通的高斯消元法 和 列主元的高斯消元法  和 全主元的高斯消元法，这里是列主元 的消元法;
+
+方法二: 列主元 的消元法
+功能: 利用 列主元 的高斯消元法计算行列式：
+整体流程与代码
+1）判断传入指针是否为空
+2）判断矩阵维数，判断是否为方阵
+3）为临时矩阵开辟空间
+4）将原矩阵数据拷贝到临时矩阵中（保护原矩阵）
+5）选择主元：利用初等行变换，找出当前对角线元素右下角(包括自己)绝对值最大的数，与主元行互换（1.提高一定的精度 2.避免原函数主对角线有0）
+6）利用初等行变换进行消0
+
+*****************************************************************************************/
+double DeterminantGaussGlobPrime(double **matrix, int order)
+{
+    int k;
+    int maxrow;             // 暂存主元的行号
+    int maxcol;             // 暂存主元的列号
+    int maxval;             // 暂存对角线及以下元素的最大值
+
 	int sign = 0;			// 行列式交换一次需要改变符号，此变量记录交换次数
-	double tmp;			    // 暂存乘积因子
+	double tmp = 0;			    // 暂存乘积因子
+    double tmpv = 0;            // 暂存元素值
 	double sum = 1.0;       // 结果
 
     // 检查指针是否为空
@@ -318,23 +442,58 @@ double DeterminantGaussColPrime(double **matrix, int order)
 
         maxval = fabs(arr[i][i]);
         maxrow = i;
-        for(int j = i + 1; maxrow < order; ++maxrow ){
-            if( fabs(arr[j][i]) > maxval ){
-                maxrow = j;
-                maxval = fabs(arr[j][i]);
+        for(int j = i; j < order; ++j ){
+            for(int k = i; k < order; ++k){
+                if( fabs(arr[j][k]) > maxval ){
+                    maxrow = j;
+                    maxcol = k;
+                    maxval = fabs(arr[j][i]);
+                }
             }
         }
+        printf("i = %d, maxrow = %d, maxcol = %d\n", i, maxrow, maxcol);
+
         if(maxval == 0.0)
         {
-            printf("zero colum\n");
+            // printf("max value is zero, exit \n");
             return 0;
         }
+        if(maxrow > i){
+            for(int j = 0; j < order; ++j)
+            {
+                tmpv = arr[maxrow][j];
+                arr[maxrow][j] = arr[i][j];
+                arr[i][j] = tmpv;
+            }
+            sign++;
+        }
 
+        if(maxcol > i){
+            for(int j = 0; j < order; ++j)
+            {
+                tmpv = arr[j][maxcol];
+                arr[j][maxcol] = arr[j][i];
+                arr[j][i] = tmpv;
+            }
+            sign++;
+        }
 
+        for(int k = i + 1; k < order; ++k){
+            if(arr[k][i] == 0.0){
+                continue;
+            }
+            else{
+                tmp = -(double)arr[k][i]/arr[i][i];;
+                for(int j = i; j < order; ++j){
+                    arr[k][j] += tmp*arr[i][j];
+                }
+            }
+        }
     }
 
-
-
+	for(int i = 0; i < order; i++)
+		sum *= arr[i][i];
+    sum = sum * pow(-1, sign); // 考虑列交换的次数
 
 
     //======================================
@@ -347,91 +506,7 @@ double DeterminantGaussColPrime(double **matrix, int order)
     free(arr);
 
 	return sum;
-
 }
-
-
-int main1()
-{
-	//我的坏毛病，参数过多，后面不一定有用上
-    int k,n,i,j,r,w,e,g;
-	double a[N][N+1],b[N],m[N][N],x[N],c[N],s=0,f,max,uu[N];
-	printf("请输入未知数的个数：");
-	scanf("%d",&n);
-	printf("请输入数据：");
-    for(i=0;i<n;i++)
-    {
-        for(j=0;j<n+1;j++)
-		{
-			scanf("%lf",&a[i][j]);
-		}
-
-	}
-	for(i=0;i<n;i++)
-	{
-		b[i]=a[i][n];
-	}
-	/*  验证代码是否正确 可将这段代码放到任何一个位置进行正确性检验
-	for(i=0;i<n;i++)
-	{
-		for(j=0;j<n;j++)
-		{
-			printf("%lf ",a[i][j]);
-		}
-		printf("%lf\n",b[i]);
-	}*/
-    for(r=0; r<n-1; r++)//这一步开始寻找每一列最大的数
-	{
-        k=r;
-        max=a[r][r];
-        for(w=r; w<n-1; w++)//寻找，若找到该列下面有比起始大的数，则进行标记
-        {
-            if(a[w+1][r] >= a[w][r])
-            {
-                max = a[w+1][r];
-                k = w+1;          //若找到下列大的数，标记
-            }
-        }
-        if(k >= r)//此时表示找到
-        {
-            for(e = r; e < n; e++)//将下列最大的数的那一行与这列起始数的那一行所有数进行行更换
-            {
-                f = a[r][e];
-                a[r][e] = a[k][e];
-                a[k][e] = f;
-            }
-            f = b[r];//让y保持与行同变化
-            b[r] = b[k];
-            b[k] = f;
-        }
-        for(i = r+1; i < n; i++)//与上面相同，进行高斯消去法，因为列已经变化完毕
-        {
-            m[i][r] = 1.0*a[i][r]/a[r][r];
-            b[i] = b[i] - 1.0*m[i][r]*b[r];
-            for(j =r; j < n; j++){
-                a[i][j] = a[i][j]-1.0*m[i][r]*a[r][j];
-            }
-        }
-    }
-	//回代过程
-	x[n-1]=1.0*b[n-1]/a[n-1][n-1];
-    for(i=n-2;i>=0;i--)
-    {
-        s=0;
-        for(j=i+1;j<n;j++)
-        {
-            c[j]=1.0*a[i][j]*x[j];
-            s=c[j]+s;
-		}
-		x[i]=1.0*(b[i]-s)/a[i][i];
-	}
-	for(i=0;i<n;i++)
-	{
-	    printf("x[%d]=%lf\n",i+1,x[i]);
-	}
-	return 0;
-}
-
 
 
 
@@ -504,11 +579,16 @@ int main()
     printf("读取的 %d × %d 矩阵:\n",order,order);
     Display2DFloatArray2DPoint(order, order, matrix);
 
-    printf("行列式为: %lf \n", DeterminantGaussNormal(matrix, order));
-    printf("行列式为: %lf \n", DeterminantGaussColPrime(matrix, order));
+    printf("行列式为: %.10lf \n", DeterminantGaussNormal(matrix, order));
+    printf("行列式为: %.10lf \n", DeterminantGaussColPrime(matrix, order));
+    printf("行列式为: %.10lf \n", DeterminantGaussGlobPrime(matrix, order));
     // printf("行列式为: %f\n", Determinant(matrix, order));
     // printf("原来的 %d × %d 矩阵:\n",order,order);
     // Display2DFloatArray2DPoint(order, order, matrix);
+
+
+
+
 
     for(int i = 0;  i < order; ++i){
         free(matrix[i]);
