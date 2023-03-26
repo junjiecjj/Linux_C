@@ -26,7 +26,8 @@ double DeterminantGaussGlobPrime(double **arr, int order);      // 全主元 gau
 
 
 void swap(double* a,double*b);
-void SwapArrCol(double **arr, int col_a, int col_b, int order);
+void SwapArrCol(double **arr, int col_a, int col_b, int order);  // 交换矩阵的两列
+void SwapArrRaw(double **arr, int raw_a, int raw_b, int order);  // 交换矩阵的两行
 
 void InverseGauss(double **A, double **inverse);
 void LinalgSolve(double **A, double *b, int order);
@@ -294,7 +295,7 @@ double DeterminantGaussColPrime(double **matrix, int order)
 {
     int k;
     int maxrow;             // 暂存主元的行号
-    int maxval;             // 暂存对角线及以下元素的最大值
+    double maxval;             // 暂存对角线及以下元素的最大值
 
 	int sign = 0;			 // 行列式交换一次需要改变符号，此变量记录交换次数
 	double tmp = 0;			 // 暂存乘积因子
@@ -406,7 +407,7 @@ double DeterminantGaussGlobPrime(double **matrix, int order)
     int k;
     int maxrow;             // 暂存主元的行号
     int maxcol;             // 暂存主元的列号
-    int maxval;             // 暂存对角线及以下元素的最大值
+    double maxval;             // 暂存对角线及以下元素的最大值
 
 	int sign = 0;			// 行列式交换一次需要改变符号，此变量记录交换次数
 	double tmp = 0;			    // 暂存乘积因子
@@ -442,6 +443,7 @@ double DeterminantGaussGlobPrime(double **matrix, int order)
 
         maxval = fabs(arr[i][i]);
         maxrow = i;
+        maxcol = i;
         for(int j = i; j < order; ++j ){
             for(int k = i; k < order; ++k){
                 if( fabs(arr[j][k]) > maxval ){
@@ -451,7 +453,7 @@ double DeterminantGaussGlobPrime(double **matrix, int order)
                 }
             }
         }
-        printf("i = %d, maxrow = %d, maxcol = %d\n", i, maxrow, maxcol);
+        printf("i = %d, maxrow = %d, maxcol = %d, maxval = %lf\n", i, maxrow, maxcol, maxval);
 
         if(maxval == 0.0)
         {

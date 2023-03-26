@@ -72,9 +72,9 @@ const double EPS = 1e-9;
 矩阵相关，求行列式
 ****************************************************************************************************************************************************************************/
 
-//两个函数的声明
-double Determinant(double  **arr, int order);
-double Cofactor(double  **arr, int order, int raw, int col);
+
+double Determinant(double  **arr, int order);                    // 求矩阵的行列式, 递归求解
+double Cofactor(double  **arr, int order, int raw, int col);     // 求矩阵的余子式, 递归求解
 
 void Display2DFloatArray2DPoint(int rows, int cols, double **arr);
 
@@ -85,7 +85,8 @@ double DeterminantGaussGlobPrime(double **arr, int order);      // 全主元 gau
 
 
 void swap(double* a,double*b);
-void SwapArrCol(double **arr, int col_a, int col_b, int order);
+void SwapArrCol(double **arr, int col_a, int col_b, int order);  // 交换矩阵的两列
+void SwapArrRaw(double **arr, int raw_a, int raw_b, int order);  // 交换矩阵的两行
 
 
 /****************************************************************************************************************************************************************************
