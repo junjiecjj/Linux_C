@@ -595,6 +595,7 @@ double DeterminantGaussGlobPrime(double **matrix, int order)
         maxval = fabs(arr[i][i]);
         maxrow = i;
         maxcol = i;
+        // 找到当前对角线主元右下角(包括自己)所有元素中的最大的元素的行和列
         for(int j = i; j < order; ++j ){
             for(int k = i; k < order; ++k){
                 if( fabs(arr[j][k]) > maxval ){
@@ -611,6 +612,7 @@ double DeterminantGaussGlobPrime(double **matrix, int order)
             // printf("max value is zero, exit \n");
             return 0;
         }
+        // 交换行
         if(maxrow > i){
             for(int j = 0; j < order; ++j)
             {
@@ -620,7 +622,7 @@ double DeterminantGaussGlobPrime(double **matrix, int order)
             }
             sign++;
         }
-
+        // 交换列
         if(maxcol > i){
             for(int j = 0; j < order; ++j)
             {
