@@ -34,8 +34,8 @@ void LinalgSolve(double **A, double *b, int order);           // 高斯消元法
 
 
 void DecompositionLU(double **arr, double **Larr, double Uarr, int order); //  矩阵的 LU 分解
-void DecompositionQR(double **arr, double **Larr, double Uarr, int order); //  矩阵的 QR 分解
-void DecompositionSVD(double **arr, double **Larr, double Uarr, int order); //  矩阵的 SVD 分解
+void DecompositionQR(double **arr, double **Qarr, double Rarr, int order); //  矩阵的 QR 分解
+void DecompositionSVD(double **arr, double **Sarr, double Varr, double Darr, int order); //  矩阵的 SVD 分解
 
 
 
@@ -563,7 +563,7 @@ void DecompositionQR(double **arr, double **Larr, double Uarr, int order) //  �
 }
 
 
-void DecompositionSVD(double **arr, double **Larr, double Uarr, int order) //  矩阵的 SVD 分解
+void DecompositionSVD(double **arr, double **Sarr, double Varr, double Darr,  int order) //  矩阵的 SVD 分解
 {
 
 }
