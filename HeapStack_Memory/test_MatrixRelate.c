@@ -29,9 +29,13 @@ void swap(double* a,double*b);
 void SwapArrCol(double **arr, int col_a, int col_b, int order);  // 交换矩阵的两列
 void SwapArrRaw(double **arr, int raw_a, int raw_b, int order);  // 交换矩阵的两行
 
-void InverseGauss(double **A, double **inverse);
-void LinalgSolve(double **A, double *b, int order);
+void InverseGauss(double **A, double **inverse, int order);   // Gauss消元法求矩阵的逆
+void LinalgSolve(double **A, double *b, int order);           // 高斯消元法解线性方程组
 
+
+void DecompositionLU(double **arr, double **Larr, double Uarr, int order); //  矩阵的 LU 分解
+void DecompositionQR(double **arr, double **Larr, double Uarr, int order); //  矩阵的 QR 分解
+void DecompositionSVD(double **arr, double **Larr, double Uarr, int order); //  矩阵的 SVD 分解
 
 
 
@@ -523,7 +527,7 @@ double DeterminantGaussGlobPrime(double **matrix, int order)
 3) B 的右部分就是 A 的逆矩阵.
 
 *****************************************************************************************/
-void InverseGauss(double **A, double **inverse)
+void InverseGauss(double **A, double **inverse, int order)
 {
 
 }
@@ -547,6 +551,22 @@ void LinalgSolve(double **A, double *b, int order)
 
 }
 
+
+void DecompositionLU(double **arr, double **Larr, double Uarr, int order) //  矩阵的 LU 分解
+{
+
+}
+
+void DecompositionQR(double **arr, double **Larr, double Uarr, int order) //  矩阵的 QR 分解
+{
+
+}
+
+
+void DecompositionSVD(double **arr, double **Larr, double Uarr, int order) //  矩阵的 SVD 分解
+{
+
+}
 
 int main()
 {
