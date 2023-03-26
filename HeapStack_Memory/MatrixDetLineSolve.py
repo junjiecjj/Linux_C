@@ -20,7 +20,7 @@ np.set_printoptions(precision=4)   # precision 设置浮点数的精度 （默�
 N = 20
 A = np.random.randint(-5, 5, N**2)*1.11
 A = A.reshape(N, N)
-A[1,:] = A[0,:]*2.0
+A[1,:] = A[0,:] 
 print(f"A is \n{A}")
 np.savetxt("/home/jack/snap/Matrix.txt", A, delimiter = ' ', fmt='%.04f')
 
