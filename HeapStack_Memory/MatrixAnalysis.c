@@ -1,42 +1,15 @@
 
-#include<stdio.h>
-#include<stdlib.h>
-#include<math.h>
-#include<string.h>
-#include<malloc.h>
-#include <math.h>
-#define MAX 200  //最大计算阶数，可以更改
-#define N 100
+#include "MatrixAnalysis.h"
 
 
-const double EPS = 1e-9;
 
 
-//两个函数的声明
-
-double Determinant(double  **arr, int order);
-double Cofactor(double  **arr, int order, int raw, int col);
-
-void Display2DFloatArray2DPoint(int rows, int cols, double **arr);
-void Display2DFloatArrayNorm(int rows, int cols, const double ar[MAX][MAX]);
-
-double DeterminantGaussNormal(double **arr, int order);         // 普通 gaussian 求行列式
-double DeterminantGaussColPrime(double **arr, int order);       // 列主元 gaussian 求行列式
-double DeterminantGaussGlobPrime(double **arr, int order);      // 全主元 gaussian 求行列式
 
 
-void swap(double* a,double*b);
-void SwapArrCol(double **arr, int col_a, int col_b, int order);  // 交换矩阵的两列
-void SwapArrRaw(double **arr, int raw_a, int raw_b, int order);  // 交换矩阵的两行
 
-void InverseGauss(double **A, double **inverse, int order);   // Gauss消元法求矩阵的逆
-void LinalgSolve(double **A, double *b, int order);           // 高斯消元法解线性方程组
-
-
-void DecompositionCroutLU(double **arr, double **Larr, double **Uarr, int order); //  矩阵的 LU 分解
-void DecompositionQR(double **arr, double **Qarr, double **Rarr, int order); //  矩阵的 QR 分解
-void DecompositionSVD(double **arr, double **Sarr, double **Varr, double **Darr, int order); //  矩阵的 SVD 分解
-
+/****************************************************************************************************************************************************************************
+矩阵相关，求行列式
+****************************************************************************************************************************************************************************/
 
 
 //适用于int **A形式申明的二维数组,内存连续或者不连续都行,推荐
@@ -329,8 +302,8 @@ double DeterminantGaussColPrime(double **matrix, int order)
 			arr[i][j] = matrix[i][j];
 		}
 	}
-    printf("拷贝的 %d × %d 矩阵:\n",order,order);
-    Display2DFloatArray2DPoint(order, order, arr);
+    // printf("拷贝的 %d × %d 矩阵:\n",order,order);
+    // Display2DFloatArray2DPoint(order, order, arr);
 
     //================================================================
     for(int i = 0; i < order - 1; ++i){// 遍历对角线, 消元是以对角线为主轴的.
@@ -440,8 +413,8 @@ double DeterminantGaussGlobPrime(double **matrix, int order)
 			arr[i][j] = matrix[i][j];
 		}
 	}
-    printf("拷贝的 %d × %d 矩阵:\n",order,order);
-    Display2DFloatArray2DPoint(order, order, arr);
+    // printf("拷贝的 %d × %d 矩阵:\n",order,order);
+    // Display2DFloatArray2DPoint(order, order, arr);
 
     //================================================================
     for(int i = 0; i < order - 1; ++i){// 遍历对角线, 消元是以对角线为主轴的.
@@ -449,6 +422,7 @@ double DeterminantGaussGlobPrime(double **matrix, int order)
         maxval = fabs(arr[i][i]);
         maxrow = i;
         maxcol = i;
+        // 找到当前对角线主元右下角(包括自己)所有元素中的最大的元素的行和列
         for(int j = i; j < order; ++j ){
             for(int k = i; k < order; ++k){
                 if( fabs(arr[j][k]) > maxval ){
@@ -458,13 +432,14 @@ double DeterminantGaussGlobPrime(double **matrix, int order)
                 }
             }
         }
-        printf("i = %d, maxrow = %d, maxcol = %d, maxval = %lf\n", i, maxrow, maxcol, maxval);
+        // printf("i = %d, maxrow = %d, maxcol = %d\n", i, maxrow, maxcol);
 
         if(maxval == 0.0)
         {
             // printf("max value is zero, exit \n");
             return 0;
         }
+        // 交换行
         if(maxrow > i){
             for(int j = 0; j < order; ++j)
             {
@@ -474,7 +449,7 @@ double DeterminantGaussGlobPrime(double **matrix, int order)
             }
             sign++;
         }
-
+        // 交换列
         if(maxcol > i){
             for(int j = 0; j < order; ++j)
             {
@@ -517,6 +492,9 @@ double DeterminantGaussGlobPrime(double **matrix, int order)
 
 
 
+/****************************************************************************************************************************************************************************
+矩阵相关，求矩阵的逆
+****************************************************************************************************************************************************************************/
 
 /*****************************************************************************************
 功能: 利用高斯消元法计算矩阵的逆矩阵;
@@ -528,13 +506,16 @@ double DeterminantGaussGlobPrime(double **matrix, int order)
 3) B 的右部分就是 A 的逆矩阵.
 
 *****************************************************************************************/
-void InverseGauss(double **A, double **inverse, int order)
+void InverseGauss(double **A, double **inverse)
 {
 
 }
 
 
 
+/****************************************************************************************************************************************************************************
+矩阵相关，解线性方程组
+****************************************************************************************************************************************************************************/
 
 /*****************************************************************************************
 功能: 利用高斯消元法求解线性方程组;
@@ -553,117 +534,36 @@ void LinalgSolve(double **A, double *b, int order)
 }
 
 
-void DecompositionCroutLU(double **arr, double **Larr, double **Uarr, int order) //  矩阵的 LU 分解
-{
 
-    for(int i = 0; i < order; ++i){
-        for(int j = 0; j < order; ++j){
-            if(i >= j){
 
-            }
-            else if(i < j){
-
-            }
-        }
-    }
-
-}
-
-void DecompositionQR(double **arr, double **Qarr, double **Rarr, int order) //  矩阵的 QR 分解
+/****************************************************************************************************************************************************************************
+矩阵相关，求矩阵的 LU 分解
+****************************************************************************************************************************************************************************/
+void DecompositionCroutLU(double **arr, double **Larr, double Uarr, int order) //  矩阵的 LU 分解
 {
 
 }
 
+/****************************************************************************************************************************************************************************
+矩阵相关，求矩阵的 QR分解
+****************************************************************************************************************************************************************************/
 
-void DecompositionSVD(double **arr, double **Sarr, double **Varr, double **Darr,  int order) //  矩阵的 SVD 分解
+void DecompositionQR(double **arr, double **Qarr, double Rarr, int order) //  矩阵的 QR 分解
 {
 
 }
 
-int main()
+
+/****************************************************************************************************************************************************************************
+矩阵相关，求矩阵的 SVD分解
+****************************************************************************************************************************************************************************/
+
+
+void DecompositionSVD(double **arr, double **Sarr, double Varr, double Darr,  int order) //  矩阵的 SVD 分解
 {
-    //=========================================================================================================
 
-    int order;
-    FILE *fp;
-
-	printf("请输入行列式阶数：");
-	scanf("%d", &order);
-    double **matrix;
-    //这样分配内存不连续,行内连续，行间不一定连续，
-    matrix = (double **)malloc(order * sizeof(double *));  //每一行的首地址分配内存，不一定连续
-    for (int i = 0; i < order; i++)
-    {
-        matrix[i] = (double *)malloc(order * sizeof(double)); //每一行一定连续
-    }
-
-
-	if ((fp = fopen("/home/jack/snap/Matrix.txt", "r")) == NULL){
-			fprintf(stderr, "\n Cannot open the file!!!\n");
-			exit(1);
-	}
-
-	for (int a = 0; a < order; a++) {
-		for (int b = 0; b < order; b++) {
-			fscanf(fp, "%lf", &matrix[a][b]);
-		}
-	}
-    fclose(fp);
-
-    printf("读取的 %d × %d 矩阵:\n",order,order);
-    Display2DFloatArray2DPoint(order, order, matrix);
-
-    printf("行列式为: %.10lf \n", DeterminantGaussNormal(matrix, order));
-    printf("行列式为: %.10lf \n", DeterminantGaussColPrime(matrix, order));
-    printf("行列式为: %.10lf \n", DeterminantGaussGlobPrime(matrix, order));
-    // printf("行列式为: %f\n", Determinant(matrix, order));
-    // printf("原来的 %d × %d 矩阵:\n",order,order);
-    // Display2DFloatArray2DPoint(order, order, matrix);
-
-
-
-
-
-    for(int i = 0;  i < order; ++i){
-        free(matrix[i]);
-        matrix[i] = NULL;
-    }
-    free(matrix);
-
-    //========================================================================================================
-    // int order;
-	// printf("请输入行列式阶数：");
-	// scanf("%d", &order);
-    // double **matrix;
-    // //这样分配内存不连续,行内连续，行间不一定连续，
-    // matrix = (double **)malloc(order * sizeof(double *));  //每一行的首地址分配内存，不一定连续
-    // for (int i = 0; i < order; i++)
-    // {
-    //     matrix[i] = (double *)malloc(order * sizeof(double)); //每一行一定连续
-    // }
-    // printf("输入一个 %d × %d 矩阵:\n",order,order);
-	// for (int a = 0; a < order; a++) {
-	// 	for (int b = 0; b < order; b++) {
-	// 		scanf("%lf", &matrix[a][b]);
-	// 	}
-	// }
-
-    // Display2DFloatArray2DPoint(order, order, matrix);
-
-    // printf("%f", Determinant(matrix, order));
-
-
-
-    // for(int i = 0;  i < order; ++i){
-    //     free(matrix[i]);
-    //     matrix[i] = NULL;
-    // }
-    // free(matrix);
-    // matrix = NULL;
-//=======================================================
-
-    return 0;
 }
+
 
 
 

@@ -22,11 +22,10 @@ A = np.random.randint(-5, 5, N**2)*1.11
 A = A.reshape(N, N)
 A[1,:] = A[0,:] 
 print(f"A is \n{A}")
-np.savetxt("/home/jack/snap/Matrix.txt", A, delimiter = ' ', fmt='%.04f')
 
-# [[2 5 5]
-#  [0 4 6]
-#  [5 8 8]]
 
+#np.savetxt("/home/jack/snap/Matrix.txt", A, delimiter = ' ', fmt='%.04f')
+
+ 
 
 print(np.linalg.det(A))
