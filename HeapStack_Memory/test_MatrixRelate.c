@@ -520,20 +520,158 @@ double DeterminantGaussGlobPrime(double **matrix, int order)
 
 /*****************************************************************************************
 功能: 利用高斯消元法计算矩阵的逆矩阵;
-注意: 高斯消元法也分为 普通的高斯消元法 和 列主元的高斯消元法  和 全主元的高斯消元法，这里是
+注意: 高斯消元法也分为  列主元的高斯消元法  和 全主元的高斯消元法，全主元的高斯消元法需要记录列交换的结果以后续的恢复顺序，相对麻烦。这里是列主元的高斯消元法。
+
+矩阵的初等变换又分为矩阵的初等行变换和矩阵的初等列变换。矩阵的初等行变换和初等列变换统称为初等变换。另外：分块矩阵也可以定义初等变换。
+定义：如果B可以由A经过一系列初等变换得到，则称矩阵A与B称为等价。
+
+数域V上的矩阵具有以下三种行变换：
+1）以V中一个非零的数，乘以矩阵的某一行
+2）把矩阵的某一行的a倍加到另一行(a∈V)
+3）互换矩阵中两行的位置
+矩阵A通过以上三种行变换变成矩阵B，称为A→B
+
+主元就是在矩阵消去过程中，每列的要保留的非零元素，用它可以把该列其他消去。在阶梯型矩阵中，主元就是每个非零行第一个非零元素就是主元。
+选择主元的方法：
+
+1）找到主对角线以下每列最大的数Max所在的行数k
+2）利用初等行变换——换行变换，将k行与当前主元行互换（记录总共换行次数n）
+3）以当前主元行为基，利用初等行变换——消法变换，将主对角线上下方消0
+4）行列式每次换行需变号，行列式最后的符号为
+5）每次进行高斯消去前都必须选择主元，计算n维的行列式，则需要进行n-1次主元选择
+
+
 
 数学知识: 对于阶数为 n 的矩阵A，求它的逆矩阵可以如下:
-1) 构造矩阵 B = [A, I]_{nx2n}
-2） 只能利用初等行变换将 B 化简为 B = [I, A^-1]的形式
+1) 构造矩阵 B = [A, I]_{nx2n} .
+2） 只能利用初等行变换将 B 化简为 B = [I, A^-1]的形式 .
 3) B 的右部分就是 A 的逆矩阵.
 
+整体流程：
+1）判断传入指针是否为空，判断矩阵是否为方针
+2）为增广矩阵、输出的逆矩阵开辟空间，并初始化为0
+3）将原矩阵中的数据拷贝到增广矩阵中，并将增广矩阵右侧化为单位阵
+4）逐列开始，选择主元，将其他位置化为0，每列阶梯位置化为1
+6）将增广矩阵右侧的逆矩阵拷贝到输入矩阵中，并释放增广矩阵内存
+
+
+https://blog.csdn.net/why1472587/article/details/128121958
+
+https://zhuanlan.zhihu.com/p/161831237
+
+https://blog.csdn.net/m0_46201544/article/details/125012646
+
+https://blog.csdn.net/qq_40843427/article/details/127371402
+
+https://blog.csdn.net/StoneColdSteve/article/details/115447020
 *****************************************************************************************/
-void InverseGauss(double **A, double **inverse, int order)
+void InverseGauss(double **matrix, double **inverse, int order)
 {
+    int k;
+    int maxrow;             // 暂存主元的行号
+    int maxcol;             // 暂存主元的列号
+    double maxval;             // 暂存对角线及以下元素的最大值
 
+	int sign = 0;			// 行列式交换一次需要改变符号，此变量记录交换次数
+	double tmp = 0;			    // 暂存乘积因子
+    double tmpv = 0;            // 暂存元素值
+	double sum = 1.0;       // 结果
+
+    // 检查指针是否为空
+    if(matrix == NULL){
+        printf("[exist.  file:%s,fun:%s, Line:%d,  ] \n", __FILE__, __func__, __LINE__);
+        exit(EXIT_FAILURE);
+    }
+
+    //=======================================================
+    // 为了消元过程不影响matrix, 先分配内存并拷贝数值;
+    //=======================================================
+    double **augmentArr;
+    augmentArr = (double **)malloc(order * sizeof(double *));     // 每一行的首地址分配内存，不一定连续
+    for (int i = 0; i < order; i++)
+    {
+        augmentArr[i] = (double *)malloc(2 * order * sizeof(double)); // 每一行一定连续
+    }
+
+	for (int i = 0; i < order; i++) {
+		for (int j = 0; j < order; j++) {
+			augmentArr[i][j] = matrix[i][j];
+		}
+	}
+    printf("拷贝的 %d × %d 矩阵:\n",order,order);
+    Display2DFloatArray2DPoint(order, 2 * order, augmentArr);
+
+    //================================================================
+    for(int i = 0; i < order - 1; ++i){// 遍历对角线, 消元是以对角线为主轴的.
+
+        maxval = fabs(arr[i][i]);
+        maxrow = i;
+        maxcol = i;
+        for(int j = i; j < order; ++j ){
+            for(int k = i; k < order; ++k){
+                if( fabs(arr[j][k]) > maxval ){
+                    maxrow = j;
+                    maxcol = k;
+                    maxval = fabs(arr[j][i]);
+                }
+            }
+        }
+        printf("i = %d, maxrow = %d, maxcol = %d, maxval = %lf\n", i, maxrow, maxcol, maxval);
+
+        if(maxval == 0.0)
+        {
+            // printf("max value is zero, exit \n");
+            return 0;
+        }
+        if(maxrow > i){
+            for(int j = 0; j < order; ++j)
+            {
+                tmpv = arr[maxrow][j];
+                arr[maxrow][j] = arr[i][j];
+                arr[i][j] = tmpv;
+            }
+            sign++;
+        }
+
+        if(maxcol > i){
+            for(int j = 0; j < order; ++j)
+            {
+                tmpv = arr[j][maxcol];
+                arr[j][maxcol] = arr[j][i];
+                arr[j][i] = tmpv;
+            }
+            sign++;
+        }
+
+        for(int k = i + 1; k < order; ++k){
+            if(arr[k][i] == 0.0){
+                continue;
+            }
+            else{
+                tmp = -(double)arr[k][i]/arr[i][i];;
+                for(int j = i; j < order; ++j){
+                    arr[k][j] += tmp*arr[i][j];
+                }
+            }
+        }
+    }
+
+	for(int i = 0; i < order; i++)
+		sum *= arr[i][i];
+    sum = sum * pow(-1, sign); // 考虑列交换的次数
+
+
+    //======================================
+    // 释放内存
+    //======================================
+    for(int i = 0;  i < order; ++i){
+        free(arr[i]);
+        arr[i] = NULL;
+    }
+    free(arr);
+
+	return sum;
 }
-
-
 
 
 /*****************************************************************************************
@@ -555,7 +693,6 @@ void LinalgSolve(double **A, double *b, int order)
 
 void DecompositionCroutLU(double **arr, double **Larr, double **Uarr, int order) //  矩阵的 LU 分解
 {
-
     for(int i = 0; i < order; ++i){
         for(int j = 0; j < order; ++j){
             if(i >= j){
@@ -580,7 +717,7 @@ void DecompositionSVD(double **arr, double **Sarr, double **Varr, double **Darr,
 
 }
 
-int main()
+int main(int argc, char *argv[])
 {
     //=========================================================================================================
 
