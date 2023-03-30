@@ -458,7 +458,7 @@ double DeterminantGaussGlobPrime(double **matrix, int order)
                 }
             }
         }
-        printf("i = %d, maxrow = %d, maxcol = %d, maxval = %lf\n", i, maxrow, maxcol, maxval);
+        // printf("i = %d, maxrow = %d, maxcol = %d, maxval = %lf\n", i, maxrow, maxcol, maxval);
 
         if(maxval == 0.0)
         {
@@ -516,9 +516,7 @@ double DeterminantGaussGlobPrime(double **matrix, int order)
 }
 
 
-
-
-/*****************************************************************************************
+/****************************************************************************************************************
 功能: 利用高斯消元法计算矩阵的逆矩阵;
 注意: 高斯消元法也分为  列主元的高斯消元法  和 全主元的高斯消元法，全主元的高斯消元法需要记录列交换的结果以后续的恢复顺序，相对麻烦。这里是列主元的高斯消元法。
 
@@ -564,7 +562,7 @@ https://blog.csdn.net/m0_46201544/article/details/125012646
 https://blog.csdn.net/qq_40843427/article/details/127371402
 
 https://blog.csdn.net/StoneColdSteve/article/details/115447020
-*****************************************************************************************/
+*********************************************************************************************************************/
 void InverseGauss(double **matrix, double **inverse, int order)
 {
     int k;
@@ -587,17 +585,24 @@ void InverseGauss(double **matrix, double **inverse, int order)
     // 为了消元过程不影响matrix, 先分配内存并拷贝数值;
     //=======================================================
     double **augmentArr;
-    augmentArr = (double **)malloc(order * sizeof(double *));     // 每一行的首地址分配内存，不一定连续
+    augmentArr = (double **)malloc(order * sizeof(double *));            // 每一行的首地址分配内存，不一定连续
     for (int i = 0; i < order; i++)
     {
-        augmentArr[i] = (double *)malloc(2 * order * sizeof(double)); // 每一行一定连续
+        augmentArr[i] = (double *)malloc(2 * order * sizeof(double));   // 每一行一定连续
+        memset(augmentArr[i], 0,  2 * order * sizeof(double));          // 初始化
     }
 
+
 	for (int i = 0; i < order; i++) {
+        // 进行数据拷贝
 		for (int j = 0; j < order; j++) {
 			augmentArr[i][j] = matrix[i][j];
 		}
+
+        //将增广矩阵右侧变为单位阵
+        augmentArr[i][order + i] = 1;
 	}
+
     printf("拷贝的 %d × %d 矩阵:\n",order,order);
     Display2DFloatArray2DPoint(order, 2 * order, augmentArr);
 
@@ -656,21 +661,19 @@ void InverseGauss(double **matrix, double **inverse, int order)
         }
     }
 
-	for(int i = 0; i < order; i++)
-		sum *= arr[i][i];
-    sum = sum * pow(-1, sign); // 考虑列交换的次数
+
 
 
     //======================================
     // 释放内存
     //======================================
     for(int i = 0;  i < order; ++i){
-        free(arr[i]);
-        arr[i] = NULL;
+        free(augmentArr[i]);
+        augmentArr[i] = NULL;
     }
-    free(arr);
+    free(augmentArr);
 
-	return sum;
+
 }
 
 
@@ -727,7 +730,7 @@ int main(int argc, char *argv[])
 	printf("请输入行列式阶数：");
 	scanf("%d", &order);
     double **matrix;
-    //这样分配内存不连续,行内连续，行间不一定连续，
+    // 分配内存
     matrix = (double **)malloc(order * sizeof(double *));  //每一行的首地址分配内存，不一定连续
     for (int i = 0; i < order; i++)
     {
@@ -750,17 +753,35 @@ int main(int argc, char *argv[])
     printf("读取的 %d × %d 矩阵:\n",order,order);
     Display2DFloatArray2DPoint(order, order, matrix);
 
+    // 计算行列式 测试程序
     printf("行列式为: %.10lf \n", DeterminantGaussNormal(matrix, order));
     printf("行列式为: %.10lf \n", DeterminantGaussColPrime(matrix, order));
     printf("行列式为: %.10lf \n", DeterminantGaussGlobPrime(matrix, order));
-    // printf("行列式为: %f\n", Determinant(matrix, order));
-    // printf("原来的 %d × %d 矩阵:\n",order,order);
-    // Display2DFloatArray2DPoint(order, order, matrix);
+    // // printf("行列式为: %f\n", Determinant(matrix, order));
+    // // printf("原来的 %d × %d 矩阵:\n",order,order);
+    // // Display2DFloatArray2DPoint(order, order, matrix);
 
 
+    // 计算矩阵的逆矩阵 测试程序
+    double **Inverse;
+    // 分配内存
+    Inverse = (double **)malloc(order * sizeof(double *));  //每一行的首地址分配内存，不一定连续
+    for (int i = 0; i < order; i++)
+    {
+        Inverse[i] = (double *)malloc(order * sizeof(double)); //每一行一定连续
+    }
+
+    InverseGauss(matrix, Inverse, order);
 
 
+    // 释放内存
+    for(int i = 0;  i < order; ++i){
+        free(Inverse[i]);
+        Inverse[i] = NULL;
+    }
+    free(Inverse);
 
+    // 释放内存
     for(int i = 0;  i < order; ++i){
         free(matrix[i]);
         matrix[i] = NULL;

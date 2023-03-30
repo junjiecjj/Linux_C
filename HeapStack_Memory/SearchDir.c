@@ -261,7 +261,7 @@ void useListFileInDir(void)
 	int MaxFileNum = 100;
 	char Dir[255];
 
-	strncpy(Dir, "./", 255);
+	strncpy(Dir, "./", 10);
 
 	// 分配内存
 	char **filelist;

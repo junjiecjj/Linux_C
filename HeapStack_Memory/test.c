@@ -46,5 +46,39 @@ int main(int argc, char *argv[])
 
     printf("mse = %.4lf, psnar = %.4lf \n", mse, psnr);
 
+    int m_pic_W = 1751, m_pic_H = 891, m_pic_C = 3;
+
+
+    int MidH = 0, MidW = 0, MidC = 3;
+	MidC = m_pic_C;
+
+    int m_pic_pix_mid_len = 9360960; // 1572960  9360960
+
+	double k  = 0;
+	k = (double) m_pic_W/m_pic_H;
+
+
+
+
+	MidH = (int) floor(sqrt((double) m_pic_pix_mid_len / (MidC * k)));
+	MidW = (int) floor(k*MidH);
+
+
+    printf("m_pic_H = %d, m_pic_W = %d, m_pic_C = %d\n", m_pic_H, m_pic_W, m_pic_C);
+    printf("MidH = %d, MidW = %d, MidC = %d\n", MidH, MidW, MidC);
+
+    char  MidBefDecSaveFilename[80];
+
+    char MidAfEncSaveFilename[90];
+	char  pic[20];
+	char  name[20];
+    double snr = 2.25;
+
+    sprintf(pic, "Lena");
+	sprintf(name, "lena");
+    sprintf(MidAfEncSaveFilename, "./%s_AfEnc_MiddleResult/%s_AfEnc_Mid_SNR=%4.2f.txt", pic, name, snr);
+
+    printf("\n\nMidAfEncSaveFilename = %s\n", MidAfEncSaveFilename);
+
     return 0;
 }

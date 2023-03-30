@@ -17,15 +17,16 @@ np.set_printoptions(suppress=True, threshold=np.inf)
 np.set_printoptions(precision=4)   # precision 设置浮点数的精度 （默认值：8）
 
 
-N = 20
+N = 10
 A = np.random.randint(-5, 5, N**2)*1.11
 A = A.reshape(N, N)
-A[1,:] = A[0,:] 
-print(f"A is \n{A}")
+
+#A[1,:] = A[0,:] 
+print(f"A is \n{A}\n")
 
 
-#np.savetxt("/home/jack/snap/Matrix.txt", A, delimiter = ' ', fmt='%.04f')
+np.savetxt("/home/jack/snap/Matrix.txt", A, delimiter = ' ', fmt='%.04f')
 
  
-
-print(np.linalg.det(A))
+print(f"Det of A is :\n{np.linalg.det(A)}\n")
+print(f"inverse of A is :\n{np.linalg.inv(A)}")
