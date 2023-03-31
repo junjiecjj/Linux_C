@@ -20,7 +20,7 @@
 int main(int argc, char *argv[]) {
 
   printf("使用system调研shell cmd的演示示例......\n");
-  printf(DEEPGREEN_YELLOW "-------------------------------------例子1-----------------------------------------\n""\033[0m" COLOR_RESET);
+  printf(  "-------------------------------------例子1-----------------------------------------\n" );
   char *argv_1[] = {"ls", "-al", "/etc/passwd", NULL};
 
   if (vfork() == 0) {
@@ -51,8 +51,7 @@ int main(int argc, char *argv[]) {
 
   printf("----------------------------------------------------------------------------\n");
   // res = execv("/bin/ps", ps_argv); //此后的程序不会在运行
-  printf("[File:%s, Function:%s, Line:%d, Time:%s, %s], res = %d \n", __FILE__,
-         __func__, __LINE__, __DATE__, __TIME__, res);
+  printf("[File:%s, Function:%s, Line:%d, Time:%s, %s], res = %d \n", __FILE__, __func__, __LINE__, __DATE__, __TIME__, res);
 
   printf("-------------------------------------例子2 execvp 函数-----------------------------------------\n");
 
@@ -71,8 +70,7 @@ int main(int argc, char *argv[]) {
 
   printf("---------------------------------------------------------------------------------------------------\n");
   // res = execvp("ps", ps_argv); //此后的程序不会在运行
-  printf("[File:%s, Function:%s, Line:%d, Time:%s, %s], res = %d \n\n\n",
-         __FILE__, __func__, __LINE__, __DATE__, __TIME__, res);
+  printf("[File:%s, Function:%s, Line:%d, Time:%s, %s], res = %d \n\n\n", __FILE__, __func__, __LINE__, __DATE__, __TIME__, res);
 
   printf("-------------------------------------例子3 execve 函数--------------------------------------------\n");
 
@@ -93,8 +91,7 @@ int main(int argc, char *argv[]) {
   printf("------------------------------------------------------------------------------------------------\n");
 
   // res = execve("/bin/ps", ps_argv, ps_envp); //此后的程序不会在运行
-  printf("[File:%s, Function:%s, Line:%d, Time:%s, %s], res = %d \n\n\n",
-         __FILE__, __func__, __LINE__, __DATE__, __TIME__, res);
+  printf("[File:%s, Function:%s, Line:%d, Time:%s, %s], res = %d \n\n\n", __FILE__, __func__, __LINE__, __DATE__, __TIME__, res);
   printf("-------------------------------------例子4 execl 函数-------------------------------------------\n");
 
   if (fork() == 0) {
@@ -112,8 +109,7 @@ int main(int argc, char *argv[]) {
   printf("-----------------------------------------------------------------------------------------------\n");
 
   // res = execl("/bin/ps", "ps", "ax", 0); //此后的程序不会在运行
-  printf("[File:%s, Function:%s, Line:%d, Time:%s, %s], res = %d \n", __FILE__,
-         __func__, __LINE__, __DATE__, __TIME__, res);
+  printf("[File:%s, Function:%s, Line:%d, Time:%s, %s], res = %d \n", __FILE__, __func__, __LINE__, __DATE__, __TIME__, res);
   printf("-------------------------------------例子5 execlp 函数-----------------------------------------\n");
 
   if (fork() == 0) {
@@ -131,8 +127,7 @@ int main(int argc, char *argv[]) {
   printf("-----------------------------------------------------------------------------------------------\n");
 
   // res = execlp("ps", "ps", "ax", 0); //此后的程序不会在运行
-  printf("[File:%s, Function:%s, Line:%d, Time:%s, %s], res = %d \n\n\n",
-         __FILE__, __func__, __LINE__, __DATE__, __TIME__, res);
+  printf("[File:%s, Function:%s, Line:%d, Time:%s, %s], res = %d \n\n\n", __FILE__, __func__, __LINE__, __DATE__, __TIME__, res);
   printf("-------------------------------------例子6 execle 函数-----------------------------------------\n");
 
   if (fork() == 0) {
@@ -151,8 +146,7 @@ int main(int argc, char *argv[]) {
   printf("-----------------------------------------------------------------------------------------------\n");
 
   res = execle("/bin/ps", "ps", "ax", 0, ps_envp); //此后的程序不会在运行
-  printf("[File:%s, Function:%s, Line:%d, Time:%s, %s], res = %d \n\n\n",
-         __FILE__, __func__, __LINE__, __DATE__, __TIME__, res);
+  printf("[File:%s, Function:%s, Line:%d, Time:%s, %s], res = %d \n\n\n", __FILE__, __func__, __LINE__, __DATE__, __TIME__, res);
 
   printf("-------------------------------------结束-----------------------------------------------------\n");
 

@@ -62,7 +62,7 @@ void useGetPwd(void)
 	char path[PATH_SIZE];
 	GetPwd(path);
 	//printf("Current Path is: %s\n", path);
-	printf("[file:%s,fun:%s, Line:%d, Current Path:%s] \n", __FILE__, __func__, __LINE__, path);
+	printf("[file:%s,fun:%s, Line:%d, Current Path:%s] \n\n", __FILE__, __func__, __LINE__, path);
 }
 
 
@@ -92,14 +92,20 @@ void  BaseNameDirName(void)
     path = strdup(s_filepath);
     printf("1 -- path = %s\n", path);
     printf("FILE_PATH - PATH : %s\n", dirname(path));
-    printf("2 -- path = %s\n", path);  // 从结果也可以看出dirname修改了传入的路径内容。
+    printf("2 -- path = %s\n\n", path);  // 从结果也可以看出dirname修改了传入的路径内容。
 
     free(path);
 }
 
 
+
 /**********************************************************************
-功能: 创建目录(可以是多级目录)，如果已经存在，则什么也不做.
+功能: 创建目录(可以是多级目录), 果已经存在，则什么也不做.
+输入:
+    testDira/test1/test2
+    ~/testDira/test1/test2
+    ./testDira/test1/test2
+    ../../testDira/test1/test2
 ***********************************************************************/
 void mkMultiDirs(char *muldir){
 	// check the parameter !
@@ -122,7 +128,7 @@ void mkMultiDirs(char *muldir){
 			if( str[i] == '/' )
 			{
 				str[i] = '\0';
-
+        		// printf("i = %d, str = %s\n", i, str);
 				if( access(str, R_OK)!=0 )
 				{
 					mkdir(str, 0777);
@@ -130,7 +136,7 @@ void mkMultiDirs(char *muldir){
 				str[i]='/';
 			}
 		}
-		printf("str = %s\n", str);
+		// printf("str = %s\n", str);
 		if( len>0 && access(str,R_OK)!=0 )
 		{
 			mkdir( str, 0777 );
@@ -146,6 +152,11 @@ void mkMultiDirs(char *muldir){
 
 /**********************************************************************
 功能: 通过 System调用shell命令 创建目录(可以是多级目录)，如果已经存在，则什么也不做.
+输入:
+    testDira/test1/test2
+    ~/testDira/test1/test2
+    ./testDira/test1/test2
+    ../../testDira/test1/test2
 ***********************************************************************/
 void mkMultiDirsBySystem(char *muldir){
 	// check the parameter !
@@ -155,21 +166,29 @@ void mkMultiDirsBySystem(char *muldir){
 		exit(EXIT_FAILURE);
 	}
 
-	DIR *mydir;
-    if((mydir = opendir(muldir)) == NULL){
-		char cmd[1000];
-		strncpy(cmd, muldir, sizeof(cmd))
+	// printf("strlen multidir = %lu\n", strlen(muldir));
+
+	char cmd[1000];
+	char filesavepath[500];
+	// printf("strlen(cmd) = %lu, (filesavepath) = %lu\n", strlen(cmd), strlen(filesavepath));
+
+		DIR *mydir;
+
+	if((mydir = opendir(muldir)) == NULL){
+		strncpy(filesavepath, muldir, sizeof(filesavepath));
+		//printf("filesavepath = %s\n", filesavepath);
 		sprintf(cmd,"mkdir -p %s",filesavepath); // 组成命令
+		//printf("cmd = %s\n", cmd);
 		system(cmd); // 建路径
 
 	}
-    else
-    {
-		printf("%s already exists !!!\n\n",muldir);
+	else{
+		printf("%s already exists !!!\n\n", muldir);
 		closedir(mydir);
-    }
-    return;
+	}
+	return;
 }
+
 
 /**********************************************************************
 功能: 创建目录(只能是单级，不能是多级目录)，如果已经存在，则什么也不做.
@@ -453,8 +472,117 @@ void useListAbsFileInDir(void)
 }
 
 
+/**********************************************************************
+功能:  分离目录和文件名
+输入:
+	filename： 例如： /home/jack/公共的/ShellScript/USB.sh
+
+输出:
+	Dirname： /home/jack/公共的/ShellScript/
+	Basename： USB.sh
+
+一、提取文件名
+头文件：#include <libgen.h>
+**函数：**char *basename(char *path);
+
+注：这个函数不会修改传入的 path 内容。
+
+二、提取路径
+头文件：#include <libgen.h>
+**函数：**char *dirname(char *path);
+
+注：这个函数会修改传入的 path 内容，如果不像path被改变需要重新申请一个buf传入，如果传入的是宏则会段错误。
+
+***********************************************************************/
+void GetDirnameBasename(char *filename, char *Dirname, char *Basename)
+{
+
+    char buf[1024] = {0}; // 缓冲区
+    char dname[1024] = {0}; // 目录
+    char bname[1024] = {0}; // 文件名
 
 
+    strcpy(buf, filename);
+	//printf("buf = %s\n", buf);
+    /*
+    Return directory part of PATH or "." if none is available.
+    extern char *dirname (char *__path) __THROW;
+    */
+   	// dirname函数会对输入进行修改
+    strcpy(Dirname, dirname(buf));
+	//printf("Dirname = %s\n", Dirname);
+
+    /*
+        Return final component of PATH.
+        extern char *__xpg_basename (char *__path) __THROW;
+        #define basename	__xpg_basename
+    */
+    strcpy(Basename, basename(filename));
+    //printf("Basename = %s\n", Basename);
+}
+
+
+
+void useGetDirnameBasename(void)
+{
+	char filename[1024] = "./home/jack/公共的/ShellScript/USB.sh";
+	char DirName[1024];
+	char BaseName[1024];
+	GetDirnameBasename(filename, DirName,BaseName);
+
+	printf("filename = %s\n", filename);
+	printf("DirName = %s\n", DirName);
+	printf("BaseName = %s\n\n", BaseName);
+
+}
+
+
+/**********************************************************************
+功能:  分离文件名和后缀
+输入:
+	filename： 例如：  USB.sh
+
+输出:
+	Dirname： USB，  jpg文件名
+	Basename： sh，   后缀
+***********************************************************************/
+int GetFilenameExtensionname(char *filename, char *basename, char *extname)
+{
+
+    char* pDest = NULL;
+    int iNameLen = 0;               // 不包括后缀名的文件名长度
+
+
+    pDest = strrchr(filename, '.'); // 返回"."的char*
+    if (NULL == pDest)
+    {
+        return -1;
+    }
+    iNameLen = pDest - filename;
+
+    strncpy(basename, filename, iNameLen);
+    //printf("file name(no ext): %s\n", basename );
+    strcpy(extname, pDest+1);
+    //printf("file extension: %s\n", extname);
+    return 0;
+}
+
+
+void useGetFilenameExtensionname(void)
+{
+	char filename[1024] = "deepstream_loulan_detection.cpp";
+	char iFileName[1024];
+	char szExtName[1024];
+	if(GetFilenameExtensionname(filename, iFileName, szExtName) == 0){
+		printf("filename = %s\n", filename);
+		printf("DirName = %s\n", iFileName);
+		printf("BaseName = %s\n", szExtName);
+	}
+	else{
+		printf("分离文件名和后缀名失败\n");
+	}
+
+}
 
 
 
@@ -473,6 +601,9 @@ void mainSearchDir(void)
 	useListAbsFileInDir();
 
 	BaseNameDirName();
+
+	useGetDirnameBasename();
+	useGetFilenameExtensionname();
 
 
 

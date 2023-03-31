@@ -37,8 +37,7 @@ bool detect_process_exsit(const char *processName) {
   if (pReponse != NULL) {
     fscanf(pReponse, "%u\n", &uiResponseData);
     printf("uiResponseData = %u\n", uiResponseData);
-    if (uiResponseData >=
-        2) //这里需要注意的是，如果当前进程已经运行，正常时命令行返回为2，但在有的板卡上popen()函数返回为4
+    if (uiResponseData >= 2) //这里需要注意的是，如果当前进程已经运行，正常时命令行返回为2，但在有的板卡上popen()函数返回为4
     {
       printf("程序 %s 正在运行........!\n", processName);
       pclose(pReponse);
@@ -50,9 +49,7 @@ bool detect_process_exsit(const char *processName) {
 }
 
 int main(int argc, char *argv[]) {
-  printf(DEEPGREEN_YELLOW "-------------------------------------例子1----------"
-                          "-------------------------------\n"
-                          "\033[0m" COLOR_RESET);
+  printf("-------------------------------------例子1-----------------------------------------\n");
 
   FILE *fp;
   char buffer[80];
@@ -63,9 +60,7 @@ int main(int argc, char *argv[]) {
   /* printf("%s", buffer); */
   pclose(fp);
 
-  printf(DEEPGREEN_YELLOW "-------------------------------------例子2----------"
-                          "-------------------------------\n"
-                          "\033[0m" COLOR_RESET);
+  printf("-------------------------------------例子2-----------------------------------------\n");
   printf("%s\n", argv[1]);
 
   if (true == detect_process_exsit(argv[1])) {
@@ -78,9 +73,6 @@ int main(int argc, char *argv[]) {
     printf("hello,dick .........\n");
   }
 
-  printf(DEEPGREEN_YELLOW
-         "------------------------------------------结束--------"
-         "-------------------------------\n"
-         "\033[0m" COLOR_RESET);
+  printf("------------------------------------------结束---------------------------------------\n");
   exit(0);
 }

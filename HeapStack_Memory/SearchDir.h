@@ -91,7 +91,30 @@ https://blog.csdn.net/lang523493505/article/details/122558431
 void  BaseNameDirName(void);
 
 
-void mkmultiDirs(char *muldir);
+
+/**********************************************************************
+函数： void mkMultiDirs(char *muldir);
+功能: 创建目录(可以是多级目录), 果已经存在，则什么也不做.
+输入:
+    testDira/test1/test2
+    ~/testDira/test1/test2
+    ./testDira/test1/test2
+    ../../testDira/test1/test2
+***********************************************************************/
+void mkMultiDirs(char *muldir);
+
+
+
+/**********************************************************************
+函数：void mkMultiDirsBySystem(char *muldir);
+功能: 通过 System调用shell命令 创建目录(可以是多级目录)，如果已经存在，则什么也不做.
+输入:
+    testDira/test1/test2
+    ~/testDira/test1/test2
+    ./testDira/test1/test2
+    ../../testDira/test1/test2
+***********************************************************************/
+void mkMultiDirsBySystem(char *muldir);
 
 
 
@@ -111,8 +134,8 @@ void  ListDir(char *Dirname, int MaxFileNum);
 int  ListFileInDir(char *Dirname, int MaxFileNum, char **FileName);
 void useListFileInDir(void);
 
-
-
+void GetDirnameBasename(char *filename, char *dirname, char *basename);
+void useGetDirnameBasename(void);
 
 
 void mainSearchDir(void);

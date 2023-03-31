@@ -75,6 +75,14 @@ void mkdirs(char *muldir){
     return;
 }
 
+/**********************************************************************
+功能: 创建目录(可以是多级目录), 果已经存在，则什么也不做.
+输入:
+    testDira/test1/test2
+    ~/testDira/test1/test2
+    ./testDira/test1/test2
+    ../../testDira/test1/test2
+***********************************************************************/
 void mkMultiDirs(char *muldir){
 	// check the parameter !
 	if( NULL == muldir )
@@ -87,56 +95,77 @@ void mkMultiDirs(char *muldir){
     char str[512];
     strncpy(str, muldir, 512);
     len = strlen(str);
-    printf("len = %d\n", len);
 
-	  DIR *mydir;
-    if((mydir = opendir(muldir)) == NULL){
-      for(int i = 0; i<len; i++ )
-      {
-        if( str[i] == '/' )
-        {
-          str[i] = '\0';
 
-          if( access(str, R_OK)!=0 )
-          {
-            mkdir(str, 0777);
-          }
-          str[i]='/';
-        }
-      }
-      printf("str = %s\n", str);
-      if( len>0 && access(str,R_OK)!=0 )
-      {
-        mkdir( str, 0777 );
-      }
-    }
-    else{
-      printf("%s already exists !!!\n\n",muldir);
-      closedir(mydir);
-    }
+	DIR *mydir;
+	if((mydir = opendir(muldir)) == NULL){
+		for(int i = 0; i < len; i++ )
+		{
+			if( str[i] == '/' )
+			{
+				str[i] = '\0';
+        // printf("i = %d, str = %s\n", i, str);
+				if( access(str, R_OK)!=0 )
+				{
+					mkdir(str, 0777);
+				}
+				str[i]='/';
+			}
+		}
+		printf("str = %s\n", str);
+		if( len>0 && access(str,R_OK)!=0 )
+		{
+			mkdir( str, 0777 );
+		}
+	}
+	else
+	{
+		printf("%s already exists !!!\n\n",muldir);
+		closedir(mydir);
+	}
     return;
 }
 
+/**********************************************************************
+功能: 通过 System调用shell命令 创建目录(可以是多级目录)，如果已经存在，则什么也不做.
+输入:
+    testDira/test1/test2
+    ~/testDira/test1/test2
+    ./testDira/test1/test2
+    ../../testDira/test1/test2
+***********************************************************************/
 void mkMultiDirsBySystem(char *muldir){
 	// check the parameter !
-  if( NULL == muldir )
+	if( NULL == muldir )
 	{
 		printf("dir_name is null ! \n");
 		exit(EXIT_FAILURE);
 	}
 
+  printf("strlen multidir = %lu\n", strlen(muldir));
 
-	  DIR *mydir;
-    if((mydir = opendir(muldir)) == NULL){
-      system("mkdir -p ./testDir/test1/test2");
-      }
-    else
-    {
-      printf("%s already exists !!!\n\n",muldir);
-      closedir(mydir);
-    }
-    return;
+  char cmd[1000];
+  char filesavepath[500];
+  printf("strlen(cmd) = %lu, (filesavepath) = %lu\n", strlen(cmd), strlen(filesavepath));
+
+	DIR *mydir;
+
+  if((mydir = opendir(muldir)) == NULL){
+
+		strncpy(filesavepath, muldir, sizeof(filesavepath));
+    printf("filesavepath = %s\n", filesavepath);
+		sprintf(cmd,"mkdir -p %s",filesavepath); // 组成命令
+    printf("cmd = %s\n", cmd);
+		system(cmd); // 建路径
+
+	}
+  else{
+		printf("%s already exists !!!\n\n",muldir);
+		closedir(mydir);
+  }
+  return;
 }
+
 
 
 int main(int argc, char *argv[]) {
@@ -152,9 +181,9 @@ int main(int argc, char *argv[]) {
   printf("------------------------------------例子2 mkdir 命令 ----------------------------------------\n");
   double SNR = 2.50;
 
-  system("mkdir -p ./testDir/test1/test2");
+  // system("mkdir -p ./testDir/test1/test2");
 
-  mkmultiDirs("./testDira/test1/test2");
+  mkMultiDirs("../../testDira/test1/test2");
 
   printf("---------------------------------------------结束----------------------------------------\n");
 
