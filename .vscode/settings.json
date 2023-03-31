@@ -19,7 +19,8 @@
         "vlamal.h": "c",
         "s_and_r.h": "c",
         "stdio.h": "c",
-        "utility.h": "c"
+        "utility.h": "c",
+        "searchdir.h": "c"
     },
     "workbench.colorCustomizations": {
         "activityBar.background": "#392C12",

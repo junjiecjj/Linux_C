@@ -1,4 +1,6 @@
-/*
+
+
+/*********************************************************************************************
 	int mkdir(const char *pathname, mode_t mode);
 	mode方式：
 	S_IRWXU 	00700权限，代表该文件所有者拥有读，写和执行操作的权限
@@ -14,9 +16,7 @@
 	S_IWOTH 	00002权限，代表其他用户拥有可写的权限
 	S_IXOTH 	00001权限，代表其他用户拥有执行的权限
 
-*/
 
-/*
 	参数 mode 有下列数种组合：
 	S_ISUID 04000 文件的 (set user-id on execution)位
 	S_ISGID 02000 文件的 (set group-id on execution)位
@@ -31,7 +31,7 @@
 	S_IWOTH 00002 其他用户具可写入权限
 	S_IXOTH 00001 其他用户具可执行权限
 
-*/
+*********************************************************************************************/
 
 
 /***********************************************************
@@ -49,7 +49,6 @@
 ***********************************************************************/
 void GetPwd(char *CurrentDir)
 {
-
 	if(getcwd(CurrentDir, PATH_SIZE) == NULL){
 		printf("Get path fail!\n");
 		exit(EXIT_FAILURE);
@@ -99,6 +98,78 @@ void  BaseNameDirName(void)
 }
 
 
+/**********************************************************************
+功能: 创建目录(可以是多级目录)，如果已经存在，则什么也不做.
+***********************************************************************/
+void mkMultiDirs(char *muldir){
+	// check the parameter !
+	if( NULL == muldir )
+	{
+		printf("dir_name is null ! \n");
+		exit(EXIT_FAILURE);
+	}
+
+    int  len;
+    char str[512];
+    strncpy(str, muldir, 512);
+    len = strlen(str);
+
+
+	DIR *mydir;
+	if((mydir = opendir(muldir)) == NULL){
+		for(int i = 0; i < len; i++ )
+		{
+			if( str[i] == '/' )
+			{
+				str[i] = '\0';
+
+				if( access(str, R_OK)!=0 )
+				{
+					mkdir(str, 0777);
+				}
+				str[i]='/';
+			}
+		}
+		printf("str = %s\n", str);
+		if( len>0 && access(str,R_OK)!=0 )
+		{
+			mkdir( str, 0777 );
+		}
+	}
+	else
+	{
+		printf("%s already exists !!!\n\n",muldir);
+		closedir(mydir);
+	}
+    return;
+}
+
+/**********************************************************************
+功能: 通过 System调用shell命令 创建目录(可以是多级目录)，如果已经存在，则什么也不做.
+***********************************************************************/
+void mkMultiDirsBySystem(char *muldir){
+	// check the parameter !
+	if( NULL == muldir )
+	{
+		printf("dir_name is null ! \n");
+		exit(EXIT_FAILURE);
+	}
+
+	DIR *mydir;
+    if((mydir = opendir(muldir)) == NULL){
+		char cmd[1000];
+		strncpy(cmd, muldir, sizeof(cmd))
+		sprintf(cmd,"mkdir -p %s",filesavepath); // 组成命令
+		system(cmd); // 建路径
+
+	}
+    else
+    {
+		printf("%s already exists !!!\n\n",muldir);
+		closedir(mydir);
+    }
+    return;
+}
 
 /**********************************************************************
 功能: 创建目录(只能是单级，不能是多级目录)，如果已经存在，则什么也不做.

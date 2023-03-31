@@ -5,17 +5,7 @@
 
 
 
-#include <stdio.h>
-#include <stdlib.h>
-//  #include <float.h>
-#include <limits.h>
-#include <math.h>
-#include <string.h>
-//#include <sys/socket.h>
-#include <stddef.h>
-#include <locale.h>
-#include <time.h>
-#include <complex.h>
+#include "StdAfx.h"
 
 
 #define PI            3.14159265358979
