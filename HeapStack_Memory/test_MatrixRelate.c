@@ -44,7 +44,7 @@ void Display2DFloatArray2DPoint(int rows, int cols, double **arr)
 {
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
-            printf("%-12.3lf", arr[i][j]);
+            printf("%-12.5lf", arr[i][j]);
             //printf("%5d  ", A[i*cols+j]);  //错误的做法
         }
     printf("\n");
@@ -553,15 +553,9 @@ double DeterminantGaussGlobPrime(double **matrix, int order)
 6）将增广矩阵右侧的逆矩阵拷贝到输入矩阵中，并释放增广矩阵内存
 
 
-https://blog.csdn.net/why1472587/article/details/128121958
+初等变换法是常用的矩阵求逆方法之一。
+相对于伴随法，初等行变换法有着较低的时间复杂度，可以进行相对高维的矩阵运算，但同时也会损失一点点精度。
 
-https://zhuanlan.zhihu.com/p/161831237
-
-https://blog.csdn.net/m0_46201544/article/details/125012646
-
-https://blog.csdn.net/qq_40843427/article/details/127371402
-
-https://blog.csdn.net/StoneColdSteve/article/details/115447020
 *********************************************************************************************************************/
 void InverseGauss(double **matrix, double **inverse, int order)
 {
@@ -581,88 +575,92 @@ void InverseGauss(double **matrix, double **inverse, int order)
         exit(EXIT_FAILURE);
     }
 
-    //=======================================================
+    //================================================================================
     // 为了消元过程不影响matrix, 先分配内存并拷贝数值;
-    //=======================================================
+    //================================================================================
     double **augmentArr;
     augmentArr = (double **)malloc(order * sizeof(double *));            // 每一行的首地址分配内存，不一定连续
-    for (int i = 0; i < order; i++)
-    {
+    for (int i = 0; i < order; i++){
         augmentArr[i] = (double *)malloc(2 * order * sizeof(double));   // 每一行一定连续
         memset(augmentArr[i], 0,  2 * order * sizeof(double));          // 初始化
     }
 
-
 	for (int i = 0; i < order; i++) {
-        // 进行数据拷贝
-		for (int j = 0; j < order; j++) {
-			augmentArr[i][j] = matrix[i][j];
-		}
+        // // 进行数据拷贝，方法一
+		// for (int j = 0; j < order; j++) {
+		// 	augmentArr[i][j] = matrix[i][j];
+		// }
+        // 进行数据拷贝,方法二
+        memcpy(augmentArr[i], matrix[i], sizeof(augmentArr[0][0]) * order);
+
 
         //将增广矩阵右侧变为单位阵
         augmentArr[i][order + i] = 1;
 	}
 
-    printf("拷贝的 %d × %d 矩阵:\n",order,order);
-    Display2DFloatArray2DPoint(order, 2 * order, augmentArr);
+    // printf("拷贝的 %d × %d 矩阵:\n",order,order);
+    // Display2DFloatArray2DPoint(order, 2 * order, augmentArr);
 
     //================================================================
-    for(int i = 0; i < order - 1; ++i){// 遍历对角线, 消元是以对角线为主轴的.
+    for(int i = 0; i < order; ++i){// 遍历对角线, 消元是以对角线为主轴的.
 
-        maxval = fabs(arr[i][i]);
+        //  整理增广矩阵，选主元
         maxrow = i;
-        maxcol = i;
+        maxval = fabs(augmentArr[maxrow][i]);
+
         for(int j = i; j < order; ++j ){
-            for(int k = i; k < order; ++k){
-                if( fabs(arr[j][k]) > maxval ){
-                    maxrow = j;
-                    maxcol = k;
-                    maxval = fabs(arr[j][i]);
-                }
+            if(fabs(augmentArr[j][i]) > maxval){
+                maxrow = j;
+                maxval = fabs(augmentArr[j][i]);
             }
         }
-        printf("i = %d, maxrow = %d, maxcol = %d, maxval = %lf\n", i, maxrow, maxcol, maxval);
+        // printf("i = %d, maxrow = %d, maxcol = %d, maxval = %lf\n", i, maxrow, maxcol, maxval);
+
 
         if(maxval == 0.0)
         {
-            // printf("max value is zero, exit \n");
-            return 0;
+            printf("some column max value is zero, no,inverse matrix exit \n");
+            exit(EXIT_FAILURE);
         }
-        if(maxrow > i){
-            for(int j = 0; j < order; ++j)
+        if(maxrow != i){
+            for(int k = 0; k < 2 * order; ++k)
             {
-                tmpv = arr[maxrow][j];
-                arr[maxrow][j] = arr[i][j];
-                arr[i][j] = tmpv;
+                tmpv = augmentArr[maxrow][k];
+                augmentArr[maxrow][k] = augmentArr[i][k];
+                augmentArr[i][k] = tmpv;
             }
             sign++;
         }
 
-        if(maxcol > i){
-            for(int j = 0; j < order; ++j)
-            {
-                tmpv = arr[j][maxcol];
-                arr[j][maxcol] = arr[j][i];
-                arr[j][i] = tmpv;
-            }
-            sign++;
-        }
-
-        for(int k = i + 1; k < order; ++k){
-            if(arr[k][i] == 0.0){
+        // 将每列其他元素化0
+        for(int k = 0; k < order; ++k){
+            if(k == i || augmentArr[k][i] == 0.0){
                 continue;
             }
             else{
-                tmp = -(double)arr[k][i]/arr[i][i];;
-                for(int j = i; j < order; ++j){
-                    arr[k][j] += tmp*arr[i][j];
+                tmp = -(double)augmentArr[k][i]/augmentArr[i][i];;
+                for(int j = 0; j < 2 * order; ++j){
+                    augmentArr[k][j] += tmp*augmentArr[i][j];
                 }
             }
         }
+
+        tmp = 1.0/augmentArr[i][i];
+        for(int j = 0; j < 2 * order; ++j){
+            augmentArr[i][j] *= tmp;
+        }
     }
 
-
-
+    // // 将逆矩阵部分拷贝到 inverse 中，方法一
+    // for(int i = 0; i < order; ++i){
+    //     for(int j = 0; j < order; ++j){
+    //         inverse[i][j] = augmentArr[i][j+order];
+    //     }
+    // }
+    // 将逆矩阵部分拷贝到 inverse 中, 方法二，内存拷贝
+    for(int i = 0; i < order; ++i){
+        memcpy(inverse[i], augmentArr[i] + order, sizeof(augmentArr[0][0]) * order);
+    }
 
     //======================================
     // 释放内存
@@ -672,8 +670,6 @@ void InverseGauss(double **matrix, double **inverse, int order)
         augmentArr[i] = NULL;
     }
     free(augmentArr);
-
-
 }
 
 
@@ -693,7 +689,22 @@ void LinalgSolve(double **A, double *b, int order)
 
 }
 
+/*****************************************************************************************
+功能: 矩阵的LU分解
 
+A = LU
+如果方针A可以分解为一个下三角矩阵L和一个上三角矩阵U的乘积，则称A可以作三角分解或LU分解；
+
+如果L是单位下三角阵， U是上三角矩阵，此时的三角分解称为杜立特分解(Doolittle)；
+如果L是下三角矩阵，U是单位上三角矩阵，此时的三角分解成为克劳特分解(Crout);
+
+输入:
+    arr：待分解矩阵
+    order: 矩阵的阶
+    Larr：分解后的 L 下三角矩阵
+    Uarr: 分解后的 U 上三角矩阵
+
+*****************************************************************************************/
 void DecompositionCroutLU(double **arr, double **Larr, double **Uarr, int order) //  矩阵的 LU 分解
 {
     for(int i = 0; i < order; ++i){
@@ -772,6 +783,8 @@ int main(int argc, char *argv[])
     }
 
     InverseGauss(matrix, Inverse, order);
+    printf("矩阵的逆矩阵为:\n");
+    Display2DFloatArray2DPoint(order, order, Inverse);
 
 
     // 释放内存

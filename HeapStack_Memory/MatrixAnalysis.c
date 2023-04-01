@@ -496,20 +496,163 @@ double DeterminantGaussGlobPrime(double **matrix, int order)
 矩阵相关，求矩阵的逆
 ****************************************************************************************************************************************************************************/
 
-/*****************************************************************************************
+
+/****************************************************************************************************************
 功能: 利用高斯消元法计算矩阵的逆矩阵;
-注意: 高斯消元法也分为 普通的高斯消元法 和 列主元的高斯消元法  和 全主元的高斯消元法，这里是
+注意: 高斯消元法也分为  列主元的高斯消元法  和 全主元的高斯消元法，全主元的高斯消元法需要记录列交换的结果以后续的恢复顺序，相对麻烦。这里是列主元的高斯消元法。
+
+矩阵的初等变换又分为矩阵的初等行变换和矩阵的初等列变换。矩阵的初等行变换和初等列变换统称为初等变换。另外：分块矩阵也可以定义初等变换。
+定义：如果B可以由A经过一系列初等变换得到，则称矩阵A与B称为等价。
+
+数域V上的矩阵具有以下三种行变换：
+1）以V中一个非零的数，乘以矩阵的某一行
+2）把矩阵的某一行的a倍加到另一行(a∈V)
+3）互换矩阵中两行的位置
+矩阵A通过以上三种行变换变成矩阵B，称为A→B
+
+主元就是在矩阵消去过程中，每列的要保留的非零元素，用它可以把该列其他消去。在阶梯型矩阵中，主元就是每个非零行第一个非零元素就是主元。
+选择主元的方法：
+
+1）找到主对角线以下每列最大的数Max所在的行数k
+2）利用初等行变换——换行变换，将k行与当前主元行互换（记录总共换行次数n）
+3）以当前主元行为基，利用初等行变换——消法变换，将主对角线上下方消0
+4）行列式每次换行需变号，行列式最后的符号为
+5）每次进行高斯消去前都必须选择主元，计算n维的行列式，则需要进行n-1次主元选择
+
+
 
 数学知识: 对于阶数为 n 的矩阵A，求它的逆矩阵可以如下:
-1) 构造矩阵 B = [A, I]_{nx2n}
-2） 只能利用初等行变换将 B 化简为 B = [I, A^-1]的形式
+1) 构造矩阵 B = [A, I]_{nx2n} .
+2） 只能利用初等行变换将 B 化简为 B = [I, A^-1]的形式 .
 3) B 的右部分就是 A 的逆矩阵.
 
-*****************************************************************************************/
-void InverseGauss(double **A, double **inverse)
-{
+整体流程：
+1）判断传入指针是否为空，判断矩阵是否为方针
+2）为增广矩阵、输出的逆矩阵开辟空间，并初始化为0
+3）将原矩阵中的数据拷贝到增广矩阵中，并将增广矩阵右侧化为单位阵
+4）逐列开始，选择主元，将其他位置化为0，每列阶梯位置化为1
+6）将增广矩阵右侧的逆矩阵拷贝到输入矩阵中，并释放增广矩阵内存
 
+
+初等变换法是常用的矩阵求逆方法之一。
+相对于伴随法，初等行变换法有着较低的时间复杂度，可以进行相对高维的矩阵运算，但同时也会损失一点点精度。
+
+*********************************************************************************************************************/
+void InverseGauss(double **matrix, double **inverse, int order)
+{
+    int k;
+    int maxrow;             // 暂存主元的行号
+    int maxcol;             // 暂存主元的列号
+    double maxval;             // 暂存对角线及以下元素的最大值
+
+	int sign = 0;			// 行列式交换一次需要改变符号，此变量记录交换次数
+	double tmp = 0;			    // 暂存乘积因子
+    double tmpv = 0;            // 暂存元素值
+	double sum = 1.0;       // 结果
+
+    // 检查指针是否为空
+    if(matrix == NULL){
+        printf("[exist.  file:%s,fun:%s, Line:%d,  ] \n", __FILE__, __func__, __LINE__);
+        exit(EXIT_FAILURE);
+    }
+
+    //================================================================================
+    // 为了消元过程不影响matrix, 先分配内存并拷贝数值;
+    //================================================================================
+    double **augmentArr;
+    augmentArr = (double **)malloc(order * sizeof(double *));            // 每一行的首地址分配内存，不一定连续
+    for (int i = 0; i < order; i++){
+        augmentArr[i] = (double *)malloc(2 * order * sizeof(double));   // 每一行一定连续
+        memset(augmentArr[i], 0,  2 * order * sizeof(double));          // 初始化
+    }
+
+	for (int i = 0; i < order; i++) {
+        // // 进行数据拷贝，方法一
+		// for (int j = 0; j < order; j++) {
+		// 	augmentArr[i][j] = matrix[i][j];
+		// }
+        // 进行数据拷贝,方法二
+        memcpy(augmentArr[i], matrix[i], sizeof(augmentArr[0][0]) * order);
+
+
+        //将增广矩阵右侧变为单位阵
+        augmentArr[i][order + i] = 1;
+	}
+
+    // printf("拷贝的 %d × %d 矩阵:\n",order,order);
+    // Display2DFloatArray2DPoint(order, 2 * order, augmentArr);
+
+    //================================================================
+    for(int i = 0; i < order; ++i){// 遍历对角线, 消元是以对角线为主轴的.
+
+        //  整理增广矩阵，选主元
+        maxrow = i;
+        maxval = fabs(augmentArr[maxrow][i]);
+
+        for(int j = i; j < order; ++j ){
+            if(fabs(augmentArr[j][i]) > maxval){
+                maxrow = j;
+                maxval = fabs(augmentArr[j][i]);
+            }
+        }
+        // printf("i = %d, maxrow = %d, maxcol = %d, maxval = %lf\n", i, maxrow, maxcol, maxval);
+
+
+        if(maxval == 0.0)
+        {
+            printf("some column max value is zero, no,inverse matrix exit \n");
+            exit(EXIT_FAILURE);
+        }
+        if(maxrow != i){
+            for(int k = 0; k < 2 * order; ++k)
+            {
+                tmpv = augmentArr[maxrow][k];
+                augmentArr[maxrow][k] = augmentArr[i][k];
+                augmentArr[i][k] = tmpv;
+            }
+            sign++;
+        }
+
+        // 将每列其他元素化0
+        for(int k = 0; k < order; ++k){
+            if(k == i || augmentArr[k][i] == 0.0){
+                continue;
+            }
+            else{
+                tmp = -(double)augmentArr[k][i]/augmentArr[i][i];;
+                for(int j = 0; j < 2 * order; ++j){
+                    augmentArr[k][j] += tmp*augmentArr[i][j];
+                }
+            }
+        }
+
+        tmp = 1.0/augmentArr[i][i];
+        for(int j = 0; j < 2 * order; ++j){
+            augmentArr[i][j] *= tmp;
+        }
+    }
+
+    // // 将逆矩阵部分拷贝到 inverse 中，方法一
+    // for(int i = 0; i < order; ++i){
+    //     for(int j = 0; j < order; ++j){
+    //         inverse[i][j] = augmentArr[i][j+order];
+    //     }
+    // }
+    // 将逆矩阵部分拷贝到 inverse 中, 方法二，内存拷贝
+    for(int i = 0; i < order; ++i){
+        memcpy(inverse[i], augmentArr[i] + order, sizeof(augmentArr[0][0]) * order);
+    }
+
+    //======================================
+    // 释放内存
+    //======================================
+    for(int i = 0;  i < order; ++i){
+        free(augmentArr[i]);
+        augmentArr[i] = NULL;
+    }
+    free(augmentArr);
 }
+
 
 
 
