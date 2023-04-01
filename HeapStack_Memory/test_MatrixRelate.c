@@ -722,6 +722,12 @@ L的第二列, U的第二行
 L的第三列, U的第三行
 ......
 L的第n-1列,U的第n-1行.
+https://blog.csdn.net/Chen_dSir/article/details/70239043
+https://blog.csdn.net/why1472587/article/details/128161086
+https://blog.csdn.net/Aysek/article/details/119938476
+https://www.cnblogs.com/flyinghorse/p/7840731.html
+https://blog.csdn.net/USTLBer/article/details/124773180
+https://blog.csdn.net/weixin_44116061/article/details/105628206
 *****************************************************************************************/
 void DecompositionLU_Crout(double **arr, double **Larr, double **Uarr, int order) //  矩阵的 LU 分解
 {
