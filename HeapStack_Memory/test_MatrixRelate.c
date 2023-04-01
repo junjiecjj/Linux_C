@@ -33,7 +33,8 @@ void InverseGauss(double **A, double **inverse, int order);   // Gauss消元法�
 void LinalgSolve(double **A, double *b, int order);           // 高斯消元法解线性方程组
 
 
-void DecompositionLU_Crout(double **arr, double **Larr, double **Uarr, int order); //  矩阵的 LU 分解
+void DecompositionLU_Crout(double **arr, double **Larr, double **Uarr, int order); //  矩阵的 LU Crout 分解
+void DecompositionLU_Doolittle(double **arr, double **Larr, double **Uarr, int order);  // 矩阵的 LU Doolittle 分解;
 void DecompositionQR(double **arr, double **Qarr, double **Rarr, int order); //  矩阵的 QR 分解
 void DecompositionSVD(double **arr, double **Sarr, double **Varr, double **Darr, int order); //  矩阵的 SVD 分解
 
@@ -693,7 +694,7 @@ void LinalgSolve(double **A, double *b, int order)
 }
 
 /*****************************************************************************************
-功能: 矩阵的LU分解
+功能: 矩阵的  LU  Crout分解
 
 A = LU
 如果方针A可以分解为一个下三角矩阵L和一个上三角矩阵U的乘积，则称A可以作三角分解或LU分解；
@@ -707,9 +708,55 @@ A = LU
     Larr：分解后的 L 下三角矩阵
     Uarr: 分解后的 U 上三角矩阵
 
+a_{0,0}    a_{0,1}    a_{0,2},...,  a_{0,n-1}    |  l_{0,0}                                         |   1  u_{0,1}  u_{0,2},...,u_{0,n-1}
+a_{1,0}    a_{1,1}    a_{1,2},...,  a_{1,n-1}    |  l_{1,0}   l_{1,1}                               |      1        u_{1,2},...,u_{1,n-1}
+a_{2,0}    a_{2,1}    a_{2,2},...,  a_{2,n-1}    |  l_{2,0}   l_{2,1}   l_{2,2}                     |               1      ,...,u_{2,n-1}
+.
+.
+.
+a_{n-1,0}  a_{n-1,1}  a_{n-1,2},...,a_{n-1,n-1}  |  l_{n-1,0} l_{n-1,1} l_{n-1,2},...,l_{n-1,n-1}   |                           1
+
+以下实现过程是以k为对角线，然后计算
+L的第一列, U的第一行
+L的第二列, U的第二行
+L的第三列, U的第三行
+......
+L的第n-1列,U的第n-1行.
 *****************************************************************************************/
 void DecompositionLU_Crout(double **arr, double **Larr, double **Uarr, int order) //  矩阵的 LU 分解
 {
+    if(arr == NULL){
+        printf("NULL point, return\n");
+        exit(EXIT_FAILURE);
+    }
+    double tmpsum = 0;
+
+    for(int i = 0; i<order; i++){
+        Uarr[i][i] = 1 ;
+    }
+    for(int k = 0; k < order; ++k){
+        // 计算Larr的第 k 列;
+        for(int i = k; i < order; ++i){
+            Larr[i][k] = arr[i][k];
+            for(int j = 0; j < k - 1; ++j)
+            {
+                Larr[i][k] -= (Larr[i][j]*Uarr[j][k]);
+            }
+        }
+        // 计算Uarr的 第 k 行;
+        for(int i = k+1; i < order; ++i){
+
+        }
+    }
+}
+
+// 矩阵的杜立特分解(Doolittle)；
+void DecompositionLU_Doolittle(double **arr, double **Larr, double **Uarr, int order) //  矩阵的 LU 分解
+{
+    for(int i = 0; i<order; i++){
+        Uarr[i][i] = 1 ;
+    }
+
     for(int i = 0; i < order; ++i){
         for(int j = 0; j < order; ++j){
             if(i >= j){
@@ -720,7 +767,6 @@ void DecompositionLU_Crout(double **arr, double **Larr, double **Uarr, int order
             }
         }
     }
-
 }
 
 void DecompositionQR(double **arr, double **Qarr, double **Rarr, int order) //  矩阵的 QR 分解
