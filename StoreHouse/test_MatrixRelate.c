@@ -750,8 +750,12 @@ void DecompositionLU_Crout(double **arr, double **Larr, double **Uarr, int order
             }
         }
         // 计算Uarr的 第 k 行;
-        for(int i = k+1; i < order; ++i){
-
+        for(int i = k + 1; i < order; ++i){
+            Uarr[k][i] = arr[k][i];
+            for(int j = 0; j < k -1; ++j){
+                Uarr[k][i] -= Larr[k][j] * Uarr[j][i]
+            }
+            Uarr[k][i] /= Larr[k][k];
         }
     }
 }
@@ -759,21 +763,35 @@ void DecompositionLU_Crout(double **arr, double **Larr, double **Uarr, int order
 // 矩阵的杜立特分解(Doolittle)；
 void DecompositionLU_Doolittle(double **arr, double **Larr, double **Uarr, int order) //  矩阵的 LU 分解
 {
-    for(int i = 0; i<order; i++){
-        Uarr[i][i] = 1 ;
+    if(arr == NULL){
+        printf("NULL point, return\n");
+        exit(EXIT_FAILURE);
     }
+    double tmpsum = 0;
 
-    for(int i = 0; i < order; ++i){
-        for(int j = 0; j < order; ++j){
-            if(i >= j){
-
+    for(int i = 0; i<order; i++){
+        Larr[i][i] = 1 ;
+    }
+    for(int k = 0; k < order; ++k){
+        // 计算Uarr的第 k 行;
+        for(int i = k; i < order; ++i){
+            Larr[i][k] = arr[i][k];
+            for(int j = 0; j < k - 1; ++j)
+            {
+                Larr[i][k] -= (Larr[i][j]*Uarr[j][k]);
             }
-            else if(i < j){
-
+        }
+        // 计算 Larr的 第 k 列;
+        for(int i = k + 1; i < order; ++i){
+            Uarr[k][i] = arr[k][i];
+            for(int j = 0; j < k -1; ++j){
+                Uarr[k][i] -= Larr[k][j] * Uarr[j][i]
             }
+            Uarr[k][i] /= Larr[k][k];
         }
     }
 }
+
 
 void DecompositionQR(double **arr, double **Qarr, double **Rarr, int order) //  矩阵的 QR 分解
 {

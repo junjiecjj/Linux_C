@@ -10,6 +10,8 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import math
 import numpy as np
+import scipy
+
 
 np.set_printoptions(suppress=True, threshold=np.inf)
 # suppress 设置是否科学记数法显示 （默认值：False）
@@ -30,3 +32,16 @@ np.savetxt("/home/jack/snap/Matrix.txt", A, delimiter = ' ', fmt='%.04f')
  
 print(f"Det of A is :\n{np.linalg.det(A)}\n")
 print(f"inverse of A is :\n{np.linalg.inv(A)}")
+
+
+
+A = np.arange(1, 17).reshape(4, 4)
+p, l, u = scipy.linalg.lu(a=A, permute_l=True, overwrite_a=False, check_finite=True)
+
+print('原矩阵\n', A)
+print('p矩阵\n', p)
+print('l矩阵\n', l)
+print('u矩阵\n', u)
+
+# scipy.linalg.qr
+# scipy.linalg.svd
