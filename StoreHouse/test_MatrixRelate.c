@@ -738,13 +738,17 @@ void DecompositionLU_Crout(double **arr, double **Larr, double **Uarr, int order
     double tmpsum = 0;
 
     for(int i = 0; i<order; i++){
-        Uarr[i][i] = 1 ;
+        for(int j = 0; j < order; ++j){
+            Larr[i][j] = 0;
+            Uarr[i][j] = 0;
+        }
+        Uarr[i][i] = 1;
     }
     for(int k = 0; k < order; ++k){
         // 计算Larr的第 k 列;
         for(int i = k; i < order; ++i){
             Larr[i][k] = arr[i][k];
-            for(int j = 0; j < k - 1; ++j)
+            for(int j = 0; j <= k - 1; ++j)
             {
                 Larr[i][k] -= (Larr[i][j]*Uarr[j][k]);
             }
@@ -752,8 +756,8 @@ void DecompositionLU_Crout(double **arr, double **Larr, double **Uarr, int order
         // 计算Uarr的 第 k 行;
         for(int i = k + 1; i < order; ++i){
             Uarr[k][i] = arr[k][i];
-            for(int j = 0; j < k -1; ++j){
-                Uarr[k][i] -= Larr[k][j] * Uarr[j][i]
+            for(int j = 0; j <= k -1; ++j){
+                Uarr[k][i] -= Larr[k][j] * Uarr[j][i];
             }
             Uarr[k][i] /= Larr[k][k];
         }
@@ -785,7 +789,7 @@ void DecompositionLU_Doolittle(double **arr, double **Larr, double **Uarr, int o
         for(int i = k + 1; i < order; ++i){
             Uarr[k][i] = arr[k][i];
             for(int j = 0; j < k -1; ++j){
-                Uarr[k][i] -= Larr[k][j] * Uarr[j][i]
+                Uarr[k][i] -= Larr[k][j] * Uarr[j][i];
             }
             Uarr[k][i] /= Larr[k][k];
         }
@@ -833,7 +837,7 @@ int main(int argc, char *argv[])
 		}
 	}
     fclose(fp);
-
+    //=====================================  行列式 =================================================
     printf("读取的 %d × %d 矩阵:\n",order,order);
     Display2DFloatArray2DPoint(order, order, matrix);
 
@@ -845,7 +849,7 @@ int main(int argc, char *argv[])
     // // printf("原来的 %d × %d 矩阵:\n",order,order);
     // // Display2DFloatArray2DPoint(order, order, matrix);
 
-
+    //======================================  求逆 =================================================
     // 计算矩阵的逆矩阵 测试程序
     double **Inverse;
     // 分配内存
@@ -859,8 +863,29 @@ int main(int argc, char *argv[])
     printf("矩阵的逆矩阵为:\n");
     Display2DFloatArray2DPoint(order, order, Inverse);
 
+    //=====================================  LU 分解 =================================================
+    double **larr;
+    // 分配内存
+    larr = (double **)malloc(order * sizeof(double *));  //每一行的首地址分配内存，不一定连续
+    for (int i = 0; i < order; i++)
+    {
+        larr[i] = (double *)malloc(order * sizeof(double)); //每一行一定连续
+    }
 
-    // 释放内存
+    double **uarr;
+    // 分配内存
+    uarr = (double **)malloc(order * sizeof(double *));  //每一行的首地址分配内存，不一定连续
+    for (int i = 0; i < order; i++)
+    {
+        uarr[i] = (double *)malloc(order * sizeof(double)); //每一行一定连续
+    }
+
+    DecompositionLU_Crout(matrix, larr, uarr, order);
+    printf("L 矩阵为:\n");
+    Display2DFloatArray2DPoint(order, order, larr);
+    printf("U 矩阵为:\n");
+    Display2DFloatArray2DPoint(order, order, uarr);
+    //====================================== 释放内存 ================================================
     for(int i = 0;  i < order; ++i){
         free(Inverse[i]);
         Inverse[i] = NULL;
@@ -873,6 +898,21 @@ int main(int argc, char *argv[])
         matrix[i] = NULL;
     }
     free(matrix);
+
+    // 释放内存
+    for(int i = 0;  i < order; ++i){
+        free(larr[i]);
+        larr[i] = NULL;
+    }
+    free(larr);
+
+    // 释放内存
+    for(int i = 0;  i < order; ++i){
+        free(uarr[i]);
+        uarr[i] = NULL;
+    }
+    free(uarr);
+
 
     //========================================================================================================
     // int order;
