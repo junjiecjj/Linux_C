@@ -78,7 +78,9 @@ void LinalgSolve(double **A, double *b, int order);
 /****************************************************************************************************************************************************************************
 矩阵相关，求矩阵的LV 分解
 ****************************************************************************************************************************************************************************/
-void DecompositionLU_Crout(double **arr, double **Larr, double Uarr, int order); //  矩阵的 LU 分解
+
+void DecompositionLU_Crout(double **arr, double **Larr, double **Uarr, int order); //  矩阵的 LU Crout 分解
+void DecompositionLU_Doolittle(double **arr, double **Larr, double **Uarr, int order);  // 矩阵的 LU Doolittle 分解;
 
 
 
