@@ -80,3 +80,37 @@ print('u矩阵\n', u)
 # scipy.linalg.qr
 # scipy.linalg.svd
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
