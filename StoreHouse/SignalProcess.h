@@ -8,10 +8,18 @@
 >> 此程序的功能是：
 ************************************************************************/
 
-#include<bits/stdc++.h>
-using namespace std;
 
 
-int main(int argc, char *argv[])
-{
-}
+#include<stdio.h>
+#include<stdlib.h>
+#include<math.h>
+#include<string.h>
+#include<malloc.h>
+#include<math.h>
+
+
+
+
+void FFT();
+
+

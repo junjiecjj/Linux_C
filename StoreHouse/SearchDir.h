@@ -129,8 +129,6 @@ bool IsHiddenFile(char *file);
 /**********************************************************************
 功能: 列出指定目录下的所有文件名称
 ***********************************************************************/
-void  ListDir(char *Dirname, int MaxFileNum);
-
 int  ListFileInDir(char *Dirname, int MaxFileNum, char **FileName);
 void useListFileInDir(void);
 

@@ -141,7 +141,7 @@ void SwapArrRaw(double **arr, int raw_a, int raw_b, int order)
 		swap(&arr[raw_a][i], &arr[raw_b][i]);
 }
 
-/***********************************************************************************************************************************************************
+/**********************************************************************************************
 https://blog.csdn.net/Dream_wave/article/details/119192417
 数学知识:
 矩阵行列式的初等行变换：
@@ -248,7 +248,7 @@ double DeterminantGaussNormal(double **matrix, int order)
 	return sum;
 }
 
-/***********************************************************************************************************************************************************
+/********************************************************************************************
 注意: 高斯消元法也分为 普通的高斯消元法 和 列主元的高斯消元法  和 全主元的高斯消元法，这里是列主元 的消元法;
 
 方法二: 列主元 的消元法
@@ -366,7 +366,7 @@ double DeterminantGaussColPrime(double **matrix, int order)
 }
 
 
-/***********************************************************************************************************************************************************
+/******************************************************************************************
 注意: 高斯消元法也分为 普通的高斯消元法 和 列主元的高斯消元法  和 全主元的高斯消元法，这里是列主元 的消元法;
 
 方法二: 列主元 的消元法
@@ -700,9 +700,78 @@ A = LU
     Uarr: 分解后的 U 上三角矩阵
 
 ****************************************************************************************************************************************************************************/
-void DecompositionLU_Crout(double **arr, double **Larr, double Uarr, int order) //  矩阵的 LU 分解
+void DecompositionLU_Crout(double **arr, double **Larr, double **Uarr, int order) //  矩阵的 LU 分解
 {
+    if(arr == NULL){
+        printf("NULL point, return\n");
+        exit(EXIT_FAILURE);
+    }
+    double tmpsum = 0;
 
+    for(int i = 0; i<order; i++){
+        for(int j = 0; j < order; ++j){
+            Larr[i][j] = 0;
+            Uarr[i][j] = 0;
+        }
+        Uarr[i][i] = 1;
+    }
+    for(int k = 0; k < order; ++k){
+        // 计算Larr的第 k 列;
+        for(int i = k; i < order; ++i){
+            Larr[i][k] = arr[i][k];
+            for(int j = 0; j <= k - 1; ++j)
+            {
+                Larr[i][k] -= (Larr[i][j]*Uarr[j][k]);
+            }
+        }
+        // 计算Uarr的 第 k 行;
+        for(int i = k + 1; i < order; ++i){
+            Uarr[k][i] = arr[k][i];
+            for(int j = 0; j <= k -1; ++j){
+                Uarr[k][i] -= Larr[k][j] * Uarr[j][i];
+            }
+            Uarr[k][i] /= Larr[k][k];
+        }
+    }
+}
+
+// 矩阵的杜立特分解(Doolittle)；
+void DecompositionLU_Doolittle(double **arr, double **Larr, double **Uarr, int order) //  矩阵的 LU 分解
+{
+    if(arr == NULL){
+        printf("NULL point, return\n");
+        exit(EXIT_FAILURE);
+    }
+    for(int i = 0; i<order; i++){
+        for(int j = 0; j < order; ++j){
+            Larr[i][j] = 0;
+            Uarr[i][j] = 0;
+        }
+        Larr[i][i] = 1;
+    }
+
+    for(int i = 0; i<order; i++){
+        Larr[i][i] = 1 ;
+    }
+
+    for(int k = 0; k < order; ++k){
+        // 计算Uarr的第 k 行;
+        for(int i = k; i < order; ++i){
+            Uarr[k][i] = arr[k][i];
+            for(int j = 0; j <= k - 1; ++j)
+            {
+                Uarr[k][i] -= (Larr[k][j]*Uarr[j][i]);
+            }
+        }
+        // 计算 Larr的 第 k 列;
+        for(int i = k + 1; i < order; ++i){
+            Larr[i][k] = arr[i][k];
+            for(int j = 0; j <= k -1; ++j){
+                Larr[i][k] -= Larr[i][j] * Uarr[j][k];
+            }
+            Larr[i][k] /= Uarr[k][k];
+        }
+    }
 }
 
 /****************************************************************************************************************************************************************************

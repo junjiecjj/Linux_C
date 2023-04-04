@@ -12,8 +12,7 @@
 const double EPS = 1e-9;
 
 
-//两个函数的声明
-
+//函数的声明
 double Determinant(double  **arr, int order);
 double Cofactor(double  **arr, int order, int raw, int col);
 
@@ -33,10 +32,11 @@ void InverseGauss(double **A, double **inverse, int order);   // Gauss消元法�
 void LinalgSolve(double **A, double *b, int order);           // 高斯消元法解线性方程组
 
 
-void DecompositionLU_Crout(double **arr, double **Larr, double **Uarr, int order); //  矩阵的 LU Crout 分解
-void DecompositionLU_Doolittle(double **arr, double **Larr, double **Uarr, int order);  // 矩阵的 LU Doolittle 分解;
-void DecompositionQR(double **arr, double **Qarr, double **Rarr, int order); //  矩阵的 QR 分解
-void DecompositionSVD(double **arr, double **Sarr, double **Varr, double **Darr, int order); //  矩阵的 SVD 分解
+void DecompositionLU_Crout(double **arr, double **Larr, double **Uarr, int order);                                   //  矩阵的 LU Crout 分解
+void DecompositionLU_Doolittle(double **arr, double **Larr, double **Uarr, int order);                               //  矩阵的 LU Doolittle 分解;
+void DecompositionQR_Householder(double **arr, double **Qarr, double **Rarr, int order);                             //  矩阵的 QR 分解
+void DecompositionQR_Givens(double **arr, double **Qarr, double **Rarr, int order);                                  //  矩阵的 QR 分解
+void DecompositionSVD(double **arr, double **Sarr, double **Varr, double **Darr,  int arr_raw_num, int arr_col_num); //  矩阵的 SVD 分解
 
 
 
@@ -722,12 +722,7 @@ L的第二列, U的第二行
 L的第三列, U的第三行
 ......
 L的第n-1列,U的第n-1行.
-https://blog.csdn.net/Chen_dSir/article/details/70239043
-https://blog.csdn.net/why1472587/article/details/128161086
-https://blog.csdn.net/Aysek/article/details/119938476
-https://www.cnblogs.com/flyinghorse/p/7840731.html
-https://blog.csdn.net/USTLBer/article/details/124773180
-https://blog.csdn.net/weixin_44116061/article/details/105628206
+
 *****************************************************************************************/
 void DecompositionLU_Crout(double **arr, double **Larr, double **Uarr, int order) //  矩阵的 LU 分解
 {
@@ -803,17 +798,83 @@ void DecompositionLU_Doolittle(double **arr, double **Larr, double **Uarr, int o
     }
 }
 
+/*****************************************************************************************
+功能: 矩阵的 QR 分解
 
-void DecompositionQR(double **arr, double **Qarr, double **Rarr, int order) //  矩阵的 QR 分解
+https://blog.csdn.net/AI_Mathworker/article/details/84136882
+
+https://blog.csdn.net/m0_37604894/article/details/123360420
+
+*****************************************************************************************/
+
+
+void DecompositionQR_Householder(double **arr, double **Qarr, double **Rarr, int order) //  矩阵的 QR 分解
 {
 
 }
 
 
-void DecompositionSVD(double **arr, double **Sarr, double **Varr, double **Darr,  int order) //  矩阵的 SVD 分解
+/*****************************************************************************************
+功能: 矩阵的 QR 分解
+
+https://zhuanlan.zhihu.com/p/429495762
+https://blog.csdn.net/honyniu/article/details/110351364
+*****************************************************************************************/
+void DecompositionQR_Givens(double **arr, double **Qarr, double **Rarr, int order) //  矩阵的 QR 分解
 {
 
 }
+
+
+
+/*****************************************************************************************
+功能: 矩阵的SVD分解
+
+https://github.com/wjtgoo/SVD-CPP
+
+https://blog.csdn.net/qxessay/article/details/40626293?spm=1001.2101.3001.6650.4&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-4-40626293-blog-122266936.235%5Ev27%5Epc_relevant_multi_platform_whitelistv3&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-4-40626293-blog-122266936.235%5Ev27%5Epc_relevant_multi_platform_whitelistv3&utm_relevant_index=7
+
+https://blog.csdn.net/chenaiyanmie/article/details/80011244?spm=1001.2101.3001.6650.6&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-6-80011244-blog-122266936.235%5Ev27%5Epc_relevant_multi_platform_whitelistv3&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-6-80011244-blog-122266936.235%5Ev27%5Epc_relevant_multi_platform_whitelistv3&utm_relevant_index=9
+
+
+
+*****************************************************************************************/
+
+
+void DecompositionSVD(double **arr, double **Uarr, double **Sigma, double **Varr,  int arr_raw_num, int arr_col_num) //  矩阵的 SVD 分解
+{
+
+}
+
+
+
+/*****************************************************************************************
+功能: 矩阵的特征值和特征向量
+
+// https://blog.csdn.net/w_weixiaotao/article/details/111868086#:~:text=%E7%BA%AFC%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0ei,%E8%A6%81%E7%94%A8%E5%88%B0QR%E5%88%86%E8%A7%A3%E3%80%82
+
+*****************************************************************************************/
+
+void EigenValueVectors(double **arr, int *EigenValue, double **EigenVec, int order)
+{
+
+}
+
+/*****************************************************************************************
+功能: 矩阵的特征值和特征向量
+
+雅可比方法用于求解实对称矩阵的特征值和特征向量,对于实对称矩阵A AA,必有正交矩阵U ,使得U^T*A*U = D .D是一个对角阵,主对角线的元素是矩阵 A  的特征值,正交矩阵 U 的每一列对应于属于矩阵 D 的主对角线对应元素的特征向量.
+
+https://blog.csdn.net/zhouxuguang236/article/details/40212143
+
+https://blog.csdn.net/StoneColdSteve/article/details/115437946
+
+*****************************************************************************************/
+void EigenValueVectors_Jacobi(double **arr, int *EigenValue, double **EigenVec, int order)
+{
+
+}
+
 
 int main(int argc, char *argv[])
 {
@@ -929,35 +990,7 @@ int main(int argc, char *argv[])
 
 
     //========================================================================================================
-    // int order;
-	// printf("请输入行列式阶数：");
-	// scanf("%d", &order);
-    // double **matrix;
-    // //这样分配内存不连续,行内连续，行间不一定连续，
-    // matrix = (double **)malloc(order * sizeof(double *));  //每一行的首地址分配内存，不一定连续
-    // for (int i = 0; i < order; i++)
-    // {
-    //     matrix[i] = (double *)malloc(order * sizeof(double)); //每一行一定连续
-    // }
-    // printf("输入一个 %d × %d 矩阵:\n",order,order);
-	// for (int a = 0; a < order; a++) {
-	// 	for (int b = 0; b < order; b++) {
-	// 		scanf("%lf", &matrix[a][b]);
-	// 	}
-	// }
 
-    // Display2DFloatArray2DPoint(order, order, matrix);
-
-    // printf("%f", Determinant(matrix, order));
-
-
-
-    // for(int i = 0;  i < order; ++i){
-    //     free(matrix[i]);
-    //     matrix[i] = NULL;
-    // }
-    // free(matrix);
-    // matrix = NULL;
 //=======================================================
 
     return 0;

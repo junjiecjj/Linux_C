@@ -235,67 +235,6 @@ bool IsHiddenFile(char *filename)
 	}
 }
 
-/**********************************************************************
-功能: 列出指定目录下的所有文件名称
-***********************************************************************/
-void  ListDir(char *Dirname, int MaxFileNum)
-{
-	if(Dirname == NULL)
-	{
-		printf("dir_name is null ! \n");
-		exit(EXIT_FAILURE);
-	}
-
-	// 分配内存
-	char **filelist;
-	filelist = (char **)malloc(MaxFileNum * sizeof(char *));
-	for(int i = 0; i < MaxFileNum; ++i)
-	{
-		filelist[i] = (char *)malloc(PATH_SIZE * sizeof(char));
-		//printf("filelist[%d] ptr:%p \r\n", i, filelist[i]);
-	}
-
-	DIR *dirpt;
-	struct dirent* dirInfo;
-	int filenum = 0;
-
-	if((dirpt = opendir(Dirname)) == NULL){
-		printf("%s is not existing !!!\n",Dirname);
-	}
-	else{
-		while((dirInfo = readdir(dirpt))!=0){
-			if (!IsHiddenFile(dirInfo->d_name)){
-				//filelist[filenum] = dirInfo->d_name;  // 不能这样，后面free会段错误
-				strncpy (filelist[filenum], dirInfo->d_name, PATH_SIZE-1);   // ok
-				// printf("filelist[%d] ptr:%p \t dirInfo->d_name:%p \n", filenum, filelist[filenum], dirInfo->d_name);
-				if(dirInfo->d_type == DT_DIR){
-					printf("filename[%d] = %s, 是一个目录\n",filenum,filelist[filenum]);
-				}
-				else if(dirInfo->d_type == DT_REG){
-					printf("filename[%d] = %s, 是一个文件\n",filenum,filelist[filenum]);
-				}
-				filenum++;
-			}
-		}
-		closedir(dirpt);
-	}
-
-	printf("filenum %d\n", filenum);
-	// for(int i = 0; i < filenum; ++i){
-	// 	// strcat(filelist[i], )
-	// 	printf("filename[%d] = %s\n",i,filelist[i]);
-	// }
-
-	// 释放内存
-    for(int i = 0;  i < MaxFileNum; ++i){
-        free(filelist[i]);
-        filelist[i] = NULL;
-    }
-
-    free(filelist);
-
-    filelist = NULL;
-}
 
 /**********************************************************************
 功能: 列出指定目录下的所有文件名称,不包括路径
