@@ -136,6 +136,10 @@ void eigen(vector<vector<T>> arr, vector<vector<T>> &E, vector<T> &e)
             }
         }
 
+        if(iter_num < 30){
+            printf("iternum = %d, max = %g\n", iter_num, max);
+        }
+
         double theta = 0.5*atan2(-2 * arr[row][col] , -(arr[row][row] - arr[col][col]));
         //update arr
         double aii = arr[row][row];
@@ -236,7 +240,7 @@ SVD::SVD(vector<vector<double>> arr){
     A = arr;
     ATA = matrix_multiply(transpose(A),A);
     // 计算ATA特征值特征向量
-    eigen(ATA, E, e);
+    eigen(A, E, e);
 }
 
 

@@ -23,6 +23,7 @@ const double EPS = 1e-9;
 double Determinant(double  **arr, int order);
 double Cofactor(double  **arr, int order, int raw, int col);
 
+void Display1DFloatArray1DPoint( int cols, double *arr);
 void Display2DFloatArray2DPoint(int rows, int cols, double **arr);
 void Display2DFloatArrayNorm(int rows, int cols, const double ar[MAX][MAX]);
 
@@ -45,7 +46,17 @@ void DecompositionQR_Householder(double **arr, double **Qarr, double **Rarr, int
 void DecompositionQR_Givens(double **arr, double **Qarr, double **Rarr, int order);                                  //  矩阵的 QR 分解
 void DecompositionSVD(double **arr, double **Uarr, double **Sigma, double **Varr,  int arr_raw_num, int arr_col_num); //  矩阵的 SVD 分解
 
-void EigenValueVectors_Jacobi(double **arr, int *EigenValue, double **EigenVec, int order, int EPS, int maxiternum);
+void EigenValueVectors_Jacobi(double **arr, double *EigenValue, double **EigenVec, int order, double EPS, int maxiternum);
+
+
+//适用于int **A形式申明的二维数组,内存连续或者不连续都行,推荐
+void Display1DFloatArray1DPoint( int cols, double *arr)
+{
+    for (int i = 0; i < cols; i++) {
+        printf("%lf ", arr[i]);
+    }
+    printf("\n\n");
+}
 
 //适用于int **A形式申明的二维数组,内存连续或者不连续都行,推荐
 void Display2DFloatArray2DPoint(int rows, int cols, double **arr)
@@ -919,12 +930,14 @@ void EigenValueVectors(double **arr, int *EigenValue, double **EigenVec, int ord
     EigenValue: 特征值, 1 x order. 从大到小排序
     EigenVec: order x order二维矩阵, 每一列是对应 EigenValue 的特征向量。
 *****************************************************************************************/
-void EigenValueVectors_Jacobi(double **arr, int *EigenValue, double **EigenVec, int order, int EPS, int maxiternum)
+void EigenValueVectors_Jacobi(double **arr, double *EigenValue, double **EigenVec, int order, double EPS, int maxiternum)
 {
     int flag = 0;
     double max = EPS;
     int iternum = 0;
     int row = 0, col = 0;
+
+    int p = 0, q = 0;
 
 	if (arr == NULL)
 	{
@@ -969,7 +982,7 @@ void EigenValueVectors_Jacobi(double **arr, int *EigenValue, double **EigenVec, 
 		}
     }
 
-    //先copy一份array在temp_mat中，因为我实在堆区申请的空间,在对其进行处理的过程中会修改原矩阵的值,因此要存储起来,到最后函数返回的时候再重新赋值.
+    //先copy一份array在temp_mat中，因为 在堆区申请的空间,在对其进行处理的过程中会修改原矩阵的值,因此要存储起来 .
     for(int i = 0; i < order; i++){
         for(int j = 0; j < order; ++j){
             tmparr[i][j] = arr[i][j];
@@ -983,9 +996,15 @@ void EigenValueVectors_Jacobi(double **arr, int *EigenValue, double **EigenVec, 
         }
     }
 
-    while(iternum < maxiternum && max >= EPS){
-        iternum++;
+    printf("拷贝的temarr和EigenVec\n");
+    Display2DFloatArray2DPoint(order, order, tmparr);
+    Display2DFloatArray2DPoint(order, order, EigenVec);
 
+    while(iternum < maxiternum && max >= EPS){
+
+        max = fabs(tmparr[0][1]);
+        row = 0;
+        col = 1;
         for(int i = 0; i < order; i++){
             for(int j = 0; j < order; ++j){
                 if(i != j && fabs(tmparr[i][j]) > max ){
@@ -996,54 +1015,61 @@ void EigenValueVectors_Jacobi(double **arr, int *EigenValue, double **EigenVec, 
             }
         }
 
-        double theta = 0.5 * atan2( -2 * tmparr[row][col] , (tmparr[col][col] - tmparr[row][row]) );
+        double theta = 0.5 * atan2( -2 * tmparr[row][col], (tmparr[col][col] - tmparr[row][row]) );
 
         //update arr
         double App = tmparr[row][row];
         double Aqq = tmparr[col][col];
         double Apq = tmparr[row][col];
 
+        // 旋转矩阵的值
         double sin_theta = sin(theta);
         double cos_theta = cos(theta);
         double sin_2theta = sin(2 * theta);
         double cos_2theta = cos(2 * theta);
 
-        tmparr[row][row] = App*cos_theta*cos_theta + Aqq*sin_theta*sin_theta + Apq*sin_2theta;  // Bpp
-        tmparr[col][col] = App*sin_theta*sin_theta + Aqq*cos_theta*cos_theta - Apq*sin_2theta;  // Bqq
-        tmparr[row][col] = 0.5*(Aqq - App)*sin_2theta + Apq*cos_2theta;                         // Bpq
-        tmparr[col][row] = tmparr[row][col];                                                    // Bqp
+        tmparr[row][row] = App*cos_theta*cos_theta + Aqq*sin_theta*sin_theta + Apq*sin_2theta;  // App'
+        tmparr[col][col] = App*sin_theta*sin_theta + Aqq*cos_theta*cos_theta - Apq*sin_2theta;  // Aqq'
+        tmparr[row][col] = 0.5*(Aqq - App)*sin_2theta + Apq*cos_2theta;                         // Apq'
+        tmparr[col][row] = tmparr[row][col];                                                    // Aqp'
         for (int k = 0; k < order; k++)
         {
             if (k != row && k != col)
             {
                 double arowk = tmparr[row][k];
                 double acolk = tmparr[col][k];
-                tmparr[row][k] = arowk * cos_theta + acolk * sin_theta;
-                tmparr[k][row] = tmparr[row][k];
-                tmparr[col][k] = acolk * cos_theta - arowk * sin_theta;
-                tmparr[k][col] = tmparr[col][k];
+                tmparr[row][k] =  arowk * cos_theta + acolk * sin_theta;                         // Api', i = 0...order
+                tmparr[k][row] = tmparr[row][k];                                                // Aip', i = 0...order
+                tmparr[col][k] = - arowk * sin_theta + acolk * cos_theta ;                      // Aqi', i = 0...order
+                tmparr[k][col] = tmparr[col][k];                                                // Aiq', i = 0...order
             }
-        }
-        // update EigenVec
+        } //  A1 仍然是实对称阵，因为，UpqT = Upq-1，知 A1 与 A 的特征值相同。
+
+
+        // 更新特征向量
         double Eki;
         double Ekj;
-        for(int k=0; k < order; k++){
+        for(int k = 0; k < order; k++){
             Eki = EigenVec[k][row];
             Ekj = EigenVec[k][col];
-            EigenVec[k][row] = Eki*cos_theta + Ekj*sin_theta;
-            EigenVec[k][col] = Ekj*cos_theta - Eki*sin_theta;
+            EigenVec[k][row] =   Eki*cos_theta + Ekj*sin_theta;
+            EigenVec[k][col] = - Eki*sin_theta + Ekj*cos_theta ;
         }
-    }
-    //update e
+
+        iternum++;
+    } // end while
+    printf("Maximum off-diagonal element is: %lf, iterate: %d times\n\n", max, iternum);
+
+    // 更新特征值
     for(int i = 0; i < order; i++){
         EigenValue[i] = tmparr[i][i];
     }
 
- // end while
+
+
 
     // 释放内存
     Matrix_Free(tmparr, order, order);
-
 
 }
 
@@ -1055,94 +1081,149 @@ int main(int argc, char *argv[])
     int order;
     FILE *fp;
 
-	printf("请输入行列式阶数：");
-	scanf("%d", &order);
-    double **matrix;
+	// printf("请输入行列式阶数：");
+	// scanf("%d", &order);
+    // double **matrix;
+    // // 分配内存
+    // matrix = (double **)malloc(order * sizeof(double *));  //每一行的首地址分配内存，不一定连续
+    // for (int i = 0; i < order; i++)
+    // {
+    //     matrix[i] = (double *)malloc(order * sizeof(double)); //每一行一定连续
+    // }
+
+
+	// if ((fp = fopen("/home/jack/snap/Matrix.txt", "r")) == NULL){
+	// 		fprintf(stderr, "\n Cannot open the file!!!\n");
+	// 		exit(1);
+	// }
+
+	// for (int a = 0; a < order; a++) {
+	// 	for (int b = 0; b < order; b++) {
+	// 		fscanf(fp, "%lf", &matrix[a][b]);
+	// 	}
+	// }
+    // fclose(fp);
+    // //=====================================  行列式 =================================================
+    // printf("读取的 %d × %d 矩阵:\n",order,order);
+    // Display2DFloatArray2DPoint(order, order, matrix);
+
+    // // 计算行列式 测试程序
+    // printf("行列式为: %.10lf \n", DeterminantGaussNormal(matrix, order));
+    // printf("行列式为: %.10lf \n", DeterminantGaussColPrime(matrix, order));
+    // printf("行列式为: %.10lf \n", DeterminantGaussGlobPrime(matrix, order));
+    // // // printf("行列式为: %f\n", Determinant(matrix, order));
+    // // // printf("原来的 %d × %d 矩阵:\n",order,order);
+    // // // Display2DFloatArray2DPoint(order, order, matrix);
+
+    // //======================================  求逆 =================================================
+    // // 计算矩阵的逆矩阵 测试程序
+    // double **Inverse;
+    // // 分配内存
+    // Inverse = (double **)malloc(order * sizeof(double *));  //每一行的首地址分配内存，不一定连续
+    // for (int i = 0; i < order; i++)
+    // {
+    //     Inverse[i] = (double *)malloc(order * sizeof(double)); //每一行一定连续
+    // }
+
+    // InverseGauss(matrix, Inverse, order);
+    // printf("矩阵的逆矩阵为:\n");
+    // Display2DFloatArray2DPoint(order, order, Inverse);
+
+    // double **recover;
+    // // 分配内存
+    // recover = (double **)malloc(order * sizeof(double *));  //每一行的首地址分配内存，不一定连续
+    // for (int i = 0; i < order; i++)
+    // {
+    //     recover[i] = (double *)malloc(order * sizeof(double)); //每一行一定连续
+    // }
+
+    // MatrixMultiplyDouble(matrix, order, order, Inverse, order, order, recover);
+    // printf("矩阵 x 矩阵的逆 为 :\n");
+    // Display2DFloatArray2DPoint(order, order, recover);
+
+
+    // Matrix_Free(recover, order, order);
+    // Matrix_Free(Inverse, order, order);
+    // //=====================================  LU 分解 =================================================
+    // double **larr;
+    // // 分配内存
+    // larr = (double **)malloc(order * sizeof(double *));  //每一行的首地址分配内存，不一定连续
+    // for (int i = 0; i < order; i++)
+    // {
+    //     larr[i] = (double *)malloc(order * sizeof(double)); //每一行一定连续
+    // }
+
+    // double **uarr;
+    // // 分配内存
+    // uarr = (double **)malloc(order * sizeof(double *));  //每一行的首地址分配内存，不一定连续
+    // for (int i = 0; i < order; i++)
+    // {
+    //     uarr[i] = (double *)malloc(order * sizeof(double)); //每一行一定连续
+    // }
+
+    // DecompositionLU_Crout(matrix, larr, uarr, order);
+    // printf("Crout分解, L 矩阵为:\n");
+    // Display2DFloatArray2DPoint(order, order, larr);
+    // printf("U 矩阵为:\n");
+    // Display2DFloatArray2DPoint(order, order, uarr);
+
+    // DecompositionLU_Doolittle(matrix, larr, uarr, order);
+    // printf("Doolittle分解, L 矩阵为:\n");
+    // Display2DFloatArray2DPoint(order, order, larr);
+    // printf("U 矩阵为:\n");
+    // Display2DFloatArray2DPoint(order, order, uarr);
+
+    // Matrix_Free(uarr, order, order);
+    // Matrix_Free(larr, order, order);
+    //=====================================  实对称矩阵的特征值特征向量 =================================================
+    double **matrix1;
+    int order1 = 4;
     // 分配内存
-    matrix = (double **)malloc(order * sizeof(double *));  //每一行的首地址分配内存，不一定连续
-    for (int i = 0; i < order; i++)
+    matrix1 = (double **)malloc(order1 * sizeof(double *));  //每一行的首地址分配内存，不一定连续
+    for (int i = 0; i < order1; i++)
     {
-        matrix[i] = (double *)malloc(order * sizeof(double)); //每一行一定连续
+        matrix1[i] = (double *)malloc(order1 * sizeof(double)); //每一行一定连续
     }
 
 
-	if ((fp = fopen("/home/jack/snap/Matrix.txt", "r")) == NULL){
+	if ((fp = fopen("/home/jack/snap/Matrix1.txt", "r")) == NULL){
 			fprintf(stderr, "\n Cannot open the file!!!\n");
 			exit(1);
 	}
 
-	for (int a = 0; a < order; a++) {
-		for (int b = 0; b < order; b++) {
-			fscanf(fp, "%lf", &matrix[a][b]);
+	for (int a = 0; a < order1; a++) {
+		for (int b = 0; b < order1; b++) {
+			fscanf(fp, "%lf", &matrix1[a][b]);
 		}
 	}
     fclose(fp);
-    //=====================================  行列式 =================================================
-    printf("读取的 %d × %d 矩阵:\n",order,order);
-    Display2DFloatArray2DPoint(order, order, matrix);
+    printf("读取的 %d × %d 矩阵:\n",order1,order1);
+    Display2DFloatArray2DPoint(order1, order1, matrix1);
 
-    // 计算行列式 测试程序
-    printf("行列式为: %.10lf \n", DeterminantGaussNormal(matrix, order));
-    printf("行列式为: %.10lf \n", DeterminantGaussColPrime(matrix, order));
-    printf("行列式为: %.10lf \n", DeterminantGaussGlobPrime(matrix, order));
-    // // printf("行列式为: %f\n", Determinant(matrix, order));
-    // // printf("原来的 %d × %d 矩阵:\n",order,order);
-    // // Display2DFloatArray2DPoint(order, order, matrix);
-
-    //======================================  求逆 =================================================
-    // 计算矩阵的逆矩阵 测试程序
-    double **Inverse;
+    double **eigenVec;
     // 分配内存
-    Inverse = (double **)malloc(order * sizeof(double *));  //每一行的首地址分配内存，不一定连续
-    for (int i = 0; i < order; i++)
+    eigenVec = (double **)malloc(order1 * sizeof(double *));  //每一行的首地址分配内存，不一定连续
+    for (int i = 0; i < order1; i++)
     {
-        Inverse[i] = (double *)malloc(order * sizeof(double)); //每一行一定连续
+        eigenVec[i] = (double *)malloc(order1 * sizeof(double)); //每一行一定连续
     }
 
-    InverseGauss(matrix, Inverse, order);
-    printf("矩阵的逆矩阵为:\n");
-    Display2DFloatArray2DPoint(order, order, Inverse);
-
-    double **recover;
+    double *eigenVal;
     // 分配内存
-    recover = (double **)malloc(order * sizeof(double *));  //每一行的首地址分配内存，不一定连续
-    for (int i = 0; i < order; i++)
-    {
-        recover[i] = (double *)malloc(order * sizeof(double)); //每一行一定连续
-    }
+    eigenVal = (double *)malloc(order1 * sizeof(double));  //每一行的首地址分配内存，不一定连续
+    double eps = 1e-40;//误差
+    int iter_max_num = 10000;//迭代总次数
 
-    MatrixMultiplyDouble(matrix, order, order, Inverse, order, order, recover);
-    printf("矩阵 x 矩阵的逆 为 :\n");
-    Display2DFloatArray2DPoint(order, order, recover);
+    EigenValueVectors_Jacobi(matrix1, eigenVal, eigenVec, order1, eps, iter_max_num);
 
-    //=====================================  LU 分解 =================================================
-    double **larr;
-    // 分配内存
-    larr = (double **)malloc(order * sizeof(double *));  //每一行的首地址分配内存，不一定连续
-    for (int i = 0; i < order; i++)
-    {
-        larr[i] = (double *)malloc(order * sizeof(double)); //每一行一定连续
-    }
+    printf("特征值:\n");
+    Display1DFloatArray1DPoint(order1, eigenVal);
 
-    double **uarr;
-    // 分配内存
-    uarr = (double **)malloc(order * sizeof(double *));  //每一行的首地址分配内存，不一定连续
-    for (int i = 0; i < order; i++)
-    {
-        uarr[i] = (double *)malloc(order * sizeof(double)); //每一行一定连续
-    }
+    printf("特征向量为:\n");
+    Display2DFloatArray2DPoint(order1, order1, eigenVec);
 
-    DecompositionLU_Crout(matrix, larr, uarr, order);
-    printf("Crout分解, L 矩阵为:\n");
-    Display2DFloatArray2DPoint(order, order, larr);
-    printf("U 矩阵为:\n");
-    Display2DFloatArray2DPoint(order, order, uarr);
 
-    DecompositionLU_Doolittle(matrix, larr, uarr, order);
-    printf("Doolittle分解, L 矩阵为:\n");
-    Display2DFloatArray2DPoint(order, order, larr);
-    printf("U 矩阵为:\n");
-    Display2DFloatArray2DPoint(order, order, uarr);
+    Matrix_Free(matrix1, order1, order1);
 
     //====================================== 释放内存 ================================================
     // for(int i = 0;  i < order; ++i){
@@ -1172,11 +1253,9 @@ int main(int argc, char *argv[])
     // }
     // free(uarr);
 
-    Matrix_Free(Inverse, order, order);
-    Matrix_Free(matrix, order, order);
-    Matrix_Free(uarr, order, order);
-    Matrix_Free(larr, order, order);
-    Matrix_Free(recover, order, order);
+    // Matrix_Free(matrix, order, order);
+
+
     //========================================================================================================
 
 //=======================================================
