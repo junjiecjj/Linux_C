@@ -1065,7 +1065,7 @@ void EigenValueVectors_Jacobi(double **arr, double *EigenValue, double **EigenVe
         EigenValue[i] = tmparr[i][i];
     }
 
-
+    // 排序特征值并返回索引，以从大到小排序特征值和特征向量.
 
 
     // 释放内存
