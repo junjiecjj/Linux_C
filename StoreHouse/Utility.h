@@ -53,8 +53,9 @@ void Display2DIntArrayUse1D(int rows, int cols,  int *ar);
 
 void Free2DNotContinueMem(int** pm,int r,int c);
 
+int Matrix_Free(double **tmp, int m, int n);
 
-
+void MatrixMultiplyDouble(double **arrL, int rowL, int colL, double **arrR, int rowR, int colR, double **result);
 
 
 #ifdef __cplusplus

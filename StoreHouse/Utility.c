@@ -180,4 +180,48 @@ void Free2DNotContinueMem(int** pm,int r,int c){
     //可以看出分配空间与释放空间都是逐步进行的，但是释放空间的顺序与分配空间的顺序相反。　
 }
 
+int Matrix_Free(double **tmp, int m, int n)
+{
+	int i, j;
+	if (tmp == NULL)
+	{
+		return 1;
+	}
+	for (i = 0; i < m; i++)
+	{
+		if (tmp[i] != NULL)
+		{
+			free(tmp[i]);
+			tmp[i] = NULL;
+		}
+	}
+	if (tmp != NULL)
+	{
+		free(tmp);
+		tmp = NULL;
+	}
+	return 0;
+}
 
+
+void MatrixMultiplyDouble(double **arrL, int rowL, int colL, double **arrR, int rowR, int colR, double **result)
+{
+    if(arrL == NULL || arrR == NULL || result == NULL){
+        printf("error :数组为空 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+        exit(EXIT_FAILURE);
+    }
+    if(colL != rowR){
+        printf("error :相乘矩阵的维度不匹配 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+        exit(EXIT_FAILURE);
+    }
+
+    // compute matrix multiplication
+    for(int i = 0; i < rowL; i++){
+        for(int j = 0; j < colR; j++){
+            result[i][j] = 0;  // 必须初始化
+            for(int k = 0; k < colL; k++){
+                result[i][j] += arrL[i][k]*arrR[k][j];
+            }
+        }
+    }
+}

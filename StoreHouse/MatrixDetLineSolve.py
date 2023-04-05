@@ -19,7 +19,7 @@ np.set_printoptions(suppress=True, threshold=np.inf)
 np.set_printoptions(precision=4)   # precision 设置浮点数的精度 （默认值：8）
 
 
-N = 5
+N = 10
 A = np.random.randint(-5, 5, N**2)*1.11
 A = A.reshape(N, N)
 

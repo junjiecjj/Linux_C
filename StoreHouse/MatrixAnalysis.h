@@ -95,7 +95,7 @@ void DecompositionQR(double **arr, double **Qarr, double Rarr, int order); //  �
 矩阵相关，求矩阵的 SVD分解
 ****************************************************************************************************************************************************************************/
 
-void DecompositionSVD(double **arr, double **Sarr, double Varr, double Darr, int order); //  矩阵的 SVD 分解
+void DecompositionSVD(double **arr, double **Uarr, double **Sigma, double **Varr,  int arr_raw_num, int arr_col_num); //  矩阵的 SVD 分解
 
 
 
