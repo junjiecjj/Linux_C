@@ -14,9 +14,9 @@
 
 
 /******************************************************************************************
- https://blog.csdn.net/qq_42528769/article/details/105599043
+https://blog.csdn.net/qq_42528769/article/details/105599043
 
- https://www.cnblogs.com/liudianfengmang/p/12700990.html
+https://www.cnblogs.com/liudianfengmang/p/12700990.html
 
 https://zhuanlan.zhihu.com/p/40505277?utm_oi=859350339957182464
 
@@ -33,6 +33,3 @@ void FFT()
 
 
 
-int main(int argc, char *argv[])
-{
-}
