@@ -196,6 +196,133 @@ void Display2DDoubleArray2DPoint(int rows, int cols, double **arr)
 
 
 
+
+
+
+// 矩阵的转置
+void Transpose2DDoubleMatrix( double **arr, double **transmat, int rows, int cols){
+    if(arr == NULL || transmat == NULL ){
+        printf("error :数组为空 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+        exit(EXIT_FAILURE);
+    }
+
+    for(int i = 0; i < cols; ++i){
+        for(int j = 0; j < rows; ++j){
+            transmat[i][j] = arr[j][i];
+        }
+    }
+
+}
+
+
+// 矩阵的相乘
+void MatrixMultiplyDouble(double **arrL, int rowL, int colL, double **arrR, int rowR, int colR, double **result)
+{
+    if(arrL == NULL || arrR == NULL || result == NULL){
+        printf("error :数组为空 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+        exit(EXIT_FAILURE);
+    }
+    if(colL != rowR){
+        printf("error :相乘矩阵的维度不匹配 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+        exit(EXIT_FAILURE);
+    }
+
+    // compute matrix multiplication
+    for(int i = 0; i < rowL; i++){
+        for(int j = 0; j < colR; j++){
+            result[i][j] = 0;  // 必须初始化
+            for(int k = 0; k < colL; k++){
+                result[i][j] += arrL[i][k]*arrR[k][j];
+            }
+        }
+    }
+}
+
+// 为二维 double 数组分配内存
+double ** malloc2DDouble(int rows, int cols)
+{   double **arr;
+    arr = (double **)malloc(rows * sizeof(double *));
+	if (arr == NULL)
+	{
+		printf("error :申请数组内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+		exit(EXIT_FAILURE);
+	}
+    for (int i = 0; i < rows; i++)
+    {
+        arr[i] = (double *)malloc(cols * sizeof(double));
+		if (arr[i] == NULL)
+		{
+			printf("error :申请数组子内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+			exit(EXIT_FAILURE);
+		}
+    }
+
+    for(int i = 0; i < rows; ++i){
+        for(int j = 0; j < cols; ++j){
+            arr[i][j] = 0;
+        }
+    }
+
+    return arr;
+}
+
+// 为二维 double 数组分配内存
+float ** malloc2DFloat(int rows, int cols)
+{   float **arr;
+    arr = (float **)malloc(rows * sizeof(float *));
+	if (arr == NULL)
+	{
+		printf("error :申请数组内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+		exit(EXIT_FAILURE);
+	}
+    for (int i = 0; i < rows; i++)
+    {
+        arr[i] = (float *)malloc(cols * sizeof(float));
+		if (arr[i] == NULL)
+		{
+			printf("error :申请数组子内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+			exit(EXIT_FAILURE);
+		}
+    }
+
+    for(int i = 0; i < rows; ++i){
+        for(int j = 0; j < cols; ++j){
+            arr[i][j] = 0;
+        }
+    }
+
+    return arr;
+}
+
+// 为二维 int 数组分配内存
+int ** malloc2DInt(int rows, int cols)
+{   int **arr;
+    arr = (int **)malloc(rows * sizeof(int *));
+	if (arr == NULL)
+	{
+		printf("error :申请数组内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+		exit(EXIT_FAILURE);
+	}
+    for (int i = 0; i < rows; i++)
+    {
+        arr[i] = (int *)malloc(cols * sizeof(int));
+		if (arr[i] == NULL)
+		{
+			printf("error :申请数组子内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+			exit(EXIT_FAILURE);
+		}
+    }
+
+    for(int i = 0; i < rows; ++i){
+        for(int j = 0; j < cols; ++j){
+            arr[i][j] = 0;
+        }
+    }
+
+    return arr;
+}
+
+// 释放内存
 void Free2DNotContinueMem(int** pm,int r,int c){
     for(int i=0;  i<r; ++i){
         free(pm[i]);
@@ -206,6 +333,7 @@ void Free2DNotContinueMem(int** pm,int r,int c){
     //可以看出分配空间与释放空间都是逐步进行的，但是释放空间的顺序与分配空间的顺序相反。　
 }
 
+// 释放内存
 int Matrix_Free_2DDouble(double **tmp, int m, int n)
 {
 	int i, j;
@@ -229,7 +357,7 @@ int Matrix_Free_2DDouble(double **tmp, int m, int n)
 	return 0;
 }
 
-
+// 释放内存
 int Matrix_Free_1DDouble(double *tmp, int n)
 {
 	int i, j;
@@ -246,6 +374,7 @@ int Matrix_Free_1DDouble(double *tmp, int n)
 	return 0;
 }
 
+// 释放内存
 int Matrix_Free_1DInt(int *tmp, int n)
 {
 	int i, j;
@@ -260,40 +389,4 @@ int Matrix_Free_1DInt(int *tmp, int n)
 		tmp = NULL;
 	}
 	return 0;
-}
-
-void Transpose2DDoubleMatrix( double **arr, double **transmat, int rows, int cols){
-    if(arr == NULL || transmat == NULL ){
-        printf("error :数组为空 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
-        exit(EXIT_FAILURE);
-    }
-
-    for(int i = 0; i < cols; ++i){
-        for(int j = 0; j < rows; ++j){
-            transmat[i][j] = arr[j][i];
-        }
-    }
-
-}
-
-void MatrixMultiplyDouble(double **arrL, int rowL, int colL, double **arrR, int rowR, int colR, double **result)
-{
-    if(arrL == NULL || arrR == NULL || result == NULL){
-        printf("error :数组为空 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
-        exit(EXIT_FAILURE);
-    }
-    if(colL != rowR){
-        printf("error :相乘矩阵的维度不匹配 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
-        exit(EXIT_FAILURE);
-    }
-
-    // compute matrix multiplication
-    for(int i = 0; i < rowL; i++){
-        for(int j = 0; j < colR; j++){
-            result[i][j] = 0;  // 必须初始化
-            for(int k = 0; k < colL; k++){
-                result[i][j] += arrL[i][k]*arrR[k][j];
-            }
-        }
-    }
 }

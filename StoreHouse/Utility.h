@@ -64,6 +64,17 @@ void Transpose2DDoubleMatrix( double **arr, double **transmat, int rows, int col
 void MatrixMultiplyDouble(double **arrL, int rowL, int colL, double **arrR, int rowR, int colR, double **result);
 
 
+
+// 为二维 double 数组分配内存
+double ** malloc2DDouble(int rows, int cols);
+
+// 为二维 int 数组分配内存
+int ** malloc2DInt(int rows, int cols);
+
+// 为二维 double 数组分配内存
+float ** malloc2DFloat(int rows, int cols);
+
+
 // 释放内存
 void Free2DNotContinueMem(int** pm,int r,int c);
 

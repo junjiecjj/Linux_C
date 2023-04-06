@@ -816,21 +816,26 @@ int DecompositionSVD(double **Aarr, double **Uarr, double **Sigma, double **Varr
 
     // 为特征向量组 分配临时内存
     double **EigenVec;
-    EigenVec = (double **)malloc(col_num * sizeof(double *));
-	if (EigenVec == NULL)
-	{
-		printf("error :申请数组内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
-		exit(EXIT_FAILURE);
-	}
-    for (int i = 0; i < col_num; i++)
-    {
-        EigenVec[i] = (double *)malloc(col_num * sizeof(double));
-		if (EigenVec[i] == NULL)
-		{
-			printf("error :申请数组子内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
-			exit(EXIT_FAILURE);
-		}
-    }
+    EigenVec = malloc2DDouble(col_num, col_num);
+    printf("EigenVec  1 为:\n");
+    Display2DDoubleArray2DPoint(col_num, col_num, EigenVec);
+
+    // EigenVec = (double **)malloc(col_num * sizeof(double *));
+	// if (EigenVec == NULL)
+	// {
+	// 	printf("error :申请数组内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+	// 	exit(EXIT_FAILURE);
+	// }
+    // for (int i = 0; i < col_num; i++)
+    // {
+    //     EigenVec[i] = (double *)malloc(col_num * sizeof(double));
+	// 	if (EigenVec[i] == NULL)
+	// 	{
+	// 		printf("error :申请数组子内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+	// 		exit(EXIT_FAILURE);
+	// 	}
+    // }
+
     // 特征值, 临时
     double *EigenValue;
     EigenValue = (double *)malloc(col_num * sizeof(double));
@@ -842,81 +847,85 @@ int DecompositionSVD(double **Aarr, double **Uarr, double **Sigma, double **Varr
 
     // 为A^TA分配内存, 临时
     double **ATA;
-    ATA = (double **)malloc(col_num * sizeof(double *));
-	if (ATA == NULL)
-	{
-		printf("error :申请数组内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
-		exit(EXIT_FAILURE);
-	}
-    for (int i = 0; i < col_num; i++)
-    {
-        ATA[i] = (double *)malloc(col_num * sizeof(double));
-		if (ATA[i] == NULL)
-		{
-			printf("error :申请数组子内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
-			exit(EXIT_FAILURE);
-		}
-    }
+    ATA = malloc2DDouble(col_num, col_num);
+    // ATA = (double **)malloc(col_num * sizeof(double *));
+	// if (ATA == NULL)
+	// {
+	// 	printf("error :申请数组内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+	// 	exit(EXIT_FAILURE);
+	// }
+    // for (int i = 0; i < col_num; i++)
+    // {
+    //     ATA[i] = (double *)malloc(col_num * sizeof(double));
+	// 	if (ATA[i] == NULL)
+	// 	{
+	// 		printf("error :申请数组子内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+	// 		exit(EXIT_FAILURE);
+	// 	}
+    // }
 
     // 为A的转置分配内存, 临时
     double **transArr;
-    transArr = (double **)malloc(col_num * sizeof(double *));
-	if (transArr == NULL)
-	{
-		printf("error :申请数组内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
-		exit(EXIT_FAILURE);
-	}
-    for (int i = 0; i < col_num; i++)
-    {
-        transArr[i] = (double *)malloc(row_num * sizeof(double));
-		if (transArr[i] == NULL)
-		{
-			printf("error :申请数组子内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
-			exit(EXIT_FAILURE);
-		}
-    }
+    transArr = malloc2DDouble(col_num, row_num);
+    // transArr = (double **)malloc(col_num * sizeof(double *));
+	// if (transArr == NULL)
+	// {
+	// 	printf("error :申请数组内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+	// 	exit(EXIT_FAILURE);
+	// }
+    // for (int i = 0; i < col_num; i++)
+    // {
+    //     transArr[i] = (double *)malloc(row_num * sizeof(double));
+	// 	if (transArr[i] == NULL)
+	// 	{
+	// 		printf("error :申请数组子内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+	// 		exit(EXIT_FAILURE);
+	// 	}
+    // }
 
     // 为 Sigma 的转置的倒数分配内存, 临时.
     double **transSigma;
-    transSigma = (double **)malloc(col_num * sizeof(double *));
-	if (transSigma == NULL)
-	{
-		printf("error :申请数组内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
-		exit(EXIT_FAILURE);
-	}
-    for (int i = 0; i < col_num; i++)
-    {
-        transSigma[i] = (double *)malloc(row_num * sizeof(double));
-		if (transSigma[i] == NULL)
-		{
-			printf("error :申请数组子内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
-			exit(EXIT_FAILURE);
-		}
-    }
-    // 初始化
-    for(int i = 0; i < col_num; ++i){
-        for(int j = 0; j < row_num; ++j){
-            transSigma[i][j] = 0;
-        }
-    }
+    transSigma = malloc2DDouble(col_num, row_num);
+    // transSigma = (double **)malloc(col_num * sizeof(double *));
+	// if (transSigma == NULL)
+	// {
+	// 	printf("error :申请数组内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+	// 	exit(EXIT_FAILURE);
+	// }
+    // for (int i = 0; i < col_num; i++)
+    // {
+    //     transSigma[i] = (double *)malloc(row_num * sizeof(double));
+	// 	if (transSigma[i] == NULL)
+	// 	{
+	// 		printf("error :申请数组子内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+	// 		exit(EXIT_FAILURE);
+	// 	}
+    // }
+    // // 初始化
+    // for(int i = 0; i < col_num; ++i){
+    //     for(int j = 0; j < row_num; ++j){
+    //         transSigma[i][j] = 0;
+    //     }
+    // }
 
     // 为 A*V 分配内存, 临时.
     double **AV;
-    AV = (double **)malloc(row_num * sizeof(double *));
-	if (AV == NULL)
-	{
-		printf("error :申请数组内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
-		exit(EXIT_FAILURE);
-	}
-    for (int i = 0; i < row_num; i++)
-    {
-        AV[i] = (double *)malloc(col_num * sizeof(double));
-		if (AV[i] == NULL)
-		{
-			printf("error :申请数组子内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
-			exit(EXIT_FAILURE);
-		}
-    }
+    AV = malloc2DDouble(row_num, col_num);
+    // AV = (double **)malloc(row_num * sizeof(double *));
+	// if (AV == NULL)
+	// {
+	// 	printf("error :申请数组内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+	// 	exit(EXIT_FAILURE);
+	// }
+    // for (int i = 0; i < row_num; i++)
+    // {
+    //     AV[i] = (double *)malloc(col_num * sizeof(double));
+	// 	if (AV[i] == NULL)
+	// 	{
+	// 		printf("error :申请数组子内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+	// 		exit(EXIT_FAILURE);
+	// 	}
+    // }
 
     Transpose2DDoubleMatrix(Aarr, transArr, row_num, col_num);
     // printf("AT  为:\n");
@@ -959,6 +968,8 @@ int DecompositionSVD(double **Aarr, double **Uarr, double **Sigma, double **Varr
     MatrixMultiplyDouble(Aarr, row_num, col_num, EigenVec, col_num, col_num, AV);
     MatrixMultiplyDouble(AV, row_num, col_num, transSigma, col_num, row_num, Uarr);
 
+
+
     // printf("Uarr 为:\n");
     // Display2DDoubleArray2DPoint(row_num, row_num, Uarr);
 
@@ -977,6 +988,7 @@ int DecompositionSVD(double **Aarr, double **Uarr, double **Sigma, double **Varr
     Matrix_Free_2DDouble(ATA, col_num, col_num);
     Matrix_Free_2DDouble(EigenVec, col_num, col_num);
     Matrix_Free_2DDouble(AV, row_num, col_num);
+
 
     return eigvalue_num;
 }
