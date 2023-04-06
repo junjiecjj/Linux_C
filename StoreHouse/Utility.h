@@ -50,7 +50,9 @@ void Display2DIntArrayNorm(int rows, int cols, const int ar[rows][cols]);
 void Display2DIntArrayUse1D(int rows, int cols,  int *ar);
 
 
+// 适用于 double *A形式申明的一维数组
 void Display1DDoubleArray1DPoint( int cols, double *arr);
+// 适用于 double **A形式申明的二维数组,内存连续或者不连续都行
 void Display2DDoubleArray2DPoint(int rows, int cols, double **arr);
 
 

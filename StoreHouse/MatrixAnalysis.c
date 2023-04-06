@@ -11,35 +11,6 @@
 ****************************************************************************************************************************************************************************/
 
 
-//适用于int **A形式申明的二维数组,内存连续或者不连续都行,推荐
-void Display2DFloatArray2DPoint(int rows, int cols, double **arr)
-{
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            printf("%-12.3lf", arr[i][j]);
-            //printf("%5d  ", A[i*cols+j]);  //错误的做法
-        }
-    printf("\n");
-    }
-    printf("\n");
-}
-
-//适用于A[m][n]形式申明的二维数组,C++中无法使用
-void Display2DFloatArrayNorm(int rows, int cols, const double ar[MAX][MAX])  // 带变长数组形参arr的函数,arr是一个变长数组
-{
-    for(int i=0; i< rows;++i)
-    {
-        for(int j=0; j< cols; ++j)
-        {
-            printf("%-12.3f", ar[i][j]);
-        }
-        printf("\n");
-    }
-    printf("\n");
-}
-
-
-
 // 递归计算行列式,当 order 超过10时不适用, 计算时间指数级, 一般都用Gauss消元法.
 double Determinant(double **arr, int order)
 {
@@ -476,7 +447,6 @@ double DeterminantGaussGlobPrime(double **matrix, int order)
 		sum *= arr[i][i];
     sum = sum * pow(-1, sign); // 考虑列交换的次数
 
-
     //======================================
     // 释放内存
     //======================================
@@ -777,12 +747,14 @@ void DecompositionLU_Doolittle(double **arr, double **Larr, double **Uarr, int o
 矩阵相关，求矩阵的 QR分解
 ****************************************************************************************************************************************************************************/
 
-void DecompositionQR_Householder(double **arr, double **Qarr, double **Rarr, int order) //  矩阵的 QR 分解
+//  矩阵的 QR 分解, Householder方法
+void DecompositionQR_Householder(double **arr, double **Qarr, double **Rarr, int order)
 {
 
 }
 
-void DecompositionQR_Givens(double **arr, double **Qarr, double **Rarr, int order) //  矩阵的 QR 分解
+//  矩阵的 QR 分解， Givens方法
+void DecompositionQR_Givens(double **arr, double **Qarr, double **Rarr, int order)
 {
 
 }
@@ -819,26 +791,12 @@ int DecompositionSVD(double **Aarr, double **Uarr, double **Sigma, double **Varr
     double eps = 1e-40;//误差
     int iter_max_num = 10000;//迭代总次数
 
-	if (Aarr == NULL )
+	if (Aarr == NULL || Uarr == NULL || VarrT == NULL || Sigma == NULL )
 	{
 		printf("error: 数组为空, [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
 		exit(EXIT_FAILURE);
 	}
-	if ( Uarr == NULL )
-	{
-		printf("error: 数组为空, [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
-		exit(EXIT_FAILURE);
-	}
-	if ( VarrT == NULL )
-	{
-		printf("error: 数组为空, [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
-		exit(EXIT_FAILURE);
-	}
-	if ( Sigma == NULL )
-	{
-		printf("error: 数组为空, [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
-		exit(EXIT_FAILURE);
-	}
+
 
     for(int i = 0; i < row_num; ++i){
         for(int j = 0; j < col_num; ++j){
@@ -858,9 +816,8 @@ int DecompositionSVD(double **Aarr, double **Uarr, double **Sigma, double **Varr
         }
     }
 
-
-    printf("A 为:\n");
-    Display2DDoubleArray2DPoint(row_num, col_num, Aarr);
+    // printf("A 为:\n");
+    // Display2DDoubleArray2DPoint(row_num, col_num, Aarr);
 
     // 为特征向量组 分配临时内存
     double **EigenVec;
@@ -879,7 +836,7 @@ int DecompositionSVD(double **Aarr, double **Uarr, double **Sigma, double **Varr
 			exit(EXIT_FAILURE);
 		}
     }
-    // 特征值
+    // 特征值, 临时
     double *EigenValue;
     EigenValue = (double *)malloc(col_num * sizeof(double));
     if (EigenVec == NULL)
@@ -888,7 +845,7 @@ int DecompositionSVD(double **Aarr, double **Uarr, double **Sigma, double **Varr
         exit(EXIT_FAILURE);
     }
 
-    // 为A^TA分配内存
+    // 为A^TA分配内存, 临时
     double **ATA;
     ATA = (double **)malloc(col_num * sizeof(double *));
 	if (ATA == NULL)
@@ -906,7 +863,7 @@ int DecompositionSVD(double **Aarr, double **Uarr, double **Sigma, double **Varr
 		}
     }
 
-    // 为A的转置分配内存
+    // 为A的转置分配内存, 临时
     double **transArr;
     transArr = (double **)malloc(col_num * sizeof(double *));
 	if (transArr == NULL)
@@ -924,7 +881,7 @@ int DecompositionSVD(double **Aarr, double **Uarr, double **Sigma, double **Varr
 		}
     }
 
-    // 为 Sigma 的转置的倒数分配内存.
+    // 为 Sigma 的转置的倒数分配内存, 临时.
     double **transSigma;
     transSigma = (double **)malloc(col_num * sizeof(double *));
 	if (transSigma == NULL)
@@ -941,13 +898,14 @@ int DecompositionSVD(double **Aarr, double **Uarr, double **Sigma, double **Varr
 			exit(EXIT_FAILURE);
 		}
     }
+    // 初始化
     for(int i = 0; i < col_num; ++i){
         for(int j = 0; j < row_num; ++j){
             transSigma[i][j] = 0;
         }
     }
 
-    // AV
+    // 为 A*V 分配内存, 临时.
     double **AV;
     AV = (double **)malloc(row_num * sizeof(double *));
 	if (AV == NULL)
@@ -1017,6 +975,8 @@ int DecompositionSVD(double **Aarr, double **Uarr, double **Sigma, double **Varr
     // printf("V 的转置为:\n");
     // Display2DDoubleArray2DPoint(col_num, col_num, VarrT);
 
+
+    // 释放内存.
     Matrix_Free_2DDouble(transArr, col_num, row_num);
     Matrix_Free_2DDouble(transSigma, col_num, row_num);
     Matrix_Free_2DDouble(ATA, col_num, col_num);
@@ -1033,13 +993,13 @@ int DecompositionSVD(double **Aarr, double **Uarr, double **Sigma, double **Varr
 https://blog.csdn.net/zhouxuguang236/article/details/40212143
 
 
-功能: 实对称矩阵 的特征值和特征向量
+功能: 求实对称矩阵 的特征值和特征向量
 
-雅可比方法用于求解实对称矩阵的特征值和特征向量,对于实对称矩阵A AA,必有正交矩阵U ,使得U^T*A*U = D .D是一个对角阵,主对角线的元素是矩阵 A  的特征值,正交矩阵 U 的每一列对应于属于矩阵 D 的主对角线对应元素的特征向量.
+雅可比方法用于求解实对称矩阵的特征值和特征向量,对于实对称矩阵A ,必有正交矩阵U ,使得U^T*A*U = D .D是一个对角阵,主对角线的元素是矩阵 A  的特征值,正交矩阵 U 的每一列对应于属于矩阵 D 的主对角线对应元素的特征向量.
 
 输入:
     arr:  order x order 的矩阵
-    EPS：精度
+    eps：精度
     maxiternum: 最大迭代次数
 
 输出:
@@ -1049,7 +1009,7 @@ https://blog.csdn.net/zhouxuguang236/article/details/40212143
 void EigenValueVectors_Jacobi(double **arr, double *EigenValue, double **EigenVec, int order, double eps, int maxiternum)
 {
     int flag = 0;
-    double max = EPS;
+    double max = 1e-20;
     int iternum = 0;
     int row = 0, col = 0;
 
@@ -1134,7 +1094,7 @@ void EigenValueVectors_Jacobi(double **arr, double *EigenValue, double **EigenVe
     //Display2DDoubleArray2DPoint(order, order, tmparr);
     //Display2DDoubleArray2DPoint(order, order, tmpEgVec);
 
-    while(iternum < maxiternum && max >= EPS){
+    while(iternum < maxiternum && max >= eps){
 
         max = fabs(tmparr[0][1]);
         row = 0;

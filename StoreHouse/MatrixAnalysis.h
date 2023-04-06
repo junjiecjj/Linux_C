@@ -39,7 +39,7 @@ extern "C" {
 double Determinant(double  **arr, int order);                    // 求矩阵的行列式, 递归求解
 double Cofactor(double  **arr, int order, int raw, int col);     // 求矩阵的余子式, 递归求解
 
-void Display2DFloatArray2DPoint(int rows, int cols, double **arr);
+
 
 
 double DeterminantGaussNormal(double **arr, int order);         // 普通 gaussian 求行列式
