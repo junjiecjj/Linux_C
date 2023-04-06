@@ -28,10 +28,9 @@ void Display1DIntArray(const int arr[], int size);
 
 void Display1DIntArray2(const int arr[], int size);
 
-void Display1DIntArray3(const int *arr, int size);
+void Display1DIntArray3(int *arr, int size);
 
-void Display1DIntArray4(const int *arr, int size);
-void mult_array(double ar[], int n, double mult);
+void mult_array(double *ar, int n, double mult);
 
 
 
@@ -51,11 +50,24 @@ void Display2DIntArrayNorm(int rows, int cols, const int ar[rows][cols]);
 void Display2DIntArrayUse1D(int rows, int cols,  int *ar);
 
 
+void Display1DDoubleArray1DPoint( int cols, double *arr);
+void Display2DDoubleArray2DPoint(int rows, int cols, double **arr);
+
+
+// 矩阵的转置
+void Transpose2DDoubleMatrix( double **arr, double **transmat, int rows, int cols);
+
+
+// 矩阵的相乘
+void MatrixMultiplyDouble(double **arrL, int rowL, int colL, double **arrR, int rowR, int colR, double **result);
+
+
+// 释放内存
 void Free2DNotContinueMem(int** pm,int r,int c);
 
-int Matrix_Free(double **tmp, int m, int n);
-
-void MatrixMultiplyDouble(double **arrL, int rowL, int colL, double **arrR, int rowR, int colR, double **result);
+int Matrix_Free_2DDouble(double **tmp, int m, int n);
+int Matrix_Free_1DDouble(double *tmp, int n);
+int Matrix_Free_1DInt(int *tmp, int n);
 
 
 #ifdef __cplusplus

@@ -93,11 +93,86 @@ print(f"A = \n{A}\n特征值 = \n{V}\n特征向量 = \n{P}\n")
 
 
 
+'''-------------------矩阵奇异值分解np.linalg.svd()-------------------'''
+import numpy as np
+
+#1. SVD分解
+A= [[1,1,3,6,1],[5,1,8,4,2],[7,9,2,1,2]]
+A=np.array(A)
 
 
+U,s,VT = np.linalg.svd(A) 
+# 为节省空间，svd输出s只有奇异值的向量
+print('奇异值：',s)
+# 根据奇异值向量s，生成奇异值矩阵
+Sigma = np.zeros(np.shape(A))
+Sigma[:len(s),:len(s)] = np.diag(s)
+
+print("U：\n",U)
+print('Sigma：\n',Sigma)
+print('VT：\n',VT)
+
+#2.SVD重构
+B = U.dot(Sigma.dot(VT))
+print('重构后的矩阵B：\n', B)
+
+print('原矩阵与重构矩阵是否相同？',np.allclose(A,B))
+
+# 3. SVD矩阵压缩（降维）
+for k in range(3,0,-1):  # 3,2,1
+    # U的k列，VT的k行
+    D = U[:,:k].dot(Sigma[:k,:k].dot(VT[:k,:]))
+    print('k=',k,"压缩后的矩阵：\n",np.round(D,1))  # round取整数
 
 
+ATA = A.T@A
 
+V , P = np.linalg.eigh(ATA)
+
+print(f"ATA = \n{ATA}\nATA特征值 = \n{V}\nATA特征向量 = \n{P}\n")
+
+
+# U1,s1,VT1 = np.linalg.svd(ATA) 
+# # 为节省空间，svd输出s只有奇异值的向量
+# print('奇异值：',s1)
+# # 根据奇异值向量s，生成奇异值矩阵
+# Sigma1 = np.zeros(np.shape(ATA))
+# Sigma1[:len(s1),:len(s1)] = np.diag(s1)
+
+# print("U1：\n",U1)
+# print('Sigma1：\n',Sigma1)
+# print('VT1：\n',VT1)
+
+# #2.SVD重构
+# B1 = U1.dot(Sigma1.dot(VT1))
+# print('重构后的矩阵B：\n', B1)
+
+# print('原矩阵与重构矩阵是否相同？',np.allclose(ATA,B1))
+
+
+AAT = A@A.T
+
+V1 , P1 = np.linalg.eigh(AAT)
+
+print(f"AAT = \n{AAT}1\nAAT特征值 = \n{V1}\nAAT特征向量 = \n{P1}\n")
+
+
+# U1,s1,VT1 = np.linalg.svd(ATA) 
+# # 为节省空间，svd输出s只有奇异值的向量
+# print('奇异值：',s1)
+# # 根据奇异值向量s，生成奇异值矩阵
+# Sigma1 = np.zeros(np.shape(ATA))
+# Sigma1[:len(s1),:len(s1)] = np.diag(s1)
+
+# print("U1：\n",U1)
+# print('Sigma1：\n',Sigma1)
+# print('VT1：\n',VT1)
+
+# #2.SVD重构
+# B1 = U1.dot(Sigma1.dot(VT1))
+# print('重构后的矩阵B：\n', B1)
+
+# print('原矩阵与重构矩阵是否相同？',np.allclose(ATA,B1))
 
 
 

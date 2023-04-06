@@ -40,7 +40,7 @@ int Sum1DIntArray2(int *start, int *end)
 
 
 /* 数组的每个元素乘以相同的值，ar[]相当于 double *p,会改变原数组 */
-void mult_array(double ar[], int n, double mult)
+void mult_array(double *ar, int n, double mult)
 {
     int i;
 
@@ -72,9 +72,9 @@ void Display1DIntArray2(const int arr[], int size)
 }
 
 
-void Display1DIntArray3(const int *arr, int size)
+void Display1DIntArray3(int *arr, int size)
 {
-    printf("****************  一维数组：传递一维数组 方法2*********************\n");
+    // printf("****************  一维数组：传递一维数组 方法2*********************\n");
     for (int i = 0; i < size; ++i)
     {
         printf("%5d ", arr[i]);
@@ -83,7 +83,7 @@ void Display1DIntArray3(const int *arr, int size)
 }
 
 
-void Display1DIntArray4(const int *arr, int size)
+void Display1DIntArray4(int *arr, int size)
 {
     printf("****************  一维数组：传递一维数组 方法4*********************\n");
     for (int i = 0; i < size; ++i)
@@ -170,6 +170,32 @@ void Display2DIntArrayUse1D(int rows, int cols, int *ar)
 }
 
 
+
+//适用于int **A形式申明的二维数组,内存连续或者不连续都行,推荐
+void Display1DDoubleArray1DPoint( int cols, double *arr)
+{
+    for (int i = 0; i < cols; i++) {
+        printf("%12.6lf ", arr[i]);
+    }
+    printf("\n\n");
+}
+
+//适用于int **A形式申明的二维数组,内存连续或者不连续都行,推荐
+void Display2DDoubleArray2DPoint(int rows, int cols, double **arr)
+{
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            printf("%-12.5lf", arr[i][j]);
+            //printf("%5d  ", A[i*cols+j]);  //错误的做法
+        }
+    printf("\n");
+    }
+    printf("\n");
+}
+
+
+
+
 void Free2DNotContinueMem(int** pm,int r,int c){
     for(int i=0;  i<r; ++i){
         free(pm[i]);
@@ -180,7 +206,7 @@ void Free2DNotContinueMem(int** pm,int r,int c){
     //可以看出分配空间与释放空间都是逐步进行的，但是释放空间的顺序与分配空间的顺序相反。　
 }
 
-int Matrix_Free(double **tmp, int m, int n)
+int Matrix_Free_2DDouble(double **tmp, int m, int n)
 {
 	int i, j;
 	if (tmp == NULL)
@@ -203,6 +229,52 @@ int Matrix_Free(double **tmp, int m, int n)
 	return 0;
 }
 
+
+int Matrix_Free_1DDouble(double *tmp, int n)
+{
+	int i, j;
+	if (tmp == NULL)
+	{
+		return 1;
+	}
+
+	if (tmp != NULL)
+	{
+		free(tmp);
+		tmp = NULL;
+	}
+	return 0;
+}
+
+int Matrix_Free_1DInt(int *tmp, int n)
+{
+	int i, j;
+	if (tmp == NULL)
+	{
+		return 1;
+	}
+
+	if (tmp != NULL)
+	{
+		free(tmp);
+		tmp = NULL;
+	}
+	return 0;
+}
+
+void Transpose2DDoubleMatrix( double **arr, double **transmat, int rows, int cols){
+    if(arr == NULL || transmat == NULL ){
+        printf("error :数组为空 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+        exit(EXIT_FAILURE);
+    }
+
+    for(int i = 0; i < cols; ++i){
+        for(int j = 0; j < rows; ++j){
+            transmat[i][j] = arr[j][i];
+        }
+    }
+
+}
 
 void MatrixMultiplyDouble(double **arrL, int rowL, int colL, double **arrR, int rowR, int colR, double **result)
 {
