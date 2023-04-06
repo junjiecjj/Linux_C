@@ -957,7 +957,7 @@ void DecompositionSVD(double **Aarr, double **Uarr, double **Sigma, double **Var
     // 为A的转置分配内存
     double **transArr;
     transArr = (double **)malloc(col_num * sizeof(double *));
-	if (ATA == NULL)
+	if (transArr == NULL)
 	{
 		printf("error :申请数组内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
 		exit(EXIT_FAILURE);
@@ -972,20 +972,58 @@ void DecompositionSVD(double **Aarr, double **Uarr, double **Sigma, double **Var
 		}
     }
 
+    // 为 Sigma 的转置的倒数分配内存.
+    double **transSigma;
+    transSigma = (double **)malloc(col_num * sizeof(double *));
+	if (transSigma == NULL)
+	{
+		printf("error :申请数组内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+		exit(EXIT_FAILURE);
+	}
+    for (int i = 0; i < col_num; i++)
+    {
+        transSigma[i] = (double *)malloc(row_num * sizeof(double));
+		if (transSigma[i] == NULL)
+		{
+			printf("error :申请数组子内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+			exit(EXIT_FAILURE);
+		}
+    }
+    for(int i = 0; i < col_num; ++i){
+        for(int j = 0; j < row_num; ++j){
+            transSigma[i][j] = 0;
+        }
+    }
+
+    // AV
+    double **AV;
+    AV = (double **)malloc(row_num * sizeof(double *));
+	if (AV == NULL)
+	{
+		printf("error :申请数组内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+		exit(EXIT_FAILURE);
+	}
+    for (int i = 0; i < row_num; i++)
+    {
+        AV[i] = (double *)malloc(col_num * sizeof(double));
+		if (AV[i] == NULL)
+		{
+			printf("error :申请数组子内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+			exit(EXIT_FAILURE);
+		}
+    }
+
     Transpose2DDoubleMatrix(Aarr, transArr, row_num, col_num);
-    printf("AT  为:\n");
-    Display2DDoubleArray2DPoint(col_num, row_num, transArr);
+    // printf("AT  为:\n");
+    // Display2DDoubleArray2DPoint(col_num, row_num, transArr);
 
     MatrixMultiplyDouble(transArr, col_num, row_num, Aarr, row_num, col_num, ATA);
 
-    printf("ATA 为:\n");
-    Display2DDoubleArray2DPoint(col_num, col_num, ATA);
-
-
+    // printf("ATA 为:\n");
+    // Display2DDoubleArray2DPoint(col_num, col_num, ATA);
 
     EigenValueVectors_Jacobi(ATA, EigenValue, EigenVec, col_num, eps, iter_max_num);
 
-    printf("Finished  Jacobi \n");
 
     eigvalue_num = 0;
     for(int i = 0; i < col_num; ++i){
@@ -1007,18 +1045,31 @@ void DecompositionSVD(double **Aarr, double **Uarr, double **Sigma, double **Var
 
     for(int i = 0; i < eigvalue_num; ++i){
         Sigma[i][i] = sqrt(EigenValue[i]);
+        transSigma[i][i] = 1.0/sqrt(EigenValue[i]);
     }
 
-    printf("Sigma 为:\n");
-    Display2DDoubleArray2DPoint(row_num, col_num, Sigma);
+    // printf("Sigma.T 为:\n");
+    // Display2DDoubleArray2DPoint(col_num, row_num, transSigma);
+
+    MatrixMultiplyDouble(Aarr, row_num, col_num, EigenVec, col_num, col_num, AV);
+    MatrixMultiplyDouble(AV, row_num, col_num, transSigma, col_num, row_num, Uarr);
+
+    // printf("Uarr 为:\n");
+    // Display2DDoubleArray2DPoint(row_num, row_num, Uarr);
 
 
-    printf("V 的转置为:\n");
-    Display2DDoubleArray2DPoint(col_num, col_num, VarrT);
+    // printf("Sigma 为:\n");
+    // Display2DDoubleArray2DPoint(row_num, col_num, Sigma);
+
+
+    // printf("V 的转置为:\n");
+    // Display2DDoubleArray2DPoint(col_num, col_num, VarrT);
 
     Matrix_Free_2DDouble(transArr, col_num, row_num);
+    Matrix_Free_2DDouble(transSigma, col_num, row_num);
     Matrix_Free_2DDouble(ATA, col_num, col_num);
     Matrix_Free_2DDouble(EigenVec, col_num, col_num);
+    Matrix_Free_2DDouble(AV, row_num, col_num);
 
 }
 
@@ -1037,6 +1088,9 @@ void EigenValueVectors(double **arr, int *EigenValue, double **EigenVec, int ord
 }
 
 /*****************************************************************************************
+https://blog.csdn.net/zhouxuguang236/article/details/40212143
+
+
 功能: 实对称矩阵 的特征值和特征向量
 
 雅可比方法用于求解实对称矩阵的特征值和特征向量,对于实对称矩阵A AA,必有正交矩阵U ,使得U^T*A*U = D .D是一个对角阵,主对角线的元素是矩阵 A  的特征值,正交矩阵 U 的每一列对应于属于矩阵 D 的主对角线对应元素的特征向量.
@@ -1203,11 +1257,11 @@ void EigenValueVectors_Jacobi(double **arr, double *EigenValue, double **EigenVe
         EigenValue[i] = tmparr[i][i];
     }
 
-    printf("排序前 特征值:\n");
-    Display1DDoubleArray1DPoint(order, EigenValue);
+    // printf("排序前 特征值:\n");
+    // Display1DDoubleArray1DPoint(order, EigenValue);
 
-    printf("排序前 特征向量为:\n");
-    Display2DDoubleArray2DPoint(order, order, tmpEgVec);
+    // printf("排序前 特征向量为:\n");
+    // Display2DDoubleArray2DPoint(order, order, tmpEgVec);
 
 
     // 排序特征值并返回索引，以从大到小排序特征值和特征向量.
@@ -1231,13 +1285,13 @@ void EigenValueVectors_Jacobi(double **arr, double *EigenValue, double **EigenVe
         }
     }
 
-    Display1DIntArray3(Index, order);
+    // Display1DIntArray3(Index, order);
 
-    printf("排序后 特征值:\n");
-    Display1DDoubleArray1DPoint(order, EigenValue);
+    // printf("排序后 特征值:\n");
+    // Display1DDoubleArray1DPoint(order, EigenValue);
 
-    printf("排序后 特征向量为:\n");
-    Display2DDoubleArray2DPoint(order, order, EigenVec);
+    // printf("排序后 特征向量为:\n");
+    // Display2DDoubleArray2DPoint(order, order, EigenVec);
 
     // 释放内存
     Matrix_Free_2DDouble(tmparr, order, order);
@@ -1404,8 +1458,8 @@ int main(int argc, char *argv[])
     printf("=====================================  SVD分解 =================================================\n");
 
     double **matrix2;
-    int row = 3;
-    int col = 5;
+    int row = 5;
+    int col = 4;
     // 分配内存
     matrix2 = (double **)malloc(row * sizeof(double *));  //每一行的首地址分配内存，不一定连续
     for (int i = 0; i < row; i++)
@@ -1414,7 +1468,7 @@ int main(int argc, char *argv[])
     }
 
 
-	if ((fp = fopen("/home/jack/snap/MatrixSVD.txt", "r")) == NULL){
+	if ((fp = fopen("/home/jack/snap/MatrixSVD1.txt", "r")) == NULL){
 			fprintf(stderr, "\n Cannot open the file!!!\n");
 			exit(1);
 	}
@@ -1450,6 +1504,18 @@ int main(int argc, char *argv[])
     }
 
     DecompositionSVD(matrix2, Uarr, Sigma, Varr, row, col);
+
+
+    printf("Uarr 为:\n");
+    Display2DDoubleArray2DPoint(row, row, Uarr);
+
+
+    printf("Sigma 为:\n");
+    Display2DDoubleArray2DPoint(row , col , Sigma);
+
+
+    printf("V 的转置为:\n");
+    Display2DDoubleArray2DPoint(col , col , Varr);
 
     Matrix_Free_2DDouble(matrix2, row, col);
     Matrix_Free_2DDouble(Uarr, row, row);

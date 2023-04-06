@@ -98,6 +98,9 @@ import numpy as np
 
 #1. SVD分解
 A= [[1,1,3,6,1],[5,1,8,4,2],[7,9,2,1,2]]
+
+A = np.array([[1,0,0,0],[0,0,0,4],[0,3,0,0],[0,0,0,0],[2,0,0,0]])
+
 A=np.array(A)
 
 
@@ -111,6 +114,8 @@ Sigma[:len(s),:len(s)] = np.diag(s)
 print("U：\n",U)
 print('Sigma：\n',Sigma)
 print('VT：\n',VT)
+print('VT.T：\n',VT.T)
+
 
 #2.SVD重构
 B = U.dot(Sigma.dot(VT))

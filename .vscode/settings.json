@@ -22,7 +22,10 @@
         "utility.h": "c",
         "searchdir.h": "c",
         "math.h": "c",
-        "sortalgorithms.h": "c"
+        "sortalgorithms.h": "c",
+        "libgen.h": "c",
+        "stdbool.h": "c",
+        "stdafx.h": "c"
     },
     "workbench.colorCustomizations": {
         "activityBar.background": "#392C12",

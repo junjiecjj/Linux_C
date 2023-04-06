@@ -4,18 +4,10 @@
 
 
 
-#include <stdio.h>
-#include <stdlib.h>
-//  #include <float.h>
-#include <limits.h>
-#include <math.h>
-#include <string.h>
-//#include <sys/socket.h>
-#include <stddef.h>
-#include <locale.h>
-#include <time.h>
-#include <complex.h>
+
+#include "StdAfx.h"
 #include "Utility.h"
+#include "SortAlgorithms.h"
 
 
 #define PI            3.14159265358979
@@ -87,18 +79,21 @@ void DecompositionLU_Doolittle(double **arr, double **Larr, double **Uarr, int o
 /****************************************************************************************************************************************************************************
 矩阵相关，求矩阵的 QR分解
 ****************************************************************************************************************************************************************************/
-void DecompositionQR(double **arr, double **Qarr, double Rarr, int order); //  矩阵的 QR 分解
-
+void DecompositionQR_Householder(double **arr, double **Qarr, double **Rarr, int order);                             //  矩阵的 QR 分解
+void DecompositionQR_Givens(double **arr, double **Qarr, double **Rarr, int order);                                  //  矩阵的 QR 分解
 
 
 /****************************************************************************************************************************************************************************
 矩阵相关，求矩阵的 SVD分解
 ****************************************************************************************************************************************************************************/
-
 void DecompositionSVD(double **arr, double **Uarr, double **Sigma, double **Varr,  int arr_raw_num, int arr_col_num); //  矩阵的 SVD 分解
 
 
 
+/****************************************************************************************************************************************************************************
+矩阵相关，求实对称矩阵的 特征值和特征向量
+****************************************************************************************************************************************************************************/
+void EigenValueVectors_Jacobi(double **arr, double *EigenValue, double **EigenVec, int order, double EPS, int maxiternum);
 
 
 

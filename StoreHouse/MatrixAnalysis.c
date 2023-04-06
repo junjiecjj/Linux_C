@@ -775,7 +775,12 @@ void DecompositionLU_Doolittle(double **arr, double **Larr, double **Uarr, int o
 矩阵相关，求矩阵的 QR分解
 ****************************************************************************************************************************************************************************/
 
-void DecompositionQR(double **arr, double **Qarr, double Rarr, int order) //  矩阵的 QR 分解
+void DecompositionQR_Householder(double **arr, double **Qarr, double **Rarr, int order) //  矩阵的 QR 分解
+{
+
+}
+
+void DecompositionQR_Givens(double **arr, double **Qarr, double **Rarr, int order) //  矩阵的 QR 分解
 {
 
 }
@@ -783,14 +788,442 @@ void DecompositionQR(double **arr, double **Qarr, double Rarr, int order) //  �
 
 /****************************************************************************************************************************************************************************
 矩阵相关，求矩阵的 SVD分解
+
+功能: 矩阵的SVD分解
+
+输入:
+    Arr: row_num x col_num的二维矩阵
+
+输出:
+    Uarr: row_num x row_num 的二维矩阵
+    Sigma: row_num x col_num 的二维矩阵
+    Varr: col_num x col_num 的二维矩阵
 ****************************************************************************************************************************************************************************/
 
-
-void DecompositionSVD(double **arr, double **Sarr, double Varr, double Darr,  int order) //  矩阵的 SVD 分解
+void DecompositionSVD(double **Aarr, double **Uarr, double **Sigma, double **VarrT,  int row_num, int col_num) //  矩阵的 SVD 分解
 {
+    int eigvalue_num = 0;
+    double eps = 1e-40;//误差
+    int iter_max_num = 10000;//迭代总次数
+
+	if (Aarr == NULL )
+	{
+		printf("error: 数组为空, [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+		exit(EXIT_FAILURE);
+	}
+	if ( Uarr == NULL )
+	{
+		printf("error: 数组为空, [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+		exit(EXIT_FAILURE);
+	}
+	if ( VarrT == NULL )
+	{
+		printf("error: 数组为空, [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+		exit(EXIT_FAILURE);
+	}
+	if ( Sigma == NULL )
+	{
+		printf("error: 数组为空, [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+		exit(EXIT_FAILURE);
+	}
+
+    for(int i = 0; i < row_num; ++i){
+        for(int j = 0; j < col_num; ++j){
+            Sigma[i][j] = 0;
+        }
+    }
+
+    for(int i = 0; i < row_num; ++i){
+        for(int j = 0; j < row_num; ++j){
+            Uarr[i][j] = 0;
+        }
+    }
+
+    for(int i = 0; i < col_num; ++i){
+        for(int j = 0; j < col_num; ++j){
+            VarrT[i][j] = 0;
+        }
+    }
+
+
+    printf("A 为:\n");
+    Display2DDoubleArray2DPoint(row_num, col_num, Aarr);
+
+    // 为特征向量组 分配临时内存
+    double **EigenVec;
+    EigenVec = (double **)malloc(col_num * sizeof(double *));
+	if (EigenVec == NULL)
+	{
+		printf("error :申请数组内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+		exit(EXIT_FAILURE);
+	}
+    for (int i = 0; i < col_num; i++)
+    {
+        EigenVec[i] = (double *)malloc(col_num * sizeof(double));
+		if (EigenVec[i] == NULL)
+		{
+			printf("error :申请数组子内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+			exit(EXIT_FAILURE);
+		}
+    }
+    // 特征值
+    double *EigenValue;
+    EigenValue = (double *)malloc(col_num * sizeof(double));
+    if (EigenVec == NULL)
+    {
+        printf("error :申请数组子内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+        exit(EXIT_FAILURE);
+    }
+
+    // 为A^TA分配内存
+    double **ATA;
+    ATA = (double **)malloc(col_num * sizeof(double *));
+	if (ATA == NULL)
+	{
+		printf("error :申请数组内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+		exit(EXIT_FAILURE);
+	}
+    for (int i = 0; i < col_num; i++)
+    {
+        ATA[i] = (double *)malloc(col_num * sizeof(double));
+		if (ATA[i] == NULL)
+		{
+			printf("error :申请数组子内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+			exit(EXIT_FAILURE);
+		}
+    }
+
+    // 为A的转置分配内存
+    double **transArr;
+    transArr = (double **)malloc(col_num * sizeof(double *));
+	if (transArr == NULL)
+	{
+		printf("error :申请数组内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+		exit(EXIT_FAILURE);
+	}
+    for (int i = 0; i < col_num; i++)
+    {
+        transArr[i] = (double *)malloc(row_num * sizeof(double));
+		if (transArr[i] == NULL)
+		{
+			printf("error :申请数组子内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+			exit(EXIT_FAILURE);
+		}
+    }
+
+    // 为 Sigma 的转置的倒数分配内存.
+    double **transSigma;
+    transSigma = (double **)malloc(col_num * sizeof(double *));
+	if (transSigma == NULL)
+	{
+		printf("error :申请数组内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+		exit(EXIT_FAILURE);
+	}
+    for (int i = 0; i < col_num; i++)
+    {
+        transSigma[i] = (double *)malloc(row_num * sizeof(double));
+		if (transSigma[i] == NULL)
+		{
+			printf("error :申请数组子内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+			exit(EXIT_FAILURE);
+		}
+    }
+    for(int i = 0; i < col_num; ++i){
+        for(int j = 0; j < row_num; ++j){
+            transSigma[i][j] = 0;
+        }
+    }
+
+    // AV
+    double **AV;
+    AV = (double **)malloc(row_num * sizeof(double *));
+	if (AV == NULL)
+	{
+		printf("error :申请数组内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+		exit(EXIT_FAILURE);
+	}
+    for (int i = 0; i < row_num; i++)
+    {
+        AV[i] = (double *)malloc(col_num * sizeof(double));
+		if (AV[i] == NULL)
+		{
+			printf("error :申请数组子内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+			exit(EXIT_FAILURE);
+		}
+    }
+
+    Transpose2DDoubleMatrix(Aarr, transArr, row_num, col_num);
+    // printf("AT  为:\n");
+    // Display2DDoubleArray2DPoint(col_num, row_num, transArr);
+
+    MatrixMultiplyDouble(transArr, col_num, row_num, Aarr, row_num, col_num, ATA);
+
+    // printf("ATA 为:\n");
+    // Display2DDoubleArray2DPoint(col_num, col_num, ATA);
+
+    EigenValueVectors_Jacobi(ATA, EigenValue, EigenVec, col_num, eps, iter_max_num);
+
+
+    eigvalue_num = 0;
+    for(int i = 0; i < col_num; ++i){
+        if( fabs(EigenValue[i]) > 1e-10){
+            eigvalue_num++;
+        }
+        else{
+            break;
+        }
+    }
+
+    for(int i = 0; i < col_num; ++i){
+        for(int j = 0; j < col_num; ++j){
+            VarrT[i][j] = EigenVec[j][i];
+        }
+    }
+
+    printf("eigvalue_num = %d\n", eigvalue_num);
+
+    for(int i = 0; i < eigvalue_num; ++i){
+        Sigma[i][i] = sqrt(EigenValue[i]);
+        transSigma[i][i] = 1.0/sqrt(EigenValue[i]);
+    }
+
+    // printf("Sigma.T 为:\n");
+    // Display2DDoubleArray2DPoint(col_num, row_num, transSigma);
+
+    MatrixMultiplyDouble(Aarr, row_num, col_num, EigenVec, col_num, col_num, AV);
+    MatrixMultiplyDouble(AV, row_num, col_num, transSigma, col_num, row_num, Uarr);
+
+    // printf("Uarr 为:\n");
+    // Display2DDoubleArray2DPoint(row_num, row_num, Uarr);
+
+
+    // printf("Sigma 为:\n");
+    // Display2DDoubleArray2DPoint(row_num, col_num, Sigma);
+
+
+    // printf("V 的转置为:\n");
+    // Display2DDoubleArray2DPoint(col_num, col_num, VarrT);
+
+    Matrix_Free_2DDouble(transArr, col_num, row_num);
+    Matrix_Free_2DDouble(transSigma, col_num, row_num);
+    Matrix_Free_2DDouble(ATA, col_num, col_num);
+    Matrix_Free_2DDouble(EigenVec, col_num, col_num);
+    Matrix_Free_2DDouble(AV, row_num, col_num);
 
 }
 
 
 
+
+/*****************************************************************************************
+https://blog.csdn.net/zhouxuguang236/article/details/40212143
+
+
+功能: 实对称矩阵 的特征值和特征向量
+
+雅可比方法用于求解实对称矩阵的特征值和特征向量,对于实对称矩阵A AA,必有正交矩阵U ,使得U^T*A*U = D .D是一个对角阵,主对角线的元素是矩阵 A  的特征值,正交矩阵 U 的每一列对应于属于矩阵 D 的主对角线对应元素的特征向量.
+
+输入:
+    arr:  order x order 的矩阵
+    EPS：精度
+    maxiternum: 最大迭代次数
+
+输出:
+    EigenValue: 特征值, 1 x order. 从大到小排序
+    EigenVec: order x order二维矩阵, 每一列是对应 EigenValue 的特征向量。
+*****************************************************************************************/
+void EigenValueVectors_Jacobi(double **arr, double *EigenValue, double **EigenVec, int order, double EPS, int maxiternum)
+{
+    int flag = 0;
+    double max = EPS;
+    int iternum = 0;
+    int row = 0, col = 0;
+
+    int p = 0, q = 0;
+
+	if (arr == NULL)
+	{
+		printf("error: 数组为空, [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+		exit(EXIT_FAILURE);
+	}
+	//判断是否为对称矩阵
+	for (int i = 0; i < order; i++)
+	{
+		for (int j = i; j < order; j++)
+		{
+			if (arr[i][j] != arr[j][i])
+			{
+				flag = 1;
+				break;
+			}
+		}
+	}
+	if (flag == 1)
+	{
+		printf("error : 输入并非是对称矩阵, [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+		exit(EXIT_FAILURE);
+	}
+
+    //=======================================================
+    // 为了消元过程不影响matrix, 先分配内存并拷贝数值;
+    //=======================================================
+    double **tmparr;
+    tmparr = (double **)malloc(order * sizeof(double *));
+	if (tmparr == NULL)
+	{
+		printf("error :申请数组内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+		exit(EXIT_FAILURE);
+	}
+    for (int i = 0; i < order; i++)
+    {
+        tmparr[i] = (double *)malloc(order * sizeof(double));
+		if (tmparr[i] == NULL)
+		{
+			printf("error :申请数组子内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+			exit(EXIT_FAILURE);
+		}
+    }
+
+    // 为特征向量组分配临时内存
+    double **tmpEgVec;
+    tmpEgVec = (double **)malloc(order * sizeof(double *));
+	if (tmpEgVec == NULL)
+	{
+		printf("error :申请数组内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+		exit(EXIT_FAILURE);
+	}
+    for (int i = 0; i < order; i++)
+    {
+        tmpEgVec[i] = (double *)malloc(order * sizeof(double));
+		if (tmpEgVec[i] == NULL)
+		{
+			printf("error :申请数组子内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+			exit(EXIT_FAILURE);
+		}
+    }
+
+    //先copy一份array在temp_mat中，因为 在堆区申请的空间,在对其进行处理的过程中会修改原矩阵的值,因此要存储起来 .
+    for(int i = 0; i < order; i++){
+        for(int j = 0; j < order; ++j){
+            tmparr[i][j] = arr[i][j];
+
+            if(i == j){
+                tmpEgVec[i][j] = 1;
+            }
+            else{
+                tmpEgVec[i][j] = 0;
+            }
+        }
+    }
+
+    //printf("拷贝的temarr和EigenVec\n");
+    //Display2DDoubleArray2DPoint(order, order, tmparr);
+    //Display2DDoubleArray2DPoint(order, order, tmpEgVec);
+
+    while(iternum < maxiternum && max >= EPS){
+
+        max = fabs(tmparr[0][1]);
+        row = 0;
+        col = 1;
+        for(int i = 0; i < order; i++){
+            for(int j = 0; j < order; ++j){
+                if(i != j && fabs(tmparr[i][j]) > max ){
+                    max = fabs(tmparr[i][j]);
+                    row = i;
+                    col = j;
+                }
+            }
+        }
+
+        double theta = 0.5 * atan2( -2 * tmparr[row][col], (tmparr[col][col] - tmparr[row][row]) );
+
+        //update Arr
+        double App = tmparr[row][row];
+        double Aqq = tmparr[col][col];
+        double Apq = tmparr[row][col];
+
+        // 旋转矩阵的值
+        double sin_theta = sin(theta);
+        double cos_theta = cos(theta);
+        double sin_2theta = sin(2 * theta);
+        double cos_2theta = cos(2 * theta);
+
+        tmparr[row][row] = App*cos_theta*cos_theta + Aqq*sin_theta*sin_theta + Apq*sin_2theta;  // App'
+        tmparr[col][col] = App*sin_theta*sin_theta + Aqq*cos_theta*cos_theta - Apq*sin_2theta;  // Aqq'
+        tmparr[row][col] = 0.5*(Aqq - App)*sin_2theta + Apq*cos_2theta;                         // Apq'
+        tmparr[col][row] = tmparr[row][col];                                                    // Aqp'
+        for (int k = 0; k < order; k++)
+        {
+            if (k != row && k != col)
+            {
+                double arowk = tmparr[row][k];
+                double acolk = tmparr[col][k];
+                tmparr[row][k] =  arowk * cos_theta + acolk * sin_theta;                         // Api', i = 0...order
+                tmparr[k][row] = tmparr[row][k];                                                // Aip', i = 0...order
+                tmparr[col][k] = - arowk * sin_theta + acolk * cos_theta ;                      // Aqi', i = 0...order
+                tmparr[k][col] = tmparr[col][k];                                                // Aiq', i = 0...order
+            }
+        } //  A1 仍然是实对称阵，因为，UpqT = Upq-1，知 A1 与 A 的特征值相同。
+
+
+        // 更新特征向量
+        double Eki;
+        double Ekj;
+        for(int k = 0; k < order; k++){
+            Eki = tmpEgVec[k][row];
+            Ekj = tmpEgVec[k][col];
+            tmpEgVec[k][row] =   Eki*cos_theta + Ekj*sin_theta;
+            tmpEgVec[k][col] = - Eki*sin_theta + Ekj*cos_theta ;
+        }
+
+        iternum++;
+    } // end while
+    printf("Maximum off-diagonal element is: %lf, iterate: %d times\n\n", max, iternum);
+
+    // 更新特征值
+    for(int i = 0; i < order; i++){
+        EigenValue[i] = tmparr[i][i];
+    }
+
+    // printf("排序前 特征值:\n");
+    // Display1DDoubleArray1DPoint(order, EigenValue);
+
+    // printf("排序前 特征向量为:\n");
+    // Display2DDoubleArray2DPoint(order, order, tmpEgVec);
+
+
+    // 排序特征值并返回索引，以从大到小排序特征值和特征向量.
+    int *Index;
+    Index = (int *)malloc(sizeof(int) * order);
+	if (Index == NULL)
+	{
+		printf("error :申请数组内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+		exit(EXIT_FAILURE);
+	}
+
+    for(int i = 0; i < order; i++){
+        Index[i] = i;
+    }
+    BubbleSortDouble(EigenValue, order, Index);
+
+
+    for(int i = 0; i < order; ++i){
+        for(int j = 0; j < order; ++j){
+            EigenVec[i][j] = tmpEgVec[i][Index[j]];
+        }
+    }
+
+    // Display1DIntArray3(Index, order);
+
+    // printf("排序后 特征值:\n");
+    // Display1DDoubleArray1DPoint(order, EigenValue);
+
+    // printf("排序后 特征向量为:\n");
+    // Display2DDoubleArray2DPoint(order, order, EigenVec);
+
+    // 释放内存
+    Matrix_Free_2DDouble(tmparr, order, order);
+    Matrix_Free_2DDouble(tmpEgVec, order, order);
+    Matrix_Free_1DInt(Index, order);
+}
 
