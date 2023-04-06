@@ -27,7 +27,7 @@ extern "C" {
 
 #define MAX 200  //最大计算阶数，可以更改
 
-const double EPS = 1e-9;
+#define EPS  1e-20
 
 
 
@@ -86,14 +86,14 @@ void DecompositionQR_Givens(double **arr, double **Qarr, double **Rarr, int orde
 /****************************************************************************************************************************************************************************
 矩阵相关，求矩阵的 SVD分解
 ****************************************************************************************************************************************************************************/
-void DecompositionSVD(double **arr, double **Uarr, double **Sigma, double **Varr,  int arr_raw_num, int arr_col_num); //  矩阵的 SVD 分解
+int DecompositionSVD(double **arr, double **Uarr, double **Sigma, double **Varr,  int arr_raw_num, int arr_col_num); //  矩阵的 SVD 分解
 
 
 
 /****************************************************************************************************************************************************************************
 矩阵相关，求实对称矩阵的 特征值和特征向量
 ****************************************************************************************************************************************************************************/
-void EigenValueVectors_Jacobi(double **arr, double *EigenValue, double **EigenVec, int order, double EPS, int maxiternum);
+void EigenValueVectors_Jacobi(double **arr, double *EigenValue, double **EigenVec, int order, double eps, int maxiternum);
 
 
 

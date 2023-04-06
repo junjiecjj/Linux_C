@@ -4,6 +4,8 @@
 #include "MatrixAnalysis.h"
 
 
+
+
 /****************************************************************************************************************************************************************************
 矩阵相关，求行列式
 ****************************************************************************************************************************************************************************/
@@ -798,9 +800,20 @@ void DecompositionQR_Givens(double **arr, double **Qarr, double **Rarr, int orde
     Uarr: row_num x row_num 的二维矩阵
     Sigma: row_num x col_num 的二维矩阵
     Varr: col_num x col_num 的二维矩阵
+    eigvalue_num: Sigma非零的特征值个数
+
+https://blog.csdn.net/chenaiyanmie/article/details/80011244?spm=1001.2101.3001.6650.6&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-6-80011244-blog-122266936.235%5Ev27%5Epc_relevant_multi_platform_whitelistv3&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-6-80011244-blog-122266936.235%5Ev27%5Epc_relevant_multi_platform_whitelistv3&utm_relevant_index=9
+
+
+https://zhuanlan.zhihu.com/p/122259109
+
+https://zhuanlan.zhihu.com/p/480389473
+
+https://taotaoiit.blog.csdn.net/article/details/125237191?spm=1001.2101.3001.6650.5&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-5-125237191-blog-122266936.235%5Ev27%5Epc_relevant_multi_platform_whitelistv3&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-5-125237191-blog-122266936.235%5Ev27%5Epc_relevant_multi_platform_whitelistv3&utm_relevant_index=8
+
 ****************************************************************************************************************************************************************************/
 
-void DecompositionSVD(double **Aarr, double **Uarr, double **Sigma, double **VarrT,  int row_num, int col_num) //  矩阵的 SVD 分解
+int DecompositionSVD(double **Aarr, double **Uarr, double **Sigma, double **VarrT,  int row_num, int col_num) //  矩阵的 SVD 分解
 {
     int eigvalue_num = 0;
     double eps = 1e-40;//误差
@@ -1010,6 +1023,7 @@ void DecompositionSVD(double **Aarr, double **Uarr, double **Sigma, double **Var
     Matrix_Free_2DDouble(EigenVec, col_num, col_num);
     Matrix_Free_2DDouble(AV, row_num, col_num);
 
+    return eigvalue_num;
 }
 
 
@@ -1032,7 +1046,7 @@ https://blog.csdn.net/zhouxuguang236/article/details/40212143
     EigenValue: 特征值, 1 x order. 从大到小排序
     EigenVec: order x order二维矩阵, 每一列是对应 EigenValue 的特征向量。
 *****************************************************************************************/
-void EigenValueVectors_Jacobi(double **arr, double *EigenValue, double **EigenVec, int order, double EPS, int maxiternum)
+void EigenValueVectors_Jacobi(double **arr, double *EigenValue, double **EigenVec, int order, double eps, int maxiternum)
 {
     int flag = 0;
     double max = EPS;

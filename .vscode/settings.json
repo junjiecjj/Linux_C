@@ -25,7 +25,8 @@
         "sortalgorithms.h": "c",
         "libgen.h": "c",
         "stdbool.h": "c",
-        "stdafx.h": "c"
+        "stdafx.h": "c",
+        "matrixanalysis.h": "c"
     },
     "workbench.colorCustomizations": {
         "activityBar.background": "#392C12",
