@@ -11,7 +11,7 @@
 
 
 
-int main(int argc, char *argv[])
+int mainMatrix( )
 {
     //=========================================================================================================
 
@@ -272,4 +272,15 @@ int main(int argc, char *argv[])
 }
 
 
+int mainSignal()
+{
 
+}
+
+
+int main(int argc, char *argv[]){
+
+    mainMatrix();
+
+    return 0;
+}
