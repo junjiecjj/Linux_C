@@ -835,7 +835,6 @@ int CString(void)
 
     LenSizeofStr();
 
-
     return 0;
 }
 /*
