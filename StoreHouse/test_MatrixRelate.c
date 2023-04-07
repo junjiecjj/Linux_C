@@ -18,100 +18,100 @@ int mainMatrix( )
     int order;
     FILE *fp;
 
-	// printf("请输入行列式阶数：");
-	// scanf("%d", &order);
-    // double **matrix;
-    // // 分配内存
-    // matrix = (double **)malloc(order * sizeof(double *));  //每一行的首地址分配内存，不一定连续
-    // for (int i = 0; i < order; i++)
-    // {
-    //     matrix[i] = (double *)malloc(order * sizeof(double)); //每一行一定连续
-    // }
+	printf("请输入行列式阶数：");
+	scanf("%d", &order);
+    double **matrix;
+    // 分配内存
+    matrix = (double **)malloc(order * sizeof(double *));  //每一行的首地址分配内存，不一定连续
+    for (int i = 0; i < order; i++)
+    {
+        matrix[i] = (double *)malloc(order * sizeof(double)); //每一行一定连续
+    }
 
 
-	// if ((fp = fopen("/home/jack/snap/Matrix.txt", "r")) == NULL){
-	// 		fprintf(stderr, "\n Cannot open the file!!!\n");
-	// 		exit(1);
-	// }
+	if ((fp = fopen("/home/jack/snap/Matrix.txt", "r")) == NULL){
+			fprintf(stderr, "\n Cannot open the file!!!\n");
+			exit(1);
+	}
 
-	// for (int a = 0; a < order; a++) {
-	// 	for (int b = 0; b < order; b++) {
-	// 		fscanf(fp, "%lf", &matrix[a][b]);
-	// 	}
-	// }
-    // fclose(fp);
-    // //=====================================  行列式 =================================================
-    // printf("读取的 %d × %d 矩阵:\n",order,order);
-    // Display2DFloatArray2DPoint(order, order, matrix);
+	for (int a = 0; a < order; a++) {
+		for (int b = 0; b < order; b++) {
+			fscanf(fp, "%lf", &matrix[a][b]);
+		}
+	}
+    fclose(fp);
+    //=====================================  行列式 =================================================
+    printf("读取的 %d × %d 矩阵:\n",order,order);
+    Display2DDoubleArray2DPoint(order, order, matrix);
 
-    // // 计算行列式 测试程序
-    // printf("行列式为: %.10lf \n", DeterminantGaussNormal(matrix, order));
-    // printf("行列式为: %.10lf \n", DeterminantGaussColPrime(matrix, order));
-    // printf("行列式为: %.10lf \n", DeterminantGaussGlobPrime(matrix, order));
-    // // // printf("行列式为: %f\n", Determinant(matrix, order));
-    // // // printf("原来的 %d × %d 矩阵:\n",order,order);
-    // // // Display2DFloatArray2DPoint(order, order, matrix);
+    // 计算行列式 测试程序
+    printf("行列式为: %.10lf \n", DeterminantGaussNormal(matrix, order));
+    printf("行列式为: %.10lf \n", DeterminantGaussColPrime(matrix, order));
+    printf("行列式为: %.10lf \n", DeterminantGaussGlobPrime(matrix, order));
+    // // printf("行列式为: %f\n", Determinant(matrix, order));
+    // // printf("原来的 %d × %d 矩阵:\n",order,order);
+    // // Display2DDoubleArray2DPoint(order, order, matrix);
 
-    // //======================================  求逆 =================================================
-    // // 计算矩阵的逆矩阵 测试程序
-    // double **Inverse;
-    // // 分配内存
-    // Inverse = (double **)malloc(order * sizeof(double *));  //每一行的首地址分配内存，不一定连续
-    // for (int i = 0; i < order; i++)
-    // {
-    //     Inverse[i] = (double *)malloc(order * sizeof(double)); //每一行一定连续
-    // }
+    //======================================  求逆 =================================================
+    // 计算矩阵的逆矩阵 测试程序
+    double **Inverse;
+    // 分配内存
+    Inverse = (double **)malloc(order * sizeof(double *));  //每一行的首地址分配内存，不一定连续
+    for (int i = 0; i < order; i++)
+    {
+        Inverse[i] = (double *)malloc(order * sizeof(double)); //每一行一定连续
+    }
 
-    // InverseGauss(matrix, Inverse, order);
-    // printf("矩阵的逆矩阵为:\n");
-    // Display2DFloatArray2DPoint(order, order, Inverse);
+    InverseGauss(matrix, Inverse, order);
+    printf("矩阵的逆矩阵为:\n");
+    Display2DDoubleArray2DPoint(order, order, Inverse);
 
-    // double **recover;
-    // // 分配内存
-    // recover = (double **)malloc(order * sizeof(double *));  //每一行的首地址分配内存，不一定连续
-    // for (int i = 0; i < order; i++)
-    // {
-    //     recover[i] = (double *)malloc(order * sizeof(double)); //每一行一定连续
-    // }
+    double **recover;
+    // 分配内存
+    recover = (double **)malloc(order * sizeof(double *));  //每一行的首地址分配内存，不一定连续
+    for (int i = 0; i < order; i++)
+    {
+        recover[i] = (double *)malloc(order * sizeof(double)); //每一行一定连续
+    }
 
-    // MatrixMultiplyDouble(matrix, order, order, Inverse, order, order, recover);
-    // printf("矩阵 x 矩阵的逆 为 :\n");
-    // Display2DFloatArray2DPoint(order, order, recover);
+    MatrixMultiplyDouble(matrix, order, order, Inverse, order, order, recover);
+    printf("矩阵 x 矩阵的逆 为 :\n");
+    Display2DDoubleArray2DPoint(order, order, recover);
 
 
-    // Matrix_Free_2DDouble(recover, order, order);
-    // Matrix_Free_2DDouble(Inverse, order, order);
-    // //=====================================  LU 分解 =================================================
-    // double **larr;
-    // // 分配内存
-    // larr = (double **)malloc(order * sizeof(double *));  //每一行的首地址分配内存，不一定连续
-    // for (int i = 0; i < order; i++)
-    // {
-    //     larr[i] = (double *)malloc(order * sizeof(double)); //每一行一定连续
-    // }
+    Matrix_Free_2DDouble(recover, order, order);
+    Matrix_Free_2DDouble(Inverse, order, order);
+    //=====================================  LU 分解 =================================================
+    double **larr;
+    // 分配内存
+    larr = (double **)malloc(order * sizeof(double *));  //每一行的首地址分配内存，不一定连续
+    for (int i = 0; i < order; i++)
+    {
+        larr[i] = (double *)malloc(order * sizeof(double)); //每一行一定连续
+    }
 
-    // double **uarr;
-    // // 分配内存
-    // uarr = (double **)malloc(order * sizeof(double *));  //每一行的首地址分配内存，不一定连续
-    // for (int i = 0; i < order; i++)
-    // {
-    //     uarr[i] = (double *)malloc(order * sizeof(double)); //每一行一定连续
-    // }
+    double **uarr;
+    // 分配内存
+    uarr = (double **)malloc(order * sizeof(double *));  //每一行的首地址分配内存，不一定连续
+    for (int i = 0; i < order; i++)
+    {
+        uarr[i] = (double *)malloc(order * sizeof(double)); //每一行一定连续
+    }
 
-    // DecompositionLU_Crout(matrix, larr, uarr, order);
-    // printf("Crout分解, L 矩阵为:\n");
-    // Display2DFloatArray2DPoint(order, order, larr);
-    // printf("U 矩阵为:\n");
-    // Display2DFloatArray2DPoint(order, order, uarr);
+    DecompositionLU_Crout(matrix, larr, uarr, order);
+    printf("Crout分解, L 矩阵为:\n");
+    Display2DDoubleArray2DPoint(order, order, larr);
+    printf("U 矩阵为:\n");
+    Display2DDoubleArray2DPoint(order, order, uarr);
 
-    // DecompositionLU_Doolittle(matrix, larr, uarr, order);
-    // printf("Doolittle分解, L 矩阵为:\n");
-    // Display2DFloatArray2DPoint(order, order, larr);
-    // printf("U 矩阵为:\n");
-    // Display2DFloatArray2DPoint(order, order, uarr);
+    DecompositionLU_Doolittle(matrix, larr, uarr, order);
+    printf("Doolittle分解, L 矩阵为:\n");
+    Display2DDoubleArray2DPoint(order, order, larr);
+    printf("U 矩阵为:\n");
+    Display2DDoubleArray2DPoint(order, order, uarr);
 
-    // Matrix_Free_2DDouble(uarr, order, order);
-    // Matrix_Free_2DDouble(larr, order, order);
+    Matrix_Free_2DDouble(uarr, order, order);
+    Matrix_Free_2DDouble(larr, order, order);
     //=====================================  实对称矩阵的特征值特征向量 =================================================
     printf("=====================================  实对称矩阵的特征值特征向量 =================================================\n");
     double **matrix1;

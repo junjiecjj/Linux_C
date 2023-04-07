@@ -45,6 +45,8 @@
 
 
 /**********************************************************************
+void GetPwd(char *CurrentDir)
+
 功能: 获取当前目录
 ***********************************************************************/
 void GetPwd(char *CurrentDir)
@@ -100,6 +102,7 @@ void  BaseNameDirName(void)
 
 
 /**********************************************************************
+void mkMultiDirs(char *muldir)
 功能: 创建目录(可以是多级目录), 果已经存在，则什么也不做.
 输入:
     testDira/test1/test2
@@ -107,7 +110,8 @@ void  BaseNameDirName(void)
     ./testDira/test1/test2
     ../../testDira/test1/test2
 ***********************************************************************/
-void mkMultiDirs(char *muldir){
+void mkMultiDirs(char *muldir)
+{
 	// check the parameter !
 	if( NULL == muldir )
 	{
@@ -151,6 +155,7 @@ void mkMultiDirs(char *muldir){
 }
 
 /**********************************************************************
+void mkMultiDirsBySystem(char *muldir)
 功能: 通过 System调用shell命令 创建目录(可以是多级目录)，如果已经存在，则什么也不做.
 输入:
     testDira/test1/test2
@@ -158,7 +163,8 @@ void mkMultiDirs(char *muldir){
     ./testDira/test1/test2
     ../../testDira/test1/test2
 ***********************************************************************/
-void mkMultiDirsBySystem(char *muldir){
+void mkMultiDirsBySystem(char *muldir)
+{
 	// check the parameter !
 	if( NULL == muldir )
 	{
@@ -237,6 +243,7 @@ bool IsHiddenFile(char *filename)
 
 
 /**********************************************************************
+int  ListFileInDir(char *Dirname, int MaxFileNum, char **FileName)
 功能: 列出指定目录下的所有文件名称,不包括路径
 输入:
 	Dirname：目录名称
@@ -278,9 +285,7 @@ int  ListFileInDir(char *Dirname, int MaxFileNum, char **FileName)
 		}
 		closedir(dirpt);
 	}
-
 	return filenum;
-
 }
 
 
@@ -290,7 +295,7 @@ void useListFileInDir(void)
 	int MaxFileNum = 100;
 	char Dir[255];
 
-	strncpy(Dir, "./", 10);
+	strncpy(Dir, "./", 255);
 
 	// 分配内存
 	char **filelist;
@@ -322,6 +327,7 @@ void useListFileInDir(void)
 
 
 /**********************************************************************
+int  ListAbsFileInDir(char *Dirname, int maxfilenum, char **FileName)
 功能: 列出指定目录下的所有文件名称,包括路径
 输入:
 	Dirname：目录名称
@@ -331,7 +337,7 @@ void useListFileInDir(void)
 	FileName： 保存文件名称的数组,提前分配好内存
 	filenum： 文件个数
 ***********************************************************************/
-int  ListAbsFileInDir(char *Dirname, int MaxFileNum, char **FileName)
+int  ListAbsFileInDir(char *Dirname, int maxfilenum, char **FileName)
 {
 	if(Dirname == NULL)
 	{
@@ -339,10 +345,29 @@ int  ListAbsFileInDir(char *Dirname, int MaxFileNum, char **FileName)
 		exit(EXIT_FAILURE);
 	}
 
+	printf("2  strlen(Dirname) = %zd, sizeof(Dirname) = %zd\n", strlen(Dirname), sizeof(Dirname));
+
 	char tempfiledir[255];
+	char dirname[155];
 	DIR *dirpt;
 	struct dirent* dirInfo;
 	int filenum = 0;
+	int len = 0;
+	int flag = 0;
+
+	len = strlen(Dirname);
+	if(strncmp(Dirname + len - 1, "/", 1) == 0){
+		// printf("%s end with / \n", Dirname);
+		strncpy(dirname, Dirname, 155);
+	}
+	else{
+		// printf("%s not end with / \n", Dirname);
+		strncpy(dirname, Dirname, 155);
+		strncat(dirname, "/", 2);
+	}
+
+	// printf("dirname = %s\n", dirname);
+
 
 	if((dirpt = opendir(Dirname)) == NULL){
 		printf("%s cannot open !!!\n", Dirname);
@@ -359,8 +384,8 @@ int  ListAbsFileInDir(char *Dirname, int MaxFileNum, char **FileName)
 				// else if(dirInfo->d_type == DT_REG){
 				// 	printf("filename[%d] = %s, 是一个文件\n",filenum, FileName[filenum]);
 				// }
-				strncpy(tempfiledir, Dirname, 100);
-				strncat(tempfiledir, FileName[filenum], 50);
+				strncpy(tempfiledir, dirname, 155);
+				strncat(tempfiledir, FileName[filenum], 100);
 				strncpy(FileName[filenum], tempfiledir, 255);
 
 				filenum++;
@@ -412,6 +437,7 @@ void useListAbsFileInDir(void)
 
 
 /**********************************************************************
+void GetDirnameBasename(char *filename, char *Dirname, char *Basename);
 功能:  分离目录和文件名
 输入:
 	filename： 例如： /home/jack/公共的/ShellScript/USB.sh
@@ -437,9 +463,6 @@ void GetDirnameBasename(char *filename, char *Dirname, char *Basename)
 {
 
     char buf[1024] = {0}; // 缓冲区
-    char dname[1024] = {0}; // 目录
-    char bname[1024] = {0}; // 文件名
-
 
     strcpy(buf, filename);
 	//printf("buf = %s\n", buf);
@@ -465,8 +488,8 @@ void GetDirnameBasename(char *filename, char *Dirname, char *Basename)
 void useGetDirnameBasename(void)
 {
 	char filename[1024] = "./home/jack/公共的/ShellScript/USB.sh";
-	char DirName[1024];
-	char BaseName[1024];
+	char DirName[1024] = {};
+	char BaseName[1024] = {};
 	GetDirnameBasename(filename, DirName,BaseName);
 
 	printf("filename = %s\n", filename);
@@ -509,9 +532,9 @@ int GetFilenameExtensionname(char *filename, char *basename, char *extname)
 
 void useGetFilenameExtensionname(void)
 {
-	char filename[1024] = "deepstream_loulan_detection.cpp";
-	char iFileName[1024];
-	char szExtName[1024];
+	char filename[1024] = "USBBBB_CCCCC_DDDDDD_EEEEEE.cpp";
+	char iFileName[1024] =  {};
+	char szExtName[1024] = {};
 	if(GetFilenameExtensionname(filename, iFileName, szExtName) == 0){
 		printf("filename = %s\n", filename);
 		printf("DirName = %s\n", iFileName);
@@ -533,13 +556,11 @@ void mainSearchDir(void)
 	// MkrDir("/home/jack/tmp/testMkdir");  // 绝对路径
 	// int2Darray();
 
-	// release2Dchar();
 
-	// ListDir("./", 100);
 	useListFileInDir();
 	useListAbsFileInDir();
 
-	BaseNameDirName();
+	// BaseNameDirName();
 
 	useGetDirnameBasename();
 	useGetFilenameExtensionname();

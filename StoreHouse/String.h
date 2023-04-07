@@ -7,7 +7,7 @@
 
 
 
-#define  MAX 20
+#define  MAX 100
 #define  WORDS "beast"
 #define  TARGSIZE 7
 #define  SIZE1 40

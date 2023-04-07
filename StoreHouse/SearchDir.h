@@ -46,6 +46,9 @@
  * 创建一个目录，并在相应目录下创建多个规则命名的文件.
  *
 **************************************************************/
+#ifndef _SEARCHDIR_CJJ
+#define _SEARCHDIR_CJJ
+
 
 #include <unistd.h> // Linux系统中
 // #include <direct.h> // windows系统中
@@ -132,8 +135,64 @@ bool IsHiddenFile(char *file);
 int  ListFileInDir(char *Dirname, int MaxFileNum, char **FileName);
 void useListFileInDir(void);
 
+
+
+
+/**********************************************************************
+int  ListAbsFileInDir(char *Dirname, int maxfilenum, char **FileName)
+功能: 列出指定目录下的所有文件名称,包括路径
+输入:
+	Dirname：目录名称
+	MaxFileNum：最多多少个文件
+
+输出:
+	FileName： 保存文件名称的数组,提前分配好内存
+	filenum： 文件个数
+***********************************************************************/
+int  ListAbsFileInDir(char *Dirname, int maxfilenum, char **FileName);
+void useListAbsFileInDir(void);
+
+
+
+/**********************************************************************
+void GetDirnameBasename(char *filename, char *dirname, char *basename);
+功能:  分离目录和文件名
+输入:
+	filename： 例如： /home/jack/公共的/ShellScript/USB.sh
+
+输出:
+	Dirname： /home/jack/公共的/ShellScript/
+	Basename： USB.sh
+
+一、提取文件名
+头文件：#include <libgen.h>
+**函数：**char *basename(char *path);
+注：这个函数不会修改传入的 path 内容。
+
+二、提取路径
+头文件：#include <libgen.h>
+**函数：**char *dirname(char *path);
+注：这个函数会修改传入的 path 内容，如果不像path被改变需要重新申请一个buf传入，如果传入的是宏则会段错误。
+***********************************************************************/
 void GetDirnameBasename(char *filename, char *dirname, char *basename);
 void useGetDirnameBasename(void);
 
+/**********************************************************************
+int GetFilenameExtensionname(char *filename, char *basename, char *extname);
+
+功能:  分离文件名和后缀
+输入:
+	filename： 例如：  USB.sh
+
+输出:
+	Dirname： USB，  jpg文件名
+	Basename： sh，   后缀
+***********************************************************************/
+int GetFilenameExtensionname(char *filename, char *basename, char *extname);
+void useGetFilenameExtensionname(void);
+
 
 void mainSearchDir(void);
+
+
+#endif  //_VLA_CJJ

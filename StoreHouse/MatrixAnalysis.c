@@ -153,7 +153,7 @@ double DeterminantGaussNormal(double **matrix, int order)
 
     // 检查指针是否为空
     if(matrix == NULL){
-        printf("[exist.  file:%s,fun:%s, Line:%d,  ] \n", __FILE__, __func__, __LINE__);
+        printf("error:数组为空, [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
         exit(EXIT_FAILURE);
     }
 
@@ -252,7 +252,7 @@ double DeterminantGaussColPrime(double **matrix, int order)
 
     // 检查指针是否为空
     if(matrix == NULL){
-        printf("[exist.  file:%s,fun:%s, Line:%d,  ] \n", __FILE__, __func__, __LINE__);
+        printf("error:数组为空, [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
         exit(EXIT_FAILURE);
     }
 
@@ -364,7 +364,7 @@ double DeterminantGaussGlobPrime(double **matrix, int order)
 
     // 检查指针是否为空
     if(matrix == NULL){
-        printf("[exist.  file:%s,fun:%s, Line:%d,  ] \n", __FILE__, __func__, __LINE__);
+        printf("error:数组为空, [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
         exit(EXIT_FAILURE);
     }
 
@@ -525,7 +525,7 @@ void InverseGauss(double **matrix, double **inverse, int order)
 
     // 检查指针是否为空
     if(matrix == NULL){
-        printf("[exist.  file:%s,fun:%s, Line:%d,  ] \n", __FILE__, __func__, __LINE__);
+        printf("error:数组为空, [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
         exit(EXIT_FAILURE);
     }
 
@@ -573,7 +573,7 @@ void InverseGauss(double **matrix, double **inverse, int order)
 
         if(maxval == 0.0)
         {
-            printf("some column max value is zero, no,inverse matrix exit \n");
+            printf("error: 某列最大值为0, 不可逆, [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
             exit(EXIT_FAILURE);
         }
         if(maxrow != i){
@@ -667,7 +667,7 @@ A = LU
 void DecompositionLU_Crout(double **arr, double **Larr, double **Uarr, int order) //  矩阵的 LU 分解
 {
     if(arr == NULL){
-        printf("NULL point, return\n");
+        printf("error:数组为空, [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
         exit(EXIT_FAILURE);
     }
     double tmpsum = 0;
@@ -703,7 +703,7 @@ void DecompositionLU_Crout(double **arr, double **Larr, double **Uarr, int order
 void DecompositionLU_Doolittle(double **arr, double **Larr, double **Uarr, int order) //  矩阵的 LU 分解
 {
     if(arr == NULL){
-        printf("NULL point, return\n");
+        printf("error:数组为空, [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
         exit(EXIT_FAILURE);
     }
     for(int i = 0; i<order; i++){

@@ -498,7 +498,7 @@ void format(void)
     printf("**************************** sprintf()函数 ******************************\n");
     char first[MAX];
     char last[MAX];
-    char formal[2 * MAX + 10];
+    char formal[2 * MAX + 100];
     double prize;
 
     puts("Enter your first name:");
@@ -661,9 +661,9 @@ sizeof()的值是在编译时计算得到的，因此不能用于计算动态分
 
 【小结】运算符sizeof()与函数strlen()的区别。
 
-sizeof()	strlen()
-编译时计算。	运行时计算。
-数组、结构体等静态变量。	char *类型的变量，必须以'\0'结尾。
+sizeof()	                  strlen()
+编译时计算。	               运行时计算。
+数组、结构体等静态变量。	    char *类型的变量，必须以'\0'结尾。
 数组名传给sizeof()不会退化。	数组名传给strlen()会退化为指针。
 利用sizeof()和strlen()分别计算上述三种定义方式定义的字符串的长度：
 
@@ -684,10 +684,29 @@ sizeof(str1)=4    // 即sizeof(char *),返回的是字符型指针的大小，�
 sizeof(str2)=13   // 包含'\0'。
 sizeof(str3)=13   // 包含'\0'。
 sizeof(str4)=16   // 返回的是实际分配的内存大小，而不是字符串的长度。
+
 strlen(str1)=12   // 不包含'\0'。
 strlen(str2)=12   // 不包含'\0',故比sizeof(str2)的值小1。
 strlen(str3)=12   // 不包含'\0',故比sizeof(str3)的值小1。
 strlen(str4)=12   // 返回的是字符串的实际长度(不包含'\0'),而不是实际分配的内存大小。
+
+
+sizeof() 和 strlen() 是 C 语言中两个非常常用的函数，它们都与计算内存大小有关，但是它们的作用是不同的。
+
+sizeof() 和 strlen() 的主要区别在于：
+
+sizeof() 是一个运算符，而 strlen() 是一个函数。
+sizeof() 计算的是变量或类型所占用的内存字节数，而 strlen() 计算的是字符串中字符的个数。
+sizeof() 可以用于任何类型的数据，而 strlen() 只能用于以空字符 '\0' 结尾的字符串。
+sizeof() 计算字符串的长度，包含末尾的 '\0'，strlen() 计算字符串的长度，不包含字符串末尾的 '\0'。
+sizeof() 函数是一个运算符而不是函数，用于计算一个类型或变量所占用的内存字节数。可以用它来获取任何类型的数据的字节数，包括基本数据类型、数组、结构体、共用体等等。
+
+sizeof就是一个计算数据类型所占空间大小的单目运算符，在计算字符串的空间大小时，包含了结束符\0的位置；而strlen是一个计算字符串长度的函数，使用时需要引用头文件#include <string.h>，不包含\0,即计算第一个 \0 之前的字符串长度。
+
+strlen() 函数用于计算一个字符串的长度，即它所包含的字符个数（不包括字符串结尾的空字符 '\0'）。
+需要注意的是，strlen() 函数只能用于计算以空字符 '\0' 结尾的字符串的长度，如果字符串中没有空字符，则 strlen() 函数的行为是未定义的。
+
+
 */
 void LenSizeofStr(void)
 {
@@ -697,88 +716,96 @@ void LenSizeofStr(void)
     char S3[20] = {'h', 'e', 'l', 'l', 'o', '\0', 'w', 'o', 'r', 'l', 'd', '\0'};
     char S4[20] = {'h', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'};
     char S5[] = "hello\0world";
-    char S6[] = {'h', 'e', 'l', 'l', 'o', '\0', ' ',
-                'w', 'o', 'r', 'l', 'd', '\0'};
+    char S6[] = {'h', 'e', 'l', 'l', 'o', '\0', ' ', 'w', 'o', 'r', 'l', 'd', '\0'};
     char S7[] = {'h', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd', '\0'};
-    char S8[] = {
-        'h', 'e', 'l', 'l', 'o', ' ',
-        'w', 'o', 'r', 'l', 'd'}; // strlen(S8)产生未定义的结果，因为S8不是以'\0'结尾，strlen可能一直向前查找直到遇到空字符
-
+    char S8[] = {'h', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'}; // strlen(S8)产生未定义的结果，因为S8不是以'\0'结尾，strlen可能一直向前查找直到遇到空字符
     char *S9 = "hello world";
-    printf("strlen(S1) = %zd ,\n strlen(S2) = %zd ,\n strlen(S3) = %zd ,\n "
-            "strlen(S4) = %zd ,\n strlen(S5) = %zd ,\n strlen(S6) = %zd ,\n "
-            "strlen(S7) = %zd ,\n strlen(S8) = %zd ,\n strlen(S9) = %zd\n",
-            strlen(S1), strlen(S2), strlen(S3), strlen(S4), strlen(S5), strlen(S6),
-            strlen(S7), strlen(S8), strlen(S9));
 
-    printf("sizeof(S1) = %zd , sizeof(S2) = %zd , sizeof(S3) = %zd , sizeof(S4) "
-            "= %zd , sizeof(S5) = %zd ,sizeof(S6) = %zd , sizeof(S7) = %zd , "
-            "sizeof(S8) = %zd ,sizeof(S9) = %zd\n",
-            sizeof(S1), sizeof(S2), sizeof(S3), sizeof(S4), sizeof(S5), sizeof(S6),
-            sizeof(S7), sizeof(S8), sizeof(S9));
+    printf("s1 = %s, s2 = %s, s3 = %s, s4 = %s, s5 = %s, s6 = %s, s7 = %s, s8 = %s, s9 =%s\n", S1, S2, S3, S4, S5, S6, S7, S8, S9);
 
-    printf("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"
-            "kkkk\n");
+    printf("strlen(S1) = %zd , strlen(S2) = %zd , strlen(S3) = %zd, strlen(S4) = %zd , strlen(S5) = %zd, strlen(S6) = %zd, strlen(S7) = %zd, strlen(S8) = %zd, strlen(S9) = %zd\n", strlen(S1), strlen(S2), strlen(S3), strlen(S4), strlen(S5), strlen(S6), strlen(S7), strlen(S8), strlen(S9));
+
+    printf("sizeof(S1) = %zd , sizeof(S2) = %zd , sizeof(S3) = %zd , sizeof(S4) = %zd , sizeof(S5) = %zd ,sizeof(S6) = %zd , sizeof(S7) = %zd, sizeof(S8) = %zd ,sizeof(S9) = %zd\n", sizeof(S1), sizeof(S2), sizeof(S3), sizeof(S4), sizeof(S5), sizeof(S6), sizeof(S7), sizeof(S8), sizeof(S9));
+
+// s1 = hello world, s2 = hello world, s3 = hello, s4 = hello world, s5 = hello, s6 = hello, s7 = hello world, s8 = hello worldhello, s9 =hello world
+// strlen(S1) = 11 , strlen(S2) = 11 , strlen(S3) = 5, strlen(S4) = 11 , strlen(S5) = 5, strlen(S6) = 5, strlen(S7) = 11, strlen(S8) = 16, strlen(S9) = 11
+// sizeof(S1) = 20 , sizeof(S2) = 20 , sizeof(S3) = 20 , sizeof(S4) = 20 , sizeof(S5) = 12 ,sizeof(S6) = 13 , sizeof(S7) = 12, sizeof(S8) = 11 ,sizeof(S9) = 8
+
+
+    printf("==================================================================================================\n\n");
     char a[] = "hello";
-    printf("strlen(a) = %zd\n", strlen(a));
-    printf("sizeof(a) = %zd\n\n", sizeof(a));
     printf("a = %s\n", a);
+    printf("strlen(a) = %zd\n", strlen(a));  // 5
+    printf("sizeof(a) = %zd\n\n", sizeof(a));  // 6
+
 
     char b[] = "hello\0";
-    printf("strlen(b) = %zd\n", strlen(b));
-    printf("sizeof(b) = %zd\n\n", sizeof(b));
     printf("b = %s\n", b);
+    printf("strlen(b) = %zd\n", strlen(b));  // 5
+    printf("sizeof(b) = %zd\n\n", sizeof(b));  // 7
+
 
     char c[] = "hello\n";
-    printf("strlen(c) = %zd\n", strlen(c));
-    printf("sizeof(c) = %zd\n\n", sizeof(c));
     printf("c = %s\n", c);
+    printf("strlen(c) = %zd\n", strlen(c)); // 6
+    printf("sizeof(c) = %zd\n\n", sizeof(c));  // 7
+
 
     char d[] = "hello\0\n";
-    printf("strlen(d) = %zd\n", strlen(d));
-    printf("sizeof(d) = %zd\n\n", sizeof(d));
     printf("d = %s\n", d);
+    printf("strlen(d) = %zd\n", strlen(d));  // 5
+    printf("sizeof(d) = %zd\n\n", sizeof(d));  // 8
+
 
     char e[] = "hello\n\0";
-    printf("strlen(e) = %zd\n", strlen(e));
-    printf("sizeof(e) = %zd\n\n", sizeof(e));
     printf("e = %s\n", e);
+    printf("strlen(e) = %zd\n", strlen(e));  // 6
+    printf("sizeof(e) = %zd\n\n", sizeof(e));  // 8
+
 
     char f[] = "hello\0\0\n";
-    printf("strlen(f) = %zd\n", strlen(f));
-    printf("sizeof(f) = %zd\n\n", sizeof(f));
     printf("f = %s\n", f);
+    printf("strlen(f) = %zd\n", strlen(f));  // 5
+    printf("sizeof(f) = %zd\n\n", sizeof(f));   // 9
+
 
     char g[] = "hello\n\0\0";
-    printf("strlen(g) = %zd\n", strlen(g));
-    printf("sizeof(g) = %zd\n\n", sizeof(g));
     printf("g = %s\n", g);
+    printf("strlen(g) = %zd\n", strlen(g));    // 6
+    printf("sizeof(g) = %zd\n\n", sizeof(g));    // 9
+
 
     char h[] = "hello\0\n\n";
-    printf("strlen(h) = %zd\n", strlen(h));
-    printf("sizeof(h) = %zd\n\n", sizeof(h));
     printf("h = %s\n", h);
+    printf("strlen(h) = %zd\n", strlen(h));   //  5
+    printf("sizeof(h) = %zd\n\n", sizeof(h));   //  9
+
 
     char i[] = "hello\n\n\0";
-    printf("strlen(i) = %zd\n", strlen(i));
-    printf("sizeof(i) = %zd\n\n", sizeof(i));
     printf("i = %s\n", i);
+    printf("strlen(i) = %zd\n", strlen(i));   // 7
+    printf("sizeof(i) = %zd\n\n", sizeof(i));  //  9
+
 
     char j[] = "hello\r\n";
-    printf("strlen(j) = %zd\n", strlen(j));
-    printf("sizeof(j) = %zd\n\n", sizeof(j));
     printf("j = %s\n", j);
+    printf("strlen(j) = %zd\n", strlen(j));  //  7
+    printf("sizeof(j) = %zd\n\n", sizeof(j)); //  8
+
 
     char k[] = "hello\n\r";
-    printf("strlen(k) = %zd\n", strlen(k));
-    printf("sizeof(k) = %zd\n\n", sizeof(k));
     printf("k = %s\n", k);
+    printf("strlen(k) = %zd\n", strlen(k));  //  7
+    printf("sizeof(k) = %zd\n\n", sizeof(k));   // 8
 
-    //  strlen()只能以char
-    //  *作为参数,不能以类型作为参数,该函数实际完成的功能是从代表该字符串的第一个地址开始遍历，直到遇到结束符'\0'。返回的长度大小不包括'\0'。
-    //  c/c++ strlen(str)和str.length()和str.size()都可以求字符串长度。
-    //  其中str.length()和str.size()是用于求string类对象长度的成员函数
-    //  strlen(str)是用于求字符数组的长度，其参数是char*
+    char *l = "hello";
+    printf("l = %s\n", l);
+    printf("strlen(k) = %zd\n", strlen(l));  //  7
+    printf("sizeof(k) = %zd\n\n", sizeof(l));   // 8
+
+
+    //  strlen()只能以char*作为参数,不能以类型作为参数,该函数实际完成的功能是从代表该字符串的第一个地址开始遍历，直到遇到结束符'\0', 在遇到'\0'前的任何字符都算作字符串的成员，如'\n'、'\t'、'\r'等. 返回的长度大小不包括'\0'。
+    //  c/c++ strlen(str)和str.length()和str.size()都可以求字符串长度。 其中str.length()和str.size()是用于求string类对象长度的成员函数. strlen(str)是用于求字符数组的长度，其参数是char*
 }
 
 int CString(void)
@@ -786,9 +813,9 @@ int CString(void)
     printf("**************************** 测试字符串和指针 ******************************\n");
 
 
-    ArrDiffPnt();
+    //ArrDiffPnt();
 
-    p_and_s();
+    //p_and_s();
 
 
     //copy1();
@@ -806,7 +833,7 @@ int CString(void)
     // arrchar();
 
 
-    // LenSizeofStr();
+    LenSizeofStr();
 
 
     return 0;
@@ -824,3 +851,12 @@ sizeof(S5) = 12 ,sizeof(S6) = 13 , sizeof(S7) = 12 , sizeof(S8) = 11 ,sizeof(S9)
 
 
  */
+
+
+int main(int argc, char *argv[]){
+
+    CString();
+
+
+    return 0;
+}
