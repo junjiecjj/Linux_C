@@ -130,6 +130,13 @@ for k in range(3,0,-1):  # 3,2,1
     print('k=',k,"压缩后的矩阵：\n",np.round(D,1))  # round取整数
 
 
+
+
+A= [[1,1,3,6,1],[5,1,8,4,2],[7,9,2,1,2]]
+V , P = np.linalg.eigh(A)
+print(f"ATA = \n{A}\nATA特征值 = \n{V}\nATA特征向量 = \n{P}\n")
+
+
 ATA = A.T@A
 
 V , P = np.linalg.eigh(ATA)

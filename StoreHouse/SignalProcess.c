@@ -26,10 +26,16 @@ https://blog.csdn.net/tengfei0973/article/details/102961477
 
 
 ******************************************************************************************/
-void FFT()
+void FFT(double **x, double **X, int len)
 {
 
 }
 
 
 
+int main(int argc, char *argv[]){
+
+
+
+    return 0;
+}
