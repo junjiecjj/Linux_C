@@ -34,6 +34,18 @@ void FFT(double **x, double **X, int len)
 
 }
 
+void shift(double *arr, int len)
+{
+    if(NULL== arr){
+        printf("error:数组为空, [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+        exit(EXIT_FAILURE);
+    }
+    double *tmparr  =  NULL;
+
+    if( len % 2== 0 ){
+
+    }
+}
 
 
 int main(int argc, char *argv[]){
