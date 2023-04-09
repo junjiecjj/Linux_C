@@ -132,15 +132,13 @@ for k in range(3,0,-1):  # 3,2,1
 
 
 
-A= [[1,1,3,6,1],[5,1,8,4,2],[7,9,2,1,2]]
+A = np.array([[5,1,6,5],[7,10,3,7],[6,8,10,9],[5,5,14,45]])
 V , P = np.linalg.eigh(A)
-print(f"ATA = \n{A}\nATA特征值 = \n{V}\nATA特征向量 = \n{P}\n")
+print(f" A = \n{A}\n A特征值 = \n{V}\n A特征向量 = \n{P}\n")
 
 
 ATA = A.T@A
-
 V , P = np.linalg.eigh(ATA)
-
 print(f"ATA = \n{ATA}\nATA特征值 = \n{V}\nATA特征向量 = \n{P}\n")
 
 
@@ -163,9 +161,7 @@ print(f"ATA = \n{ATA}\nATA特征值 = \n{V}\nATA特征向量 = \n{P}\n")
 
 
 AAT = A@A.T
-
 V1 , P1 = np.linalg.eigh(AAT)
-
 print(f"AAT = \n{AAT}1\nAAT特征值 = \n{V1}\nAAT特征向量 = \n{P1}\n")
 
 

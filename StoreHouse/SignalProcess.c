@@ -28,6 +28,9 @@ https://blog.csdn.net/tengfei0973/article/details/102961477
 ******************************************************************************************/
 void FFT(double **x, double **X, int len)
 {
+    for(int i = 0; i < len; i++){
+
+    }
 
 }
 
