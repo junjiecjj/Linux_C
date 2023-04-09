@@ -17,11 +17,11 @@ void Swap(int *A, int i, int j)
 //void BubbleSort(int *A, int n)
 void BubbleSort(int A[], int n)
 {
-    for(int j =0; j < n-1; j++)
+    for(int j = 0; j < n-1; j++)
     {
-        for(int i =0; i < n-1-j; i++)
+        for(int i = 0; i < n-1-j; i++)
         {
-            if(A[i]>A[i+1])
+            if(A[i] < A[i+1])
                 Swap(A,i,i+1);
         }
     }

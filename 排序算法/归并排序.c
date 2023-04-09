@@ -80,9 +80,7 @@ void MergeSortIteration(int A[], int len)
 }
 
 int main()
-
 {
-
     int A1[] = {6, 5, 3, 1, 8, 7, 2, 4}; // 从小到大归并排序
     int A2[] = {6, 5, 3, 1, 8, 7, 2, 4};
     int n1 = sizeof(A1) / sizeof(int);
