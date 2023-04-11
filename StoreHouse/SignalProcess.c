@@ -29,20 +29,29 @@ https://blog.csdn.net/tengfei0973/article/details/102961477
 void FFT(double **x, double **X, int len)
 {
     for(int i = 0; i < len; i++){
-
     }
-
 }
+
+
+
 
 void shift(double *arr, int len)
 {
+    if(len < 2)
     if(NULL== arr){
         printf("error:数组为空, [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
         exit(EXIT_FAILURE);
     }
     double *tmparr  =  NULL;
 
-    if( len % 2== 0 ){
+    tmparr = (double *)malloc(sizeof(double) * len);
+	if (tmparr == NULL)
+	{
+		printf("error :申请数组内存空间失败 [file:%s,fun:%s, Line:%d ] \n\n", __FILE__, __func__, __LINE__);
+		exit(EXIT_FAILURE);
+	}
+
+    if( len % 2== 0 ){ // 偶数
 
     }
 }
